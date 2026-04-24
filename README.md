@@ -42,30 +42,41 @@ In the future, I plan to integrate pure OpenGL, DirectX, and Vulkan rendering ba
   - No manual installation required - handled by the build process
 
 ## Building
-
-### Option 1: Manual Build
 1. Clone or download the project
+
+### Option 1a: Manual Build
 2. Navigate to the project root directory
 3. Create a build directory:
    ```
-   mkdir build
-   cd build
+   mkdir build  # create build directory
+   cd build     # enter build directory
    ```
 4. Generate build files with CMake:
    ```
-   cmake ..
+   cmake ..     # execute into the ./build directory
    ```
 5. Build the project:
    ```
-   cmake --build . --config Release
+   cmake --build . --config Release   # execute into the ./build directory - builds the code into the .exe into release folder
+   ```
+
+### Option 1b: Manual Build
+2. Open the project
+3. Generate build files with CMake::
+   ```
+   cmake -S . -B build    # CMAKE initial build
+   ```
+4. Build the project:
+   ```
+   cmake --build build    # builds the code into the .exe
    ```
 
 ### Option 2: Using Build Script (Windows)
-Run the PowerShell build script from the project root:
+2. Run the PowerShell build script from the project root:
 ```
 .\scripts\build.ps1 -BuildType Release
 ```
-To clean and rebuild:
+0. To clean and rebuild:
 ```
 .\scripts\build.ps1 -Clean -BuildType Release
 ```
