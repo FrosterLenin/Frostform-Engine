@@ -20,7 +20,7 @@ jobs:
         id: version
         run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
 
-      - name: Extract changelog (reliable)
+      - name: Extract changelog
         run: |
           VERSION=${{ steps.version.outputs.version }}
 
@@ -33,21 +33,42 @@ jobs:
 
           sed -n "/^## \[$VERSION\]/,/^## \[/p" clean.md | tail -n +2 >> notes.md
 
-      # Debug
-      - name: Debug files
-        run: |
-          echo "Release Content:"
-          ls -R ./build/bin/Release || true
+      # Install tools
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y cmake g++
 
-      # ZIP SECURE
+      # Build with CMake
+      - name: Configure CMake
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build
+
+      # Debug (usefull first time)
+      - name: Debug build output
+        run: |
+          echo "===== BUILD CONTENT ====="
+          ls -R build
+
+      # Find and zip the .exe
       - name: Create zip
         run: |
           mkdir -p dist
-          zip -j dist/release.zip ./build/bin/Release/FrostformEngine.exe
 
-          echo "Distribution Content:"
+          FILE=$(find build -type f -executable -name "FrostformEngine*" | head -n 1)
+
+          if [ -z "$FILE" ]; then
+            echo "ERROR: executable not found"
+            exit 1
+          fi
+
+          echo "Found executable: $FILE"
+
+          zip -j dist/FrostformEngine-${{ github.ref_name }}.zip "$FILE"
+
           ls -l dist
 
+      # Release GitHub
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
@@ -55,6 +76,6 @@ jobs:
           name: Release ${{ github.ref_name }}
           body_path: notes.md
           files: |
-            dist/release.zip
+            dist/*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
