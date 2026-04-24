@@ -20,11 +20,17 @@ jobs:
         id: version
         run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
 
-      - name: Extract changelog
+      - name: Extract changelog (include Unreleased + version)
         run: |
           VERSION=${{ steps.version.outputs.version }}
 
-          awk "/## \\[$VERSION\\]/{flag=1; next} /## \\[/{flag=0} flag" CHANGELOG.md > notes.md
+          echo "## Unreleased" > notes.md
+
+          awk '/## \[Unreleased\]/ {flag=1; next} /## \[/{flag=0} flag' CHANGELOG.md >> notes.md
+
+          echo "" >> notes.md
+
+          awk "/## \\[$VERSION\\]/{flag=1; next} /## \\[/{flag=0} flag" CHANGELOG.md >> notes.md
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
