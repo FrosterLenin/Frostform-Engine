@@ -38,6 +38,23 @@ jobs:
           echo "----- DEBUG OUTPUT -----"
           cat notes.md
 
+      # Debug: check what's actually inside Release
+      - name: Debug build output
+        run: |
+          echo "Listing Release folder:"
+          ls -R ./build/bin/Release || echo "Folder not found"
+
+      # Create zip from Release folder
+      - name: Create release zip
+        run: |
+          if [ -d "./build/bin/Release" ]; then
+            cd ./build/bin/Release
+            zip -r release.zip .
+          else
+            echo "ERROR: ./build/bin/Release does not exist"
+            exit 1
+          fi
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
@@ -45,6 +62,6 @@ jobs:
           name: Release ${{ github.ref_name }}
           body_path: notes.md
           files: |
-            ./build/bin/Release/*.exe
+            ./build/bin/Release/release.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
