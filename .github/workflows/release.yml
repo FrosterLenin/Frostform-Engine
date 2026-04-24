@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
@@ -18,58 +18,74 @@ jobs:
 
       - name: Get version from tag
         id: version
-        run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+        run: echo "version=${GITHUB_REF_NAME#v}" >> $env:GITHUB_OUTPUT
 
-      - name: Extract changelog
+      - name: Extract changelog (reliable)
+        shell: pwsh
         run: |
-          VERSION=${{ steps.version.outputs.version }}
+          $version = "${{ steps.version.outputs.version }}"
 
-          sed 's/\r$//' CHANGELOG.md > clean.md
+          (Get-Content CHANGELOG.md) -replace "`r", "" | Set-Content clean.md
 
-          echo "## Unreleased" > notes.md
-          sed -n '/^## \[Unreleased\]/,/^## \[/p' clean.md | tail -n +2 >> notes.md
+          "## Unreleased" | Set-Content notes.md
+          $content = Get-Content clean.md
 
-          echo "" >> notes.md
+          $start = ($content | Select-String "^## \[Unreleased\]").LineNumber
+          $end = ($content | Select-String "^## \[" | Where-Object { $_.LineNumber -gt $start } | Select-Object -First 1).LineNumber
 
-          sed -n "/^## \[$VERSION\]/,/^## \[/p" clean.md | tail -n +2 >> notes.md
+          if ($start) {
+            if ($end) {
+              $content[$start..($end-2)] | Add-Content notes.md
+            } else {
+              $content[$start..($content.Length-1)] | Add-Content notes.md
+            }
+          }
 
-      # Install tools
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y cmake g++
+          "" | Add-Content notes.md
 
-      # Build with CMake
+          $startV = ($content | Select-String "^## \[$version\]").LineNumber
+          $endV = ($content | Select-String "^## \[" | Where-Object { $_.LineNumber -gt $startV } | Select-Object -First 1).LineNumber
+
+          if ($startV) {
+            if ($endV) {
+              $content[$startV..($endV-2)] | Add-Content notes.md
+            } else {
+              $content[$startV..($content.Length-1)] | Add-Content notes.md
+            }
+          }
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
       - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+        run: cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
-        run: cmake --build build
+        run: cmake --build build --config Release
 
-      # Debug (usefull first time)
-      - name: Debug build output
+      - name: Debug output
+        shell: pwsh
         run: |
-          echo "===== BUILD CONTENT ====="
-          ls -R build
+          Write-Host "===== BUILD TREE ====="
+          Get-ChildItem -Recurse build
 
-      # Find and zip the .exe
       - name: Create zip
+        shell: pwsh
         run: |
-          mkdir -p dist
+          New-Item -ItemType Directory -Force -Path dist
 
-          FILE=$(find build -type f -executable -name "FrostformEngine*" | head -n 1)
+          $exe = Get-ChildItem -Recurse -Path build -Filter "FrostformEngine.exe" | Select-Object -First 1
 
-          if [ -z "$FILE" ]; then
-            echo "ERROR: executable not found"
+          if (-not $exe) {
+            Write-Error "FrostformEngine.exe not found"
             exit 1
-          fi
+          }
 
-          echo "Found executable: $FILE"
+          Write-Host "Found exe: $($exe.FullName)"
 
-          zip -j dist/FrostformEngine-${{ github.ref_name }}.zip "$FILE"
+          Compress-Archive -Path $exe.FullName -DestinationPath "dist/FrostformEngine-${{ github.ref_name }}.zip"
 
-          ls -l dist
-
-      # Release GitHub
-      - name: Create Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
