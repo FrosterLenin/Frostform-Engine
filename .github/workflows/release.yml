@@ -26,34 +26,27 @@ jobs:
 
           sed 's/\r$//' CHANGELOG.md > clean.md
 
-          # Extract Unreleased section
           echo "## Unreleased" > notes.md
           sed -n '/^## \[Unreleased\]/,/^## \[/p' clean.md | tail -n +2 >> notes.md
 
           echo "" >> notes.md
 
-          # Extract version section
           sed -n "/^## \[$VERSION\]/,/^## \[/p" clean.md | tail -n +2 >> notes.md
 
-          echo "----- DEBUG OUTPUT -----"
-          cat notes.md
-
-      # Debug: check what's actually inside Release
-      - name: Debug build output
+      # Debug
+      - name: Debug files
         run: |
-          echo "Listing Release folder:"
-          ls -R ./build/bin/Release || echo "Folder not found"
+          echo "Release Content:"
+          ls -R ./build/bin/Release || true
 
-      # Create zip from Release folder
-      - name: Create release zip
+      # ZIP SECURE
+      - name: Create zip
         run: |
-          if [ -d "./build/bin/Release" ]; then
-            cd ./build/bin/Release
-            zip -r release.zip .
-          else
-            echo "ERROR: ./build/bin/Release does not exist"
-            exit 1
-          fi
+          mkdir -p dist
+          zip -j dist/release.zip ./build/bin/Release/FrostformEngine.exe
+
+          echo "Distribution Content:"
+          ls -l dist
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
@@ -62,6 +55,6 @@ jobs:
           name: Release ${{ github.ref_name }}
           body_path: notes.md
           files: |
-            ./build/bin/Release/release.zip
+            dist/release.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
