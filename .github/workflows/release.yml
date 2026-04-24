@@ -20,23 +20,20 @@ jobs:
         id: version
         run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
 
-      - name: Extract changelog (fixed)
+      - name: Extract changelog (reliable)
         run: |
           VERSION=${{ steps.version.outputs.version }}
 
-          # normalize file (fix Windows line endings)
           sed 's/\r$//' CHANGELOG.md > clean.md
 
-          # start notes file
+          # Extract Unreleased section
           echo "## Unreleased" > notes.md
-
-          # extract Unreleased section
-          awk '/^## \[Unreleased\]/{flag=1; next} /^## \[/{flag=0} flag' clean.md >> notes.md
+          sed -n '/^## \[Unreleased\]/,/^## \[/p' clean.md | tail -n +2 >> notes.md
 
           echo "" >> notes.md
 
-          # extract version section
-          awk "/^## \\[$VERSION\\]/{flag=1; next} /^## \\[/{flag=0} flag" clean.md >> notes.md
+          # Extract version section
+          sed -n "/^## \[$VERSION\]/,/^## \[/p" clean.md | tail -n +2 >> notes.md
 
           echo "----- DEBUG OUTPUT -----"
           cat notes.md
