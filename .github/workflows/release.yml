@@ -18,41 +18,51 @@ jobs:
 
       - name: Get version from tag
         id: version
+        shell: pwsh
         run: echo "version=${GITHUB_REF_NAME#v}" >> $env:GITHUB_OUTPUT
 
-      - name: Extract changelog (reliable)
+      - name: Extract changelog (Unreleased + Version)
         shell: pwsh
         run: |
           $version = "${{ steps.version.outputs.version }}"
 
+          # Normalize line endings
           (Get-Content CHANGELOG.md) -replace "`r", "" | Set-Content clean.md
-
-          "## Unreleased" | Set-Content notes.md
           $content = Get-Content clean.md
 
-          $start = ($content | Select-String "^## \[Unreleased\]").LineNumber
-          $end = ($content | Select-String "^## \[" | Where-Object { $_.LineNumber -gt $start } | Select-Object -First 1).LineNumber
+          function Get-Section($pattern) {
+            $start = ($content | Select-String $pattern).LineNumber
+            if (-not $start) { return @() }
 
-          if ($start) {
+            $end = ($content | Select-String "^## \[" | Where-Object { $_.LineNumber -gt $start } | Select-Object -First 1).LineNumber
+
             if ($end) {
-              $content[$start..($end-2)] | Add-Content notes.md
+              return $content[($start-1)..($end-2)]
             } else {
-              $content[$start..($content.Length-1)] | Add-Content notes.md
+              return $content[($start-1)..($content.Length-1)]
             }
           }
 
-          "" | Add-Content notes.md
+          $unreleased = Get-Section "^## \[Unreleased\]"
+          $versionSec = Get-Section "^## \[$version\]"
 
-          $startV = ($content | Select-String "^## \[$version\]").LineNumber
-          $endV = ($content | Select-String "^## \[" | Where-Object { $_.LineNumber -gt $startV } | Select-Object -First 1).LineNumber
-
-          if ($startV) {
-            if ($endV) {
-              $content[$startV..($endV-2)] | Add-Content notes.md
-            } else {
-              $content[$startV..($content.Length-1)] | Add-Content notes.md
-            }
+          if (-not $versionSec -or $versionSec.Count -eq 0) {
+            Write-Error "Version $version not found in CHANGELOG.md"
+            exit 1
           }
+
+          $output = @()
+
+          if ($unreleased.Count -gt 0) {
+            $output += $unreleased
+            $output += ""
+            $output += "---"
+            $output += ""
+          }
+
+          $output += $versionSec
+
+          $output | Set-Content notes.md
 
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -62,12 +72,6 @@ jobs:
 
       - name: Build
         run: cmake --build build --config Release
-
-      - name: Debug output
-        shell: pwsh
-        run: |
-          Write-Host "===== BUILD TREE ====="
-          Get-ChildItem -Recurse build
 
       - name: Create zip
         shell: pwsh
@@ -80,8 +84,6 @@ jobs:
             Write-Error "FrostformEngine.exe not found"
             exit 1
           }
-
-          Write-Host "Found exe: $($exe.FullName)"
 
           Compress-Archive -Path $exe.FullName -DestinationPath "dist/FrostformEngine-${{ github.ref_name }}.zip"
 
