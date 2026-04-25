@@ -19,7 +19,10 @@ jobs:
       - name: Get version from tag
         id: version
         shell: pwsh
-        run: echo "version=${GITHUB_REF_NAME#v}" >> $env:GITHUB_OUTPUT
+        run: |
+          $ref = "${{ github.ref_name }}"
+          $version = $ref -replace '^v', ''
+          "version=$version" >> $env:GITHUB_OUTPUT
 
       - name: Extract changelog (Unreleased + Version)
         shell: pwsh
