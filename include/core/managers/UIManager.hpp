@@ -15,8 +15,7 @@ public:
     UIManager();
     ~UIManager();
 
-    void Init();
-    virtual void Bind(std::shared_ptr<GameObject> gameObject) override;
+    void Init() override;
     
     // Bind an event from a UI object to the manager (supports any number of parameters)
     template<typename... Args>
@@ -29,8 +28,4 @@ public:
     // Trigger all bound events with parameters
     template<typename... Args>
     void TriggerAllEvents(Args... args);
-
-    void SpawnUIObject(const FVector2& position, const FVector2& size, const Color color);
-    void Update(float deltaTime);
-    bool IsEmpty();
 };

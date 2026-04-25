@@ -4,12 +4,8 @@ UIManager::UIManager() {}
 UIManager::~UIManager() {}
 
 void UIManager::Init() {
-    _ManagedObjects.clear();
+    BaseManager::Init();
     _Events.clear();
-}
-
-void UIManager::Bind(std::shared_ptr<GameObject> UIObject){
-    _ManagedObjects.push_back(UIObject);
 }
 
 // Template implementations
@@ -50,22 +46,3 @@ template void UIManager::TriggerObjectEvent<int>(GameObject*, int);
 template void UIManager::TriggerObjectEvent<>(GameObject*);
 template void UIManager::TriggerAllEvents<int>(int);
 template void UIManager::TriggerAllEvents<>();
-
-void UIManager::Update(float deltaTime) {
-    for(auto& UIObject : _ManagedObjects){
-        if(auto sharedUIObject = UIObject.lock()){
-            if(sharedUIObject->IsActive())
-                sharedUIObject->UpdateControlled(deltaTime);
-        }
-    }
-}
-
-bool UIManager::IsEmpty(){
-    for(auto& UIObject : _ManagedObjects){
-        if(auto sharedUIObject = UIObject.lock()){
-            if(sharedUIObject->IsActive())
-                return false;
-        }
-    }
-    return true;
-}

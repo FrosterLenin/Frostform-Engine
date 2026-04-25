@@ -6,10 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- Move ScoreUI from PONG to Core and refactor to support a configurable number of players
-- Move base functions from specific managers to base manager
+
+### Added
+- Moved all common manager methods (`Bind()`, `Init()`, `Update()`, `IsEmpty()`) to BaseManager with default implementations
 
 ### Future Plans
+- Move ScoreUI from PONG to Core and refactor to support a configurable number of players
 - OpenGL, DirectX, and Vulkan backends
 - 3D rendering capabilities
 
