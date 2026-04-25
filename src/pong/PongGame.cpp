@@ -4,6 +4,7 @@
 #include "pong/ScoreUI.hpp"
 
 PongGame::PongGame(FVector2 screenSize) : Game(screenSize, "Pong"){
+    _UIManager = std::make_unique<UIManager>();
     FVector2 centerScreen = screenSize * .5f;
     std::unique_ptr<Ball> ball = std::make_unique<Ball>(this, FVector2{centerScreen.x, centerScreen.y}, 5.0f, RAYWHITE, true);
     ball.get()->SetRandomIndexVelocityX(5);
@@ -11,7 +12,7 @@ PongGame::PongGame(FVector2 screenSize) : Game(screenSize, "Pong"){
     _GameObjects.push_back(std::move(ball));
     _GameObjects.push_back(std::make_unique<Paddle>(this, FVector2{100.0f, centerScreen.y}, FVector2{10.0f, 30.0f}, RAYWHITE, false));
     _GameObjects.push_back(std::make_unique<Paddle>(this, FVector2{screenSize.x - 100.0f, centerScreen.y}, FVector2{10.0f, 30.0f}, RED, false, 1));
-    _GameObjects.push_back(std::make_unique<ScoreUI>(this, FVector2{10.0f, 10.0f}, FVector2{10.0f, 10.0f}, WHITE));
+    InitUI();
     _GameOver = false;
     _EndGameDelay = .0f;
 }
@@ -25,9 +26,12 @@ void PongGame::Update(float deltaTime){
             _GameOver = false;
         }
     }
-    else
+    else{
         Game::Update(deltaTime);
+        _UIManager->Update(deltaTime);
+    }
 }
+        
 void PongGame::Draw(){
     if(_GameOver)
         DrawEndGameScreen();
@@ -61,8 +65,9 @@ void PongGame::ScorePoint(const int playerIndex){
         ++_P1Points;
     else
         ++_P2Points;
-    if(ScoreEvent)
-        ScoreEvent(playerIndex);
+    
+    // Trigger UIManager event with playerIndex
+    _UIManager->TriggerAllEvents(playerIndex);
 
     if(_P1Points >= 10 || _P2Points >= 10){
         _GameOver = true;
@@ -91,5 +96,15 @@ void PongGame::DrawEndGameScreen(){
     DrawTextPro(font, pointsText, FVector2(centerScreen.x, centerScreen.y + 60), pointsTextOrigin, 0, 20, 2, RAYWHITE);
 
     EndDrawing();
+}
+
+void PongGame::InitUI(){
+    _GameObjects.push_back(std::make_unique<ScoreUI>(this, FVector2{10.0f, 10.0f}, FVector2{10.0f, 10.0f}, WHITE));
+    ScoreUI* scoreUI = dynamic_cast<ScoreUI*>(_GameObjects.back().get());
+    _UIManager->Bind(_GameObjects.back());
+    
+    if(scoreUI) {
+        _UIManager->BindEvent(scoreUI, scoreUI->ScoreEvent);
+    }
 }
 

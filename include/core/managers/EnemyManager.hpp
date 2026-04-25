@@ -5,7 +5,6 @@
 #include "core/managers/BaseManager.hpp"
 
 class EnemyManager : public BaseManager{
-    std::vector<std::weak_ptr<GameObject>> _Enemies;
 public:
     EnemyManager();
     ~EnemyManager();

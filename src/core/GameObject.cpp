@@ -97,7 +97,9 @@ void GameObject::Draw() {
 }
 void GameObject::UpdateWithInput(float deltaTime){
 }
-void GameObject::UpdateAutomatic(float deltaTime){
+void GameObject::UpdateControlled(float deltaTime){
+}
+void GameObject::Update(float deltaTime){
 }
 
 bool GameObject::CheckCollision(const GameObject& other) const{

@@ -12,6 +12,6 @@ public:
     virtual void Start() override;
     virtual void Draw() override;
 
-    virtual void UpdateAutomatic(float deltaTime) override;
+    virtual void UpdateControlled(float deltaTime) override;
     virtual void OnCollisionEnter(FCollisionInfo& collisionInfo) override;
 };

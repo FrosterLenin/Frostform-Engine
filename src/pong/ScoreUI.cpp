@@ -6,14 +6,16 @@ ScoreUI::ScoreUI(Game* game, FVector2 position, FVector2 size, Color color) :
     GameObject(game, position, size, color)
     , _ScoreLeft(0)
     , _ScoreRight(0){
+    // Initialize the event in constructor so it's available before Start() is called
+    ScoreEvent = [this](int playerIndex){
+        UpdateScore(playerIndex);
+    };
 }
 
 ScoreUI::~ScoreUI() {}
 
 void ScoreUI::Update(float deltaTime){
-    PongGame* pongGame = dynamic_cast<PongGame*>(_Game);
-    _ScoreLeft = pongGame->GetPlayerPoints(0);
-    _ScoreRight = pongGame->GetPlayerPoints(1);
+    GameObject::Update(deltaTime);
 }
 void ScoreUI::Draw(){
     GameObject::Draw();
@@ -23,12 +25,6 @@ void ScoreUI::Draw(){
 void ScoreUI::Start(){
     _ScoreLeft = 0;
     _ScoreRight = 0;
-    PongGame* pongGame = dynamic_cast<PongGame*>(_Game);
-    // Using std::bind
-    // pongGame->ScoreEvent = std::bind(&ScoreUI::UpdateScore, this, std::placeholders::_1);
-    pongGame->ScoreEvent = [this](int playerIndex){
-        UpdateScore(playerIndex);
-    };
 }
 
 bool ScoreUI::CheckCollision(const GameObject& other) const {
@@ -39,4 +35,10 @@ void ScoreUI::UpdateScore(const int playerIndex){
         _ScoreLeft += 1;
     else
         _ScoreRight += 1;
+}
+void ScoreUI::UpdateControlled(float deltaTime){
+    GameObject::UpdateControlled(deltaTime);
+    PongGame* pongGame = dynamic_cast<PongGame*>(_Game);
+    _ScoreLeft = pongGame->GetPlayerPoints(0);
+    _ScoreRight = pongGame->GetPlayerPoints(1);
 }

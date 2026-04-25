@@ -6,15 +6,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- Move ScoreUI from PONG to Core and refactor to support a configurable number of players
+- Move base functions from specific managers to base manager
 
 ### Future Plans
-- Move UI GameObject from PONG to Core
 - OpenGL, DirectX, and Vulkan backends
 - 3D rendering capabilities
 
 ### Known Issues 
 #### Contributions or suggestions to help identify and fix these issues are welcome.
 - Space Invaders: The enemy formation gradually shifts, causing inconsistent spacing between invaders over time after the enemy manager update.
+
+## [0.2.0] - 2026-04-25
+
+### Added
+- UIManager event binding system with variadic template support
+- Support for events with any number of parameters (0, 1, or more)
+- Template function explicit instantiation for cleaner code organization
+- Generalized bound objects storage in BaseManager to reduce code duplication across managers
+
+### Fixed
+- PongGame initialization crash by creating UIManager before InitUI()
+- ScoreUI event binding issue by initializing ScoreEvent in constructor
+- Event triggering now properly calls bound UI object events
 
 ## [0.1.0] - 2026-04-24
 

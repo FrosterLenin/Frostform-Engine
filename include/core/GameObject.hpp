@@ -40,7 +40,12 @@ public:
     virtual float GetHalfWidth() const;
     virtual float GetHalfHeight() const;
     virtual void UpdateWithInput(float deltaTime);
-    virtual void UpdateAutomatic(float deltaTime);
+    // For game objects that update without player input, like enemies or projectiles.
+    // This is to separate the logic of player controlled game objects and non player controlled game objects.
+    // This is called by the game after the input manager updates, so it will be called after the player input is processed.
+    // Specific Manager will call this for the game objects it manages
+    // like the enemy manager will call this for the enemies, the projectile manager will call this for the projectiles, etc.
+    virtual void UpdateControlled(float deltaTime); 
 
     void SetPosition(const FVector2& other);
     void SetVelocity(const FVector2& other);

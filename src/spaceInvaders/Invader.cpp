@@ -34,7 +34,7 @@ void Invader::Update(float deltaTime){
     SetPosition(_Position + _Velocity * _AccelerationIndex * deltaTime);
 }
 
-void Invader::UpdateAutomatic(float deltaTime){
+void Invader::UpdateControlled(float deltaTime){
     _Velocity *= -1;
     SetPosition(FVector2{_Position.x, _Position.y + _Size.y});
 }

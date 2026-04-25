@@ -1,5 +1,7 @@
 #pragma once
 #include "core/Game.hpp"
+#include "core/Managers/UIManager.hpp"
+#include "pong/ScoreUI.hpp"
 #include <vector>
 #include <memory>
 #include <functional>
@@ -10,8 +12,7 @@ private:
     int _P2Points;
     float _EndGameDelay;
     bool _GameOver;
-public:
-    std::function<void(int)> ScoreEvent;
+    std::unique_ptr<UIManager> _UIManager;
 public:
     PongGame(FVector2 screenSize);
 
@@ -22,4 +23,6 @@ public:
     int GetPlayerPoints(const int playerIndex) const;
     void ScorePoint(const int playerIndex);
     void DrawEndGameScreen();
+private:
+    void InitUI();
 };
