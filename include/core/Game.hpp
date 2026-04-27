@@ -10,6 +10,8 @@
 #include "core/managers/EnemyManager.hpp"
 #include "core/managers/CollisionManager.hpp"
 
+class Player; // Forward declaration
+
 class Game
 {
 protected:
@@ -36,6 +38,7 @@ public:
     const FVector2 GetScreenSize() const;
     const InputManager* GetInputManager() const;
     const EnemyManager* GetEnemyManager() const;
+    const std::vector<Player*> GetPlayers() const;
     void SetShouldClose(const bool shouldClose);
     void SetClearColor(const Color other);
     virtual void InitGame(const Color clearColor = BLACK);

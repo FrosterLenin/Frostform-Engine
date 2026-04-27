@@ -1,8 +1,8 @@
 #pragma once
-#include "core/GameObject.hpp"
+#include "core/Player.hpp"
 #include "core/enums/InputActions.hpp"
 
-class Paddle : public GameObject{
+class Paddle : public Player{
 private:
     bool _IsAutomatic; // If it works automatically or needs input
     int _RandomIndexVelocityX;

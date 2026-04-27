@@ -2,7 +2,7 @@
 #include "spaceInvaders/SpaceInvaders.hpp"
 
 SpaceShip::SpaceShip(Game* game, FVector2 position, FVector2 size, Color color, float accelerationIndex) : 
-    GameObject(game, position, size, color, accelerationIndex) {
+    Player(game, position, size, color, accelerationIndex) {
     _Collider = std::make_shared<RectangleCollider>(position, size);
 }
     
@@ -27,9 +27,8 @@ void SpaceShip::Start(){
         std::shared_ptr<Bullet> bullet = spaceInvadersGame->SpawnBullet(this, FVector2{-100.f, -100.f}, 10.f, BLUE, 200.f);
         bullet->OnExpired = [weakThis = weak_from_this()](std::shared_ptr<Bullet> inBullet)
         {
-            if(std::shared_ptr<SpaceShip> sharedThis = weakThis.lock()){
+            if(std::shared_ptr<SpaceShip> sharedThis = weakThis.lock())
                 sharedThis->ReturnBullet(inBullet);
-            }
         };
         _Bullets.push(bullet);
     }

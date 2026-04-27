@@ -1,4 +1,5 @@
 #include "core/Game.hpp"
+#include "core/Player.hpp"
 
 Game::Game(FVector2 screenSize, const std::string& title) : 
     _ScreenSize(screenSize)
@@ -23,6 +24,16 @@ const InputManager* Game::GetInputManager() const{
 }
 const EnemyManager* Game::GetEnemyManager() const{
     return _EnemyManager.get();
+}
+const std::vector<Player*> Game::GetPlayers() const{
+    std::vector<Player*> players;
+    for(const auto& gameObject : _GameObjects){
+        Player* player = dynamic_cast<Player*>(gameObject.get());
+        if(player != nullptr){
+            players.push_back(player);
+        }
+    }
+    return players;
 }
 void Game::SetShouldClose(const bool shouldClose){
     _ShouldClose = shouldClose;

@@ -1,11 +1,11 @@
 #pragma once
-#include "core/GameObject.hpp"
+#include "core/Player.hpp"
 #include "core/enums/InputActions.hpp"
 #include "spaceInvaders/Bullet.hpp"
 #include <queue>
 #include <memory>
 
-class SpaceShip : public GameObject,  public std::enable_shared_from_this<SpaceShip>{
+class SpaceShip : public Player,  public std::enable_shared_from_this<SpaceShip>{
 private:
     InputAction _UP;
     InputAction _DOWN;

@@ -3,7 +3,7 @@
 #include "raylib.h"
 
 Paddle::Paddle(Game* game, FVector2 position, FVector2 size, Color color, bool isAutomatic, int index) : 
-    GameObject(game, position, size, color) 
+    Player(game, position, size, color) 
     , _IsAutomatic(isAutomatic)
     , _RandomIndexVelocityX(1)
     , _Index(index){
