@@ -9,9 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Moved all common manager methods (`Bind()`, `Init()`, `Update()`, `IsEmpty()`) to BaseManager with default implementations
+- Moved ScoreUI from PONG to Core and refactor to support a configurable number of players
 
 ### Future Plans
-- Move ScoreUI from PONG to Core and refactor to support a configurable number of players
 - OpenGL, DirectX, and Vulkan backends
 - 3D rendering capabilities
 
