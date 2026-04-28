@@ -1,5 +1,6 @@
 #include "pong/Ball.hpp"
 #include "pong/PongGame.hpp"
+#include "core/ScoreUI.hpp"
 #include "raylib.h"
 
 Ball::Ball(Game* game, FVector2 position, float radius, Color color, bool isAutomatic, int index) : 
@@ -49,7 +50,8 @@ void Ball::Update(float deltaTime){
             _Velocity.x *= -1;
         }
         if(playerIndex != -1){
-            dynamic_cast<PongGame*>(_Game)->ScorePoint(playerIndex);
+            // Ball detected a score, call PongGame to trigger the ScoreUI event
+            _Game->GetUIManager()->TriggerObjectEvent<ScoreUI>(playerIndex, 1);
             SetPosition(_Game->GetScreenSize() * .5f);
             _AccelerationIndex = 100.0f;
         }

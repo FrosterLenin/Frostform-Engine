@@ -12,6 +12,7 @@ Game::Game(FVector2 screenSize, const std::string& title) :
     _CollisionManager = std::make_unique<CollisionManager>();
     _DrawManager = std::make_unique<DrawManager>();
     _EnemyManager = std::make_unique<EnemyManager>();
+    _UIManager = std::make_unique<UIManager>();
 }
 Game::~Game(){
     CloseWindow();
@@ -24,6 +25,9 @@ const InputManager* Game::GetInputManager() const{
 }
 const EnemyManager* Game::GetEnemyManager() const{
     return _EnemyManager.get();
+}
+const UIManager* Game::GetUIManager() const{
+    return _UIManager.get();
 }
 const std::vector<Player*> Game::GetPlayers() const{
     std::vector<Player*> players;

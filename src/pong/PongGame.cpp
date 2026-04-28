@@ -4,7 +4,6 @@
 #include "core/ScoreUI.hpp"
 
 PongGame::PongGame(FVector2 screenSize) : Game(screenSize, "Pong"), _Player1(nullptr), _Player2(nullptr){
-    _UIManager = std::make_unique<UIManager>();
     FVector2 centerScreen = screenSize * .5f;
     std::unique_ptr<Ball> ball = std::make_unique<Ball>(this, FVector2{centerScreen.x, centerScreen.y}, 5.0f, RAYWHITE, true);
     ball.get()->SetRandomIndexVelocityX(5);
@@ -75,10 +74,8 @@ int PongGame::GetPlayerScore(const int playerIndex) const{
     return 0;
 }
 
-void PongGame::ScorePoint(const int playerIndex){
-    // Trigger UIManager event with playerIndex
-    _UIManager->TriggerAllEvents(playerIndex);
-
+void PongGame::ScorePoint(const int playerIndex, const int score){
+    _UIManager->GetManagedObject<ScoreUI>()->UpdateScore(playerIndex, score);
     int p1Score = _Player1 ? _Player1->GetScore() : 0;
     int p2Score = _Player2 ? _Player2->GetScore() : 0;
 
@@ -118,8 +115,9 @@ void PongGame::InitUI(){
     _GameObjects.push_back(std::make_unique<ScoreUI>(this, 2 ,FVector2{10.0f, 10.0f}, FVector2{10.0f, 10.0f}, WHITE));
     ScoreUI* scoreUI = dynamic_cast<ScoreUI*>(_GameObjects.back().get());
     _UIManager->Bind(_GameObjects.back());
-    
     if(scoreUI)
-        _UIManager->BindEvent(scoreUI, scoreUI->ScoreEvent);
+        _UIManager->BindEvent(scoreUI, scoreUI->OnScoreUpdated = [this](int playerIndex, int points){
+            ScorePoint(playerIndex, points);
+        });
 }
 

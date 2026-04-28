@@ -9,7 +9,7 @@
 #include "core/managers/DrawManager.hpp"
 #include "core/managers/EnemyManager.hpp"
 #include "core/managers/CollisionManager.hpp"
-
+#include "core/managers/UIManager.hpp"
 class Player; // Forward declaration
 
 class Game
@@ -24,6 +24,7 @@ protected:
     std::unique_ptr<InputManager> _InputManager;
     std::unique_ptr<DrawManager> _DrawManager;
     std::unique_ptr<EnemyManager> _EnemyManager;
+    std::unique_ptr<UIManager> _UIManager;
 public:
     const bool DEBUGMODE = true;
     Game(FVector2 screenSize, const std::string& title);
@@ -38,6 +39,7 @@ public:
     const FVector2 GetScreenSize() const;
     const InputManager* GetInputManager() const;
     const EnemyManager* GetEnemyManager() const;
+    const UIManager* GetUIManager() const;
     const std::vector<Player*> GetPlayers() const;
     void SetShouldClose(const bool shouldClose);
     void SetClearColor(const Color other);
