@@ -7,11 +7,6 @@
 ScoreUI::ScoreUI(Game* game, int maxPlayers, FVector2 position, FVector2 size, Color color) : 
     GameObject(game, position, size, color)
     , _MaxPlayers(std::min(maxPlayers, 4)) { // Cap at 4 players max
-    
-    // Initialize the event in constructor so it's available before Start() is called
-    ScoreEvent = [this](int playerIndex){
-        UpdateScore(playerIndex);
-    };
 }
 
 ScoreUI::~ScoreUI() {}
@@ -77,10 +72,10 @@ void ScoreUI::Start(){
 }
 
 
-void ScoreUI::UpdateScore(const int playerIndex){
-    if(playerIndex >= 0 && playerIndex < static_cast<int>(_Players.size())){
+void ScoreUI::UpdateScore(const int playerIndex, const int points){
+    if(playerIndex >= 0 && playerIndex <static_cast<int>(_Players.size())){
         if(_Players[playerIndex])
-            _Players[playerIndex]->AddScore(1);
+            _Players[playerIndex]->AddScore(points);
     }
 }
 

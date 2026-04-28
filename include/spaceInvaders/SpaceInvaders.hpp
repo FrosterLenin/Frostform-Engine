@@ -16,5 +16,7 @@ public:
     std::shared_ptr<Bullet> SpawnBullet(GameObject* owner, FVector2 position, float radius, Color color, float accelerationIndex);
 
 private:
+    void ScorePoint(const int playerIndex, const int score);
     void InitEnemies(int row, int column, float spacing);
+    void InitUI();
 };

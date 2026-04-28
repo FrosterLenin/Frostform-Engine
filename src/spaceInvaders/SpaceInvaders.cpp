@@ -2,6 +2,7 @@
 #include "spaceInvaders/SpaceShip.hpp"
 #include "spaceInvaders/Invader.hpp"
 #include "core/Background.hpp"
+#include "core/ScoreUI.hpp"
 #include <memory>
 
 SpaceInvaders::SpaceInvaders() : Game({800, 600}, "Space Invaders")
@@ -11,7 +12,7 @@ SpaceInvaders::SpaceInvaders() : Game({800, 600}, "Space Invaders")
     _GameObjects.push_back(std::make_unique<Background>(this, FVector2{.0f, .0f}, BLACK));
     _GameObjects.push_back(std::make_unique<SpaceShip>(this, spaceShipSpawnPoint, FVector2{40.0f, 40.0f}, WHITE, 100.0f));
     InitEnemies(5, 10, 10.0f);
-
+    InitUI();
 }
 
 void SpaceInvaders::InitGame(const Color clearColor){
@@ -44,4 +45,20 @@ void SpaceInvaders::Update(float deltaTime){
     Game::Update(deltaTime);
     if(_EnemyManager.get()->IsEmpty())
         _ShouldClose = true;
+}
+void SpaceInvaders::ScorePoint(const int playerIndex, const int score){
+    _UIManager->GetManagedObject<ScoreUI>()->UpdateScore(playerIndex, score);
+
+    // if(p1Score >= 10 || p2Score >= 10)
+    //     _GameOver = true;
+}
+void SpaceInvaders::InitUI(){
+    _GameObjects.push_back(std::make_unique<ScoreUI>(this, 1 ,FVector2{10.0f, 10.0f}, FVector2{10.0f, 10.0f}, WHITE));
+    ScoreUI* scoreUI = dynamic_cast<ScoreUI*>(_GameObjects.back().get());
+    _UIManager->Bind(_GameObjects.back());
+    
+    if(scoreUI)
+        _UIManager->BindEvent(scoreUI, scoreUI->OnScoreUpdated = [this](int playerIndex, int points){
+            ScorePoint(playerIndex, points);
+    });
 }

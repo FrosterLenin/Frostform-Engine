@@ -1,6 +1,5 @@
 #pragma once
 #include "core/Game.hpp"
-#include "core/Managers/UIManager.hpp"
 #include "core/ScoreUI.hpp"
 #include <vector>
 #include <memory>
@@ -14,7 +13,6 @@ private:
     Paddle* _Player2;
     float _EndGameDelay;
     bool _GameOver;
-    std::unique_ptr<UIManager> _UIManager;
 public:
     PongGame(FVector2 screenSize);
 
@@ -23,7 +21,7 @@ public:
     virtual void InitGame(const Color clearColor = BLACK) override;
 
     int GetPlayerScore(const int playerIndex) const;
-    void ScorePoint(const int playerIndex);
+    void ScorePoint(const int playerIndex, const int score);
     void DrawEndGameScreen();
 private:
     void InitUI();

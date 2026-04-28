@@ -14,9 +14,8 @@ void BaseManager::Init() {
 void BaseManager::Update(float deltaTime) {
     for(auto& managedObject : _ManagedObjects) {
         if(auto sharedObject = managedObject.lock()) {
-            if(sharedObject->IsActive()) {
+            if(sharedObject->IsActive())
                 sharedObject->UpdateControlled(deltaTime);
-            }
         }
     }
 }
@@ -24,9 +23,8 @@ void BaseManager::Update(float deltaTime) {
 bool BaseManager::IsEmpty() {
     for(auto& managedObject : _ManagedObjects) {
         if(auto sharedObject = managedObject.lock()) {
-            if(sharedObject->IsActive()) {
+            if(sharedObject->IsActive())
                 return false;
-            }
         }
     }
     return true;

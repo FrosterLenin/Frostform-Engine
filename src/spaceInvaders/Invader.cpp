@@ -1,6 +1,6 @@
 #include "spaceInvaders/Invader.hpp"
 #include "core/Game.hpp"
-
+#include "core/ScoreUI.hpp"
 
 Invader::Invader(Game* game, FVector2 position, FVector2 size, Color color, float accelerationIndex) : 
     GameObject(game, position, size, color, accelerationIndex) {
@@ -41,5 +41,6 @@ void Invader::UpdateControlled(float deltaTime){
 
 void Invader::OnCollisionEnter(FCollisionInfo& collisionInfo){
     GameObject::OnCollisionEnter(collisionInfo);
+    _Game->GetUIManager()->TriggerObjectEvent<ScoreUI>(0, 10); // Give 10 points to player 0 for killing an invader
     SetActive(false);
 }
