@@ -26,8 +26,18 @@ void CollisionManager::Update(){
             std::shared_ptr<GameObject> gameObjectB = _GameObjects.at(j).lock();
             if(!gameObjectB || !gameObjectB.get()->IsActive()) continue;
 
+            // Ignore collision with self or with the owner of the object
+            if(gameObjectA.get() == gameObjectB.get()) continue;
+            if(gameObjectA->GetOwner() == gameObjectB.get() || gameObjectB->GetOwner() == gameObjectA.get()) continue;
+
+            // Ignore if the collider layer/mask configuration disallows the pair
+            const Collider* colliderA = gameObjectA->GetCollider();
+            const Collider* colliderB = gameObjectB->GetCollider();
+            if(!colliderA || !colliderB) continue;
+            if(!Collider::CanCollide(*colliderA, *colliderB)) continue;
+
             FCollisionInfo collisionInfo;
-            if(CheckForCollissionPair(gameObjectA.get()->GetCollider(), gameObjectB.get()->GetCollider(), collisionInfo)){
+            if(CheckForCollissionPair(colliderA, colliderB, collisionInfo)){
 
                 _CurrentCollisions.emplace_back(gameObjectA, gameObjectB);
                 if(!HasCollisionPair(_PreviousCollisions, gameObjectA, gameObjectB)){

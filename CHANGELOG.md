@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `OnCollisionEnter` override on SpaceShip to apply damage on contact
 - `GetLife()` and `TakeDamage()` accessors on SpaceShip
 - `Invader::CollisionDamage` (10) constant defining damage dealt to the SpaceShip on collision
+- `CollisionLayer` bitflag enum (`include/core/enums/CollisionLayers.hpp`) with bitwise operators (`|`, `&`, `~`, `|=`, `&=`) and `HasLayer()` helper to express collision categories
+- `_Layer` and `_Mask` members on `Collider` plus new constructors taking `(layer, mask)` for `Collider`, `RectangleCollider`, and `CircleCollider`
+- `Collider::CanCollide(A, B)` static helper performing symmetric layer/mask checks
 
 ### Changed
 - Moved `_Owner` (parent GameObject pointer) from Bullet to base GameObject class so any GameObject can optionally have an owner/parent
@@ -19,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `_Owner` initialized to `nullptr` by default in GameObject constructor
 - Bullet now uses inherited `_Owner` instead of its own private member
 - SpaceShip bullet pool increased from 2 to 3 bullets with reduced radius (5.f)
+- `CollisionManager::Update` now skips pairs where objects are the same instance, in an owner/child relationship, or whose `Collider` layer/mask configuration disallows the collision
 
 ### Future Plans
 - OpenGL, DirectX, and Vulkan backends

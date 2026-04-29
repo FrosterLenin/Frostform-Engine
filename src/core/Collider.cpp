@@ -1,14 +1,28 @@
 #include "core/Collider.hpp"
 #include "raylib.h"
 
-Collider::Collider(FVector2 position) : _Position(position){
-
+Collider::Collider(FVector2 position)
+    : _Position(position), _Layer(CollisionLayer::DEFAULT), _Mask(CollisionLayer::ALL){
 }
-CircleCollider::CircleCollider(FVector2 position, float radius) : Collider(position), _Radius(radius){
-
+Collider::Collider(FVector2 position, CollisionLayer layer, CollisionLayer mask)
+    : _Position(position), _Layer(layer), _Mask(mask){
 }
-RectangleCollider::RectangleCollider(FVector2 position, FVector2 size) : Collider(position), _Size(size){
+CircleCollider::CircleCollider(FVector2 position, float radius)
+    : Collider(position), _Radius(radius){
+}
+CircleCollider::CircleCollider(FVector2 position, float radius, CollisionLayer layer, CollisionLayer mask)
+    : Collider(position, layer, mask), _Radius(radius){
+}
+RectangleCollider::RectangleCollider(FVector2 position, FVector2 size)
+    : Collider(position), _Size(size){
+}
+RectangleCollider::RectangleCollider(FVector2 position, FVector2 size, CollisionLayer layer, CollisionLayer mask)
+    : Collider(position, layer, mask), _Size(size){
+}
 
+bool Collider::CanCollide(const Collider& A, const Collider& B){
+    // Both sides must accept the other's layer.
+    return HasLayer(A._Mask, B._Layer) && HasLayer(B._Mask, A._Layer);
 }
 
 void RectangleCollider::Draw() const {
