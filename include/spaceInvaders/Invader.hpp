@@ -4,6 +4,8 @@
 class Invader : public GameObject{
 
 public:
+    static constexpr int CollisionDamage = 10;
+
     Invader(Game* game, FVector2 position = FVector2{0,0}, FVector2 size = FVector2{1,1}
         , Color color = RAYWHITE, float accelerationIndex = 50.0f);
     ~Invader();

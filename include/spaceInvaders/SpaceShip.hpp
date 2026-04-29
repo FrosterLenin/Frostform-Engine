@@ -14,7 +14,9 @@ private:
     InputAction _SHOOT;
 
     std::queue<std::shared_ptr<Bullet>> _Bullets;
-    
+
+    int _Life;
+
 public:
     SpaceShip(Game* game, FVector2 position = FVector2{0,0}, FVector2 size = FVector2{1,1}
         , Color color = RAYWHITE, float accelerationIndex = 100.0f);
@@ -23,8 +25,12 @@ public:
     virtual void UpdateWithInput(float deltaTime) override;
     virtual void Start() override;
     virtual void Draw() override;
+    virtual void OnCollisionEnter(FCollisionInfo& collisionInfo) override;
 
     void Shoot();
     void ReturnBullet(std::shared_ptr<Bullet> bullet);
+
+    int GetLife() const;
+    void TakeDamage(const int amount);
 
 };

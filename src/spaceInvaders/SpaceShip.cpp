@@ -1,5 +1,6 @@
 #include "spaceInvaders/SpaceShip.hpp"
 #include "spaceInvaders/SpaceInvaders.hpp"
+#include "spaceInvaders/Invader.hpp"
 
 SpaceShip::SpaceShip(Game* game, FVector2 position, FVector2 size, Color color, float accelerationIndex) : 
     Player(game, position, size, color, accelerationIndex) {
@@ -20,6 +21,7 @@ void SpaceShip::Start(){
 
     _Velocity = {.0f, .0f};
     _AccelerationIndex = 100.0f;
+    _Life = 100;
 
     SpaceInvaders* spaceInvadersGame = dynamic_cast<SpaceInvaders*>(_Game);
     // Initialize bullet pool
@@ -81,4 +83,20 @@ void SpaceShip::Shoot(){
 void SpaceShip::ReturnBullet(std::shared_ptr<Bullet> bullet){
     bullet->SetActive(false);
     _Bullets.push(bullet);
+}
+
+void SpaceShip::OnCollisionEnter(FCollisionInfo& collisionInfo){
+    GameObject::OnCollisionEnter(collisionInfo);
+    TakeDamage(Invader::CollisionDamage);
+    if(_Life <= 0){
+        SetActive(false);
+    }
+}
+
+int SpaceShip::GetLife() const {
+    return _Life;
+}
+
+void SpaceShip::TakeDamage(int amount){
+    _Life -= amount;
 }
