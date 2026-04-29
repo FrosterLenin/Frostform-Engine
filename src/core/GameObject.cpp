@@ -10,6 +10,7 @@ GameObject::GameObject(Game* game, const FVector2 position, const FVector2 size)
     , _AccelerationIndex(.0f)
     , _Size(size)
     , _Active(true)
+    , _Owner(nullptr)
     , _DrawLayer(DrawLayer::GAME_FIELD){
 }
 GameObject::GameObject(Game* game, const FVector2 position, const FVector2 size, const Color color, float accelerationIndex) :
@@ -57,6 +58,12 @@ void GameObject::SetVelocity(const FVector2& other){
 }
 void GameObject::SetActive(const bool other){
     _Active = other;
+}
+void GameObject::SetOwner(GameObject* owner){
+    _Owner = owner;
+}
+GameObject* GameObject::GetOwner() const{
+    return _Owner;
 }
 FVector2 GameObject::GetPosition() const{
     return _Position;

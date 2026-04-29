@@ -2,8 +2,8 @@
 #include "spaceInvaders/SpaceShip.hpp"
 
 Bullet::Bullet(Game* game, GameObject* owner, FVector2 position, float radius, Color color, float accelerationIndex) : 
-    Circle(game, accelerationIndex, position, radius, color)
-    , _Owner(owner) {
+    Circle(game, accelerationIndex, position, radius, color) {
+    _Owner = owner;
     _Collider = std::make_shared<CircleCollider>(position, radius);
 }
 Bullet::~Bullet(){}
