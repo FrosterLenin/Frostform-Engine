@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - 2026-04-29
 
+### Added
+- SpaceShip life points system: starts with 100 life and deactivates when it reaches 0
+- `OnCollisionEnter` override on SpaceShip to apply damage on contact
+- `GetLife()` and `TakeDamage()` accessors on SpaceShip
+- `Invader::CollisionDamage` (10) constant defining damage dealt to the SpaceShip on collision
+
 ### Changed
 - Moved `_Owner` (parent GameObject pointer) from Bullet to base GameObject class so any GameObject can optionally have an owner/parent
 - Added `SetOwner()` and `GetOwner()` methods to GameObject public API
