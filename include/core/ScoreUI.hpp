@@ -6,12 +6,15 @@
 
 class Player;
 
+// Event signature for score updates: (playerIndex, score)
+using ScoreEventCallback = std::function<void(int, int)>;
+
 class ScoreUI : public GameObject{
 private:
     int _MaxPlayers;
     std::vector<Player*> _Players; // Raw pointers to player objects (owned by game)
 public:
-    std::function<void(int)> ScoreEvent;
+    ScoreEventCallback OnScoreUpdated;
 public:
     ScoreUI(Game* game, int maxPlayers = 4, FVector2 position = FVector2{0,0}, FVector2 size = FVector2{1,1}, Color color = RAYWHITE);
     ~ScoreUI();
@@ -21,7 +24,7 @@ public:
     virtual void Draw() override;
     virtual void Start() override;
 
-    void UpdateScore(const int playerIndex);
+    void UpdateScore(const int playerIndex, const int points);
     int GetPlayerScore(const int playerIndex) const;
     int GetNumberOfPlayers() const;
 };

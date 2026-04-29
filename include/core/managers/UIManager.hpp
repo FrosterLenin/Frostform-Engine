@@ -17,15 +17,19 @@ public:
 
     void Init() override;
     
-    // Bind an event from a UI object to the manager (supports any number of parameters)
+    // Bind an event from a UI object to the manager
     template<typename... Args>
     void BindEvent(GameObject* UIObject, std::function<void(Args...)> event);
     
-    // Trigger event for a specific UI object with parameters
-    template<typename... Args>
-    void TriggerObjectEvent(GameObject* UIObject, Args... args);
+    // Trigger event for a UI object of type T with parameters
+    template<typename T, typename... Args>
+    void TriggerObjectEvent(Args... args) const;
     
     // Trigger all bound events with parameters
     template<typename... Args>
     void TriggerAllEvents(Args... args);
+
+    // Get a managed UI object by type
+    template<typename T>
+    T* GetManagedObject() const;
 };

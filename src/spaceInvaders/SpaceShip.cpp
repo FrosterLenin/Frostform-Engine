@@ -25,8 +25,8 @@ void SpaceShip::Start(){
 
     SpaceInvaders* spaceInvadersGame = dynamic_cast<SpaceInvaders*>(_Game);
     // Initialize bullet pool
-    for(int i = 0; i < 2; ++i) {
-        std::shared_ptr<Bullet> bullet = spaceInvadersGame->SpawnBullet(this, FVector2{-100.f, -100.f}, 10.f, BLUE, 200.f);
+    for(int i = 0; i < 3; ++i) {
+        std::shared_ptr<Bullet> bullet = spaceInvadersGame->SpawnBullet(this, FVector2{-100.f, -100.f}, 5.f, BLUE, 200.f);
         bullet->OnExpired = [weakThis = weak_from_this()](std::shared_ptr<Bullet> inBullet)
         {
             if(std::shared_ptr<SpaceShip> sharedThis = weakThis.lock())
