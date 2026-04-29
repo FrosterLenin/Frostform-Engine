@@ -17,6 +17,9 @@ protected:
     std::shared_ptr<Collider> _Collider;
     Game* _Game;
     DrawLayer _DrawLayer;
+    // Optional owner/parent - the GameObject that "owns" this one (e.g. a ship that fired a bullet).
+    // Actual lifetime ownership is managed by the Game itself.
+    GameObject* _Owner;
 public:
     GameObject(Game* game, const FVector2 position = (.0f, .0f), const FVector2 size = (1.f, 1.f));
     GameObject(Game* game, const FVector2 position, const FVector2 size, const Color color, float accelerationIndex);
@@ -50,6 +53,7 @@ public:
     void SetPosition(const FVector2& other);
     void SetVelocity(const FVector2& other);
     void SetActive(const bool other);
+    void SetOwner(GameObject* owner);
 
     FVector2 GetPosition() const;
     FVector2 GetVelocity() const;
@@ -58,6 +62,7 @@ public:
     Collider* GetCollider() const;
     bool IsActive() const;
     DrawLayer GetDrawLayer() const;
+    GameObject* GetOwner() const;
 
     void Destroy();
    

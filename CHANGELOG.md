@@ -5,7 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [Unreleased] - 2026-04-29
+
+### Changed
+- Moved `_Owner` (parent GameObject pointer) from Bullet to base GameObject class so any GameObject can optionally have an owner/parent
+- Added `SetOwner()` and `GetOwner()` methods to GameObject public API
+- `_Owner` initialized to `nullptr` by default in GameObject constructor
+- Bullet now uses inherited `_Owner` instead of its own private member
+- SpaceShip bullet pool increased from 2 to 3 bullets with reduced radius (5.f)
 
 ### Future Plans
 - OpenGL, DirectX, and Vulkan backends
