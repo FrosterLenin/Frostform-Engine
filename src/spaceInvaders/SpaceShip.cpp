@@ -4,7 +4,8 @@
 
 SpaceShip::SpaceShip(Game* game, FVector2 position, FVector2 size, Color color, float accelerationIndex) : 
     Player(game, position, size, color, accelerationIndex) {
-    _Collider = std::make_shared<RectangleCollider>(position, size);
+    // Player should collide with enemies and enemy projectiles, but not with other players or player projectiles
+    _Collider = std::make_shared<RectangleCollider>(position, size, CollisionLayer::PLAYER, CollisionLayer::ENEMY | CollisionLayer::PROJECTILE_2); 
 }
     
 void SpaceShip::Draw(){
@@ -25,7 +26,8 @@ void SpaceShip::Start(){
 
     SpaceInvaders* spaceInvadersGame = dynamic_cast<SpaceInvaders*>(_Game);
     // Initialize bullet pool
-    for(int i = 0; i < 3; ++i) {
+    _Velocity = {1.f, .0}; // Move only in X axis
+    for(int i = 0; i < MAX_BULLETS; ++i) {
         std::shared_ptr<Bullet> bullet = spaceInvadersGame->SpawnBullet(this, FVector2{-100.f, -100.f}, 10.f, BLUE, 200.f);
         bullet->OnExpired = [weakThis = weak_from_this()](std::shared_ptr<Bullet> inBullet)
         {
@@ -86,7 +88,7 @@ void SpaceShip::ReturnBullet(std::shared_ptr<Bullet> bullet){
 }
 void SpaceShip::OnCollisionEnter(FCollisionInfo& collisionInfo){
     GameObject::OnCollisionEnter(collisionInfo);
-    TakeDamage(Invader::CollisionDamage);
+    TakeDamage(Invader::COLLISION_DAMAGE);
     if(_Life <= 0)
         SetActive(false);
 }

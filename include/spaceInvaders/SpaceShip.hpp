@@ -16,7 +16,7 @@ private:
     std::queue<std::shared_ptr<Bullet>> _Bullets;
 
     int _Life;
-
+    static constexpr int MAX_BULLETS = 3; // Max bullets in the pool, can be tweaked for performance/behavior
 public:
     SpaceShip(Game* game, FVector2 position = FVector2{0,0}, FVector2 size = FVector2{1,1}
         , Color color = RAYWHITE, float accelerationIndex = 100.0f);

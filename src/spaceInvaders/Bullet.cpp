@@ -1,9 +1,10 @@
 #include "spaceInvaders/Bullet.hpp"
 #include "spaceInvaders/SpaceShip.hpp"
 
-Bullet::Bullet(Game* game, GameObject* owner, FVector2 position, float radius, Color color, float accelerationIndex) : 
-    Circle(game, accelerationIndex, position, radius, color) {
+Bullet::Bullet(Game* game, GameObject* owner, FVector2 position, float radius, Color color, float accelerationIndex, FVector2 velocity) : 
+    Circle(game, accelerationIndex, position, radius, color){
     _Owner = owner;
+    _Velocity = velocity;
     _Collider = std::make_shared<CircleCollider>(position, radius);
 }
 Bullet::~Bullet(){}
@@ -12,7 +13,6 @@ void Bullet::Draw(){
     Circle::Draw();
 }
 void Bullet::Start(){
-    _Velocity = {.0f, -1.0f}; // Move only in Y axis
     _AccelerationIndex = 200.0f;
 }
 void Bullet::Update(float deltaTime){

@@ -73,7 +73,9 @@ void Game::Quit(){
 void Game::InitGame(const Color clearColor){
     _DrawManager.get()->Init();
     SetClearColor(clearColor);
-     for(auto& gameObject : _GameObjects){
+    const size_t initialGameObjectCount = _GameObjects.size();
+    for(size_t i = 0; i < initialGameObjectCount; ++i){
+        std::shared_ptr<GameObject> gameObject = _GameObjects.at(i);
         if(!gameObject->IsActive()) continue;
         gameObject->Start();
         _CollisionManager.get()->RegisterCollider(gameObject);

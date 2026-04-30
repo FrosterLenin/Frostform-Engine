@@ -12,7 +12,8 @@ enum class CollisionLayer : uint32_t {
     , PLAYER = 1u << 1
     , ENEMY = 1u << 2
     , PROJECTILE = 1u << 3
-    , PROJECTILE_2 = 1u << 4
+    // Second projectile layer for different "teams" entities, e.g. player projectiles vs enemy projectiles
+    , PROJECTILE_2 = 1u << 4 
     , WALL = 1u << 5
     , PICKUP = 1u << 6
     , UI = 1u << 7
