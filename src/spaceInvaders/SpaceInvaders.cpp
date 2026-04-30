@@ -95,7 +95,7 @@ void SpaceInvaders::InitUI(){
     _UIManager->Bind(_GameObjects.back());
     
     if(scoreUI)
-        _UIManager->BindEvent(scoreUI, scoreUI->OnScoreUpdated = [this](int playerIndex, int points){
+        _UIManager->BindEvent(scoreUI, scoreUI->UpdateEvent = [this](int playerIndex, int points){
             ScorePoint(playerIndex, points);
     });
 }

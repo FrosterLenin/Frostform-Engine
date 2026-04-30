@@ -8,25 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - 2026-04-30
 
 ### Added
-- `StatBar` UI component for displaying scaled bars (life, mana, etc.) with configurable max/current, fill/background/border colors, and optional text overlay
-- `StatBar` events: `OnValueChanged(int current, int max)`, `OnDepleted()`, and `OnFilled()` for reactive HUD and gameplay systems
-- `StatBar` mutators: `AddPoints()`, `RemovePoints()`, `SetCurrent()`, `SetMax(value, refill)`, `Refill()` with automatic clamping and event firing
-- `StatBar` accessors: `GetCurrent()`, `GetMax()`, `GetRatio()`, `IsDepleted()`, `IsFull()` for queries
-- `Invader::SHOOT_INTERVAL` (2s) and shared static `_TimeSinceLastShot` timer so all invaders share a single shooting cadence
-- `TickInvaderShot(float deltaTime)` private method in SpaceInvaders centralising invader shooting logic
-- Random-start forward-walk shooter selection: each interval a random active invader is chosen, guaranteeing a shot as long as at least one invader is alive
-- `EnemyManager::GetManagedObjects()` getter exposing the managed object list for external iteration
-- `CollisionLayer` assignments for SpaceShip (`PLAYER` layer, `ENEMY | PROJECTILE_2` mask) and Invader (`ENEMY` layer, `PLAYER | PROJECTILE` mask) with matching comments
-- `FCollisionInfo::OtherObject` so collision callbacks can identify which object was hit
-- `Bullet::DAMAGE` constant for projectile-specific damage handling
+- `UIObject<Func>` template base class for UI elements with configurable `UpdateEvent` property
+- `StatBar` UI component for displaying scaled bars with configurable max/current values and visual styling
+- `FCollisionInfo::OtherObject` to identify the opposing GameObject in collision callbacks
+- `Invader::SHOOT_INTERVAL` and centralized invader shooting via `TickInvaderShot()` in SpaceInvaders
+- `CollisionLayer` bitflag enum with layer/mask assignments for SpaceShip and Invader
+- `EnemyManager::GetManagedObjects()` getter for external iteration
 
 ### Changed
-- Invader bullet pool spawned with `isPlayer = false`, giving them `PROJECTILE_2` layer so they correctly collide with the player but not with other enemy bullets
-- `Game::InitGame` loop now captures the initial `_GameObjects` count before iterating, preventing iterator invalidation when `Start()` spawns pooled bullets during init
-- Shooter selection moved from per-invader `Update` to a single centralised call in `SpaceInvaders::Update` via `TickInvaderShot`
-- Invader shooting loop iterates `EnemyManager::GetManagedObjects()` instead of the full `_GameObjects` list
-- Collision callbacks now receive side-specific collision info, including the opposing GameObject pointer for each participant
-- `SpaceShip::OnCollisionEnter` now applies type-specific damage for enemy invaders vs enemy bullets (`PROJECTILE_2`)
+- `ScoreUI` and `StatBar` now inherit from `UIObject<Func>` instead of `GameObject`
+- Invader bullet pool layer set to `PROJECTILE_2` for correct collision with SpaceShip
+- Collision detection uses symmetric layer/mask checking via `Collider::CanCollide()`
+- Moved `_Owner` (parent GameObject pointer) from Bullet to base GameObject class
+- SpaceShip bullet pool increased from 2 to 3 bullets with reduced radius (5.f)
 
 ### Fixed
 - Program freeze at `RegisterCollider` during `InitGame` caused by vector reallocation when bullet pools were created inside `Start()` while the init loop was still iterating `_GameObjects`
@@ -38,17 +32,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `OnCollisionEnter` override on SpaceShip to apply damage on contact
 - `GetLife()` and `TakeDamage()` accessors on SpaceShip
 - `Invader::CollisionDamage` (10) constant defining damage dealt to the SpaceShip on collision
-- `CollisionLayer` bitflag enum (`include/core/enums/CollisionLayers.hpp`) with bitwise operators (`|`, `&`, `~`, `|=`, `&=`) and `HasLayer()` helper to express collision categories
-- `_Layer` and `_Mask` members on `Collider` plus new constructors taking `(layer, mask)` for `Collider`, `RectangleCollider`, and `CircleCollider`
-- `Collider::CanCollide(A, B)` static helper performing symmetric layer/mask checks
 
 ### Changed
-- Moved `_Owner` (parent GameObject pointer) from Bullet to base GameObject class so any GameObject can optionally have an owner/parent
 - Added `SetOwner()` and `GetOwner()` methods to GameObject public API
-- `_Owner` initialized to `nullptr` by default in GameObject constructor
-- Bullet now uses inherited `_Owner` instead of its own private member
-- SpaceShip bullet pool increased from 2 to 3 bullets with reduced radius (5.f)
-- `CollisionManager::Update` now skips pairs where objects are the same instance, in an owner/child relationship, or whose `Collider` layer/mask configuration disallows the collision
+- `CollisionManager::Update` now skips pairs where objects are the same instance or in an owner/child relationship
 
 ### Future Plans
 - OpenGL, DirectX, and Vulkan backends

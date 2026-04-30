@@ -116,7 +116,7 @@ void PongGame::InitUI(){
     ScoreUI* scoreUI = dynamic_cast<ScoreUI*>(_GameObjects.back().get());
     _UIManager->Bind(_GameObjects.back());
     if(scoreUI)
-        _UIManager->BindEvent(scoreUI, scoreUI->OnScoreUpdated = [this](int playerIndex, int points){
+        _UIManager->BindEvent(scoreUI, scoreUI->UpdateEvent = [this](int playerIndex, int points){
             ScorePoint(playerIndex, points);
         });
 }

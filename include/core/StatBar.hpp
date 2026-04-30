@@ -1,5 +1,5 @@
 #pragma once
-#include "core/GameObject.hpp"
+#include "core/UIObject.hpp"
 #include <functional>
 
 // Event signature for stat changes: (currentValue, maxValue)
@@ -7,9 +7,9 @@ using StatBarEventCallback = std::function<void(int, int)>;
 
 // A generic UI bar that visualizes a stat with a maximum (e.g. life points, mana points).
 // The filled portion scales relative to the current/max ratio.
-// Use AddPoints / RemovePoints / SetCurrent to mutate; OnValueChanged fires whenever the
+// Use AddPoints / RemovePoints / SetCurrent to mutate; UpdateEvent fires whenever the
 // value changes, OnDepleted fires when current reaches 0, OnFilled when current reaches max.
-class StatBar : public GameObject {
+class StatBar : public UIObject<StatBarEventCallback> {
 private:
     int _MaxPoints;
     int _CurrentPoints;
@@ -17,14 +17,6 @@ private:
     Color _BorderColor;
     int _BorderThickness;
     bool _ShowText;
-
-public:
-    // Fires every time the stat changes (after clamp).
-    StatBarEventCallback OnValueChanged;
-    // Fires when current reaches 0 from a higher value.
-    StatBarEventCallback OnDepleted;
-    // Fires when current reaches max from a lower value.
-    StatBarEventCallback OnFilled;
 
 public:
     StatBar(Game* game,

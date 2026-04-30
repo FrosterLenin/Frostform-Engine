@@ -5,7 +5,7 @@
 #include <algorithm>
 
 ScoreUI::ScoreUI(Game* game, int maxPlayers, FVector2 position, FVector2 size, Color color) : 
-    GameObject(game, position, size, color)
+    UIObject(game, position, size, color)
     , _MaxPlayers(std::min(maxPlayers, 4)) { // Cap at 4 players max
 }
 

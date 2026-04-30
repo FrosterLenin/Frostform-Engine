@@ -11,7 +11,7 @@ StatBar::StatBar(Game* game,
                  Color fillColor,
                  Color backgroundColor,
                  Color borderColor)
-    : GameObject(game, position, size, fillColor)
+    : UIObject(game, position, size, fillColor)
     , _MaxPoints(std::max(1, maxPoints))
     , _CurrentPoints(std::clamp(currentPoints, 0, std::max(1, maxPoints)))
     , _BackgroundColor(backgroundColor)
@@ -77,14 +77,6 @@ void StatBar::SetCurrent(int value) {
     const int previous = _CurrentPoints;
     _CurrentPoints = std::clamp(value, 0, _MaxPoints);
     if (_CurrentPoints == previous) return;
-
-    if (OnValueChanged)
-        OnValueChanged(_CurrentPoints, _MaxPoints);
-
-    if (_CurrentPoints == 0 && previous > 0 && OnDepleted)
-        OnDepleted(_CurrentPoints, _MaxPoints);
-    else if (_CurrentPoints == _MaxPoints && previous < _MaxPoints && OnFilled)
-        OnFilled(_CurrentPoints, _MaxPoints);
 }
 
 void StatBar::SetMax(int value, bool refill) {
@@ -93,9 +85,6 @@ void StatBar::SetMax(int value, bool refill) {
         _CurrentPoints = _MaxPoints;
     else
         _CurrentPoints = std::clamp(_CurrentPoints, 0, _MaxPoints);
-
-    if (OnValueChanged)
-        OnValueChanged(_CurrentPoints, _MaxPoints);
 }
 
 void StatBar::Refill() {
