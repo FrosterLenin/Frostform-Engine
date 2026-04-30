@@ -12,6 +12,7 @@ struct CircleCollider;
 struct FCollisionInfo{
 public:
     FVector2 OverlapPoint;
+    GameObject* OtherObject;
 
     FCollisionInfo();
 };

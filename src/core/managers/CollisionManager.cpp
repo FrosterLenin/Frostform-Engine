@@ -38,15 +38,19 @@ void CollisionManager::Update(){
 
             FCollisionInfo collisionInfo;
             if(CheckForCollissionPair(colliderA, colliderB, collisionInfo)){
+                FCollisionInfo collisionInfoForA = collisionInfo;
+                FCollisionInfo collisionInfoForB = collisionInfo;
+                collisionInfoForA.OtherObject = gameObjectB.get();
+                collisionInfoForB.OtherObject = gameObjectA.get();
 
                 _CurrentCollisions.emplace_back(gameObjectA, gameObjectB);
                 if(!HasCollisionPair(_PreviousCollisions, gameObjectA, gameObjectB)){
-                    gameObjectA->OnCollisionEnter(collisionInfo);
-                    gameObjectB->OnCollisionEnter(collisionInfo);
+                    gameObjectA->OnCollisionEnter(collisionInfoForA);
+                    gameObjectB->OnCollisionEnter(collisionInfoForB);
                 }
                 else{
-                    gameObjectA->OnCollisionStay(collisionInfo);
-                    gameObjectB->OnCollisionStay(collisionInfo);
+                    gameObjectA->OnCollisionStay(collisionInfoForA);
+                    gameObjectB->OnCollisionStay(collisionInfoForB);
                 }
             }
         }
@@ -58,9 +62,12 @@ void CollisionManager::Update(){
         if(!gameObjectA || !gameObjectB) continue;
 
         if(!HasCollisionPair(_CurrentCollisions, gameObjectA, gameObjectB)){
-            FCollisionInfo collisionInfo; // We can pass an empty collision info since the collision is already ended
-            gameObjectA->OnCollisionExit(collisionInfo);
-            gameObjectB->OnCollisionExit(collisionInfo);
+            FCollisionInfo collisionInfoForA; // We can pass an empty collision info since the collision is already ended
+            FCollisionInfo collisionInfoForB;
+            collisionInfoForA.OtherObject = gameObjectB.get();
+            collisionInfoForB.OtherObject = gameObjectA.get();
+            gameObjectA->OnCollisionExit(collisionInfoForA);
+            gameObjectB->OnCollisionExit(collisionInfoForB);
         }
     }
 }

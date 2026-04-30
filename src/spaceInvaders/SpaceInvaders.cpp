@@ -11,7 +11,7 @@ SpaceInvaders::SpaceInvaders() : Game({800, 600}, "Space Invaders")
     FVector2 spaceShipSpawnPoint = {centerScreen.x, centerScreen.y + 200.0f};
     _GameObjects.push_back(std::make_unique<Background>(this, FVector2{.0f, .0f}, BLACK));
     _GameObjects.push_back(std::make_unique<SpaceShip>(this, spaceShipSpawnPoint, FVector2{40.0f, 40.0f}, WHITE, 100.0f));
-    InitEnemies(3, 10, 20.0f);
+    InitEnemies(3, 7, 20.0f);
     InitUI();
 }
 
@@ -90,7 +90,7 @@ void SpaceInvaders::ScorePoint(const int playerIndex, const int score){
     //     _GameOver = true;
 }
 void SpaceInvaders::InitUI(){
-    _GameObjects.push_back(std::make_unique<ScoreUI>(this, 1 ,FVector2{10.0f, 10.0f}, FVector2{10.0f, 10.0f}, WHITE));
+    _GameObjects.push_back(std::make_unique<ScoreUI>(this, 1 ,FVector2{10.0f, 10.0f}, FVector2{20.0f, 20.0f}, WHITE));
     ScoreUI* scoreUI = dynamic_cast<ScoreUI*>(_GameObjects.back().get());
     _UIManager->Bind(_GameObjects.back());
     

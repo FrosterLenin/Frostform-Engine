@@ -13,12 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Random-start forward-walk shooter selection: each interval a random active invader is chosen, guaranteeing a shot as long as at least one invader is alive
 - `EnemyManager::GetManagedObjects()` getter exposing the managed object list for external iteration
 - `CollisionLayer` assignments for SpaceShip (`PLAYER` layer, `ENEMY | PROJECTILE_2` mask) and Invader (`ENEMY` layer, `PLAYER | PROJECTILE` mask) with matching comments
+- `FCollisionInfo::OtherObject` so collision callbacks can identify which object was hit
+- `Bullet::DAMAGE` constant for projectile-specific damage handling
 
 ### Changed
 - Invader bullet pool spawned with `isPlayer = false`, giving them `PROJECTILE_2` layer so they correctly collide with the player but not with other enemy bullets
 - `Game::InitGame` loop now captures the initial `_GameObjects` count before iterating, preventing iterator invalidation when `Start()` spawns pooled bullets during init
 - Shooter selection moved from per-invader `Update` to a single centralised call in `SpaceInvaders::Update` via `TickInvaderShot`
 - Invader shooting loop iterates `EnemyManager::GetManagedObjects()` instead of the full `_GameObjects` list
+- Collision callbacks now receive side-specific collision info, including the opposing GameObject pointer for each participant
+- `SpaceShip::OnCollisionEnter` now applies type-specific damage for enemy invaders vs enemy bullets (`PROJECTILE_2`)
 
 ### Fixed
 - Program freeze at `RegisterCollider` during `InitGame` caused by vector reallocation when bullet pools were created inside `Start()` while the init loop was still iterating `_GameObjects`

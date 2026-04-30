@@ -18,12 +18,12 @@ void Invader::Draw(){
 }
 void Invader::Start(){
     _Velocity = {1.f, .0}; // Move only in X axis
-    _AccelerationIndex = 100.0f;
+    _AccelerationIndex = 80.0f;
 
     SpaceInvaders* spaceInvadersGame = dynamic_cast<SpaceInvaders*>(_Game);
     // Initialize bullet pool
     for(int i = 0; i < MAX_BULLETS; ++i) {
-        std::shared_ptr<Bullet> bullet = spaceInvadersGame->SpawnBullet(this, FVector2{-100.f, -100.f}, 10.f, BLUE, 200.f, false);
+        std::shared_ptr<Bullet> bullet = spaceInvadersGame->SpawnBullet(this, FVector2{-100.f, -100.f}, 5.f, YELLOW, 200.f, false);
         bullet->OnExpired = [weakThis = weak_from_this()](std::shared_ptr<Bullet> inBullet)
         {
             if(std::shared_ptr<Invader> sharedThis = weakThis.lock())

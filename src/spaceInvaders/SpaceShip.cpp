@@ -28,7 +28,7 @@ void SpaceShip::Start(){
     // Initialize bullet pool
     _Velocity = {1.f, .0}; // Move only in X axis
     for(int i = 0; i < MAX_BULLETS; ++i) {
-        std::shared_ptr<Bullet> bullet = spaceInvadersGame->SpawnBullet(this, FVector2{-100.f, -100.f}, 10.f, BLUE, 200.f);
+        std::shared_ptr<Bullet> bullet = spaceInvadersGame->SpawnBullet(this, FVector2{-100.f, -100.f}, 5.f, BLUE, 200.f);
         bullet->OnExpired = [weakThis = weak_from_this()](std::shared_ptr<Bullet> inBullet)
         {
             if(std::shared_ptr<SpaceShip> sharedThis = weakThis.lock())
@@ -88,9 +88,19 @@ void SpaceShip::ReturnBullet(std::shared_ptr<Bullet> bullet){
 }
 void SpaceShip::OnCollisionEnter(FCollisionInfo& collisionInfo){
     GameObject::OnCollisionEnter(collisionInfo);
-    TakeDamage(Invader::COLLISION_DAMAGE);
-    if(_Life <= 0)
+
+    if(dynamic_cast<Bullet*>(collisionInfo.OtherObject) != nullptr)
+        TakeDamage(Bullet::DAMAGE);
+    else if(dynamic_cast<Invader*>(collisionInfo.OtherObject) != nullptr)
+        TakeDamage(Invader::COLLISION_DAMAGE);
+
+    if(_Life <= 0){
         SetActive(false);
+        // _Game->GetUIManager()->TriggerObjectEvent<GameOverUI>(0); // Trigger Game Over UI
+        // _Game->GetEnemyManager()->Clear(); // Clear enemies from the screen
+        _Game->SetShouldClose(true); // End the game loop, this will close the game after the current frame
+    }
+        
 }
 int SpaceShip::GetLife() const {
     return _Life;

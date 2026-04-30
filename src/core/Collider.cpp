@@ -65,7 +65,7 @@ bool Collider::CheckCollision(const CircleCollider& C, const RectangleCollider& 
     return CheckCollision(R, C, collisionInfo);
 }
 
-FCollisionInfo::FCollisionInfo() : OverlapPoint(0,0) {}
+FCollisionInfo::FCollisionInfo() : OverlapPoint(0,0), OtherObject(nullptr) {}
 
 FCollisionPair::FCollisionPair(std::weak_ptr<GameObject> a, std::weak_ptr<GameObject> b): A(a), B(b) {}
 
