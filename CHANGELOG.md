@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - 2026-04-30
 
 ### Added
+- `StatBar` UI component for displaying scaled bars (life, mana, etc.) with configurable max/current, fill/background/border colors, and optional text overlay
+- `StatBar` events: `OnValueChanged(int current, int max)`, `OnDepleted()`, and `OnFilled()` for reactive HUD and gameplay systems
+- `StatBar` mutators: `AddPoints()`, `RemovePoints()`, `SetCurrent()`, `SetMax(value, refill)`, `Refill()` with automatic clamping and event firing
+- `StatBar` accessors: `GetCurrent()`, `GetMax()`, `GetRatio()`, `IsDepleted()`, `IsFull()` for queries
 - `Invader::SHOOT_INTERVAL` (2s) and shared static `_TimeSinceLastShot` timer so all invaders share a single shooting cadence
 - `TickInvaderShot(float deltaTime)` private method in SpaceInvaders centralising invader shooting logic
 - Random-start forward-walk shooter selection: each interval a random active invader is chosen, guaranteeing a shot as long as at least one invader is alive
