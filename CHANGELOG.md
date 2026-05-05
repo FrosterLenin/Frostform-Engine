@@ -32,16 +32,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `AddPlayer()` method to ScoreUI for explicit player registration from game scenes
 
 ### Changed
-- `SetGameScene()` moved from inline header to cpp implementations for PongGame and SpaceInvaders
-- All game object spawning now handled through Scene::SpawnGameObject() for scene-local object management
-- Collision detection integrated into scene updates via CollisionManager
-- Input management now scene-based via InputManager bound during scene initialization
-- Making UIObject set correct DrawLayer (UI) in constructor
-- Activating ScoreUI in Start() method so DrawManager renders it
-- Initializing DrawManager layer vector immediately in constructor
-- Preventing ScoreUI from clearing players in UpdateControlled()
-- Having game scenes explicitly register players via AddPlayer()
-- DrawManager layer availability by initializing in constructor instead of deferred initialization
+- All game object spawning now handled through `Scene::SpawnGameObject()` for scene-local object management
+- Input management now scene-based via `InputManager` bound during scene initialization
+- Making `UIObject` set correct `DrawLayer` (UI) in constructor
+- Activating `ScoreUI` in `Start()` method so `DrawManager` renders it
+- Initializing `DrawManager` layer vector immediately in constructor
+- Preventing `ScoreUI` from clearing players in `UpdateControlled()`
+- Having game scenes explicitly register players via `AddPlayer()`
+- `DrawManager` layer availability by initializing in constructor instead of deferred initialization
 
 ## [0.6.0] - 2026-05-01
 
@@ -75,7 +73,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 #### 2026-04-30
 - Program freeze at `RegisterCollider` during `InitGame` caused by vector reallocation when bullet pools were created inside `Start()` while the init loop was still iterating `_GameObjects`
-
 
 ## [0.4.0] - 2026-04-28
 
