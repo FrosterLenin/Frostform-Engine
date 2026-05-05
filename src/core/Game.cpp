@@ -1,5 +1,6 @@
 #include "core/Game.hpp"
 #include "core/Player.hpp"
+#include "core/enums/SceneResult.hpp"
 
 Game::Game(FVector2 screenSize, const std::string& title) : 
     _ScreenSize(screenSize)
@@ -13,6 +14,7 @@ Game::Game(FVector2 screenSize, const std::string& title) :
     _DrawManager = std::make_unique<DrawManager>();
     _EnemyManager = std::make_unique<EnemyManager>();
     _UIManager = std::make_unique<UIManager>();
+    _SceneManager = std::make_unique<SceneManager>(this);
 }
 Game::~Game(){
     CloseWindow();
@@ -20,14 +22,23 @@ Game::~Game(){
 const FVector2 Game::GetScreenSize() const{
     return _ScreenSize;
 }
-const InputManager* Game::GetInputManager() const{
+InputManager* Game::GetInputManager() const{
     return _InputManager.get();
 }
-const EnemyManager* Game::GetEnemyManager() const{
+EnemyManager* Game::GetEnemyManager() const{
     return _EnemyManager.get();
 }
-const UIManager* Game::GetUIManager() const{
+UIManager* Game::GetUIManager() const{
     return _UIManager.get();
+}
+CollisionManager* Game::GetCollisionManager() const{
+    return _CollisionManager.get();
+}
+DrawManager* Game::GetDrawManager() const{
+    return _DrawManager.get();
+}
+Color Game::GetClearColor() const{
+    return _ClearColor;
 }
 const std::vector<Player*> Game::GetPlayers() const{
     std::vector<Player*> players;
@@ -45,6 +56,16 @@ void Game::SetShouldClose(const bool shouldClose){
 void Game::SetClearColor(const Color other){
     _ClearColor = other;
 }
+
+void Game::ClearManagers()
+{
+    _InputManager->Init();
+    _CollisionManager->Init();
+    _DrawManager->Init();
+    _EnemyManager->Init();
+    _UIManager->Init();
+}
+
 void Game::Draw(){
     BeginDrawing();
     ClearBackground(_ClearColor);
@@ -62,8 +83,21 @@ void Game::Update(float deltaTime){
 void Game::Run(){
     while(!WindowShouldClose() && !_ShouldClose){
         float deltaTime = GetFrameTime();
-        Update(deltaTime);
-        Draw();
+        
+        if (_SceneManager && _SceneManager->HasActiveScene()) {
+            // Scene-based game loop
+            SceneResult result = _SceneManager->Update(deltaTime);
+            _SceneManager->Draw();
+            
+            // Handle scene results
+            if (result == SceneResult::EXIT || result == SceneResult::RESTART) {
+                _ShouldClose = true;
+            }
+        } else {
+            // Old-style game loop (without scenes)
+            Update(deltaTime);
+            Draw();
+        }
     }
 }
 void Game::Quit(){

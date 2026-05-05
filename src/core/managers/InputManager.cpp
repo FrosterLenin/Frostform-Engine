@@ -1,13 +1,17 @@
 #include "core/managers/InputManager.hpp"
 
 InputManager::InputManager(){
-    for(auto& keyBinding : _KeyBindings){
-        keyBinding = -1;
-    }
+    Init();
+}
+void InputManager::ClearAllBindings(){
+    _KeyBindings.fill(-1);
     _KeyDowns.fill(false);
     _KeyUps.fill(false);
     _KeyStates.fill(false);
+}
 
+void InputManager::Init(){
+    ClearAllBindings();
     _MousePosition = {0,0};
     _MousePositionDelta = {0,0};
     _MouseWheel = .0f;
@@ -24,6 +28,8 @@ void InputManager::UnbindKey(InputAction action){
     _KeyUps[ToIndex(action)] = false;
     _KeyStates[ToIndex(action)] = false;
 }
+
+
 void InputManager::Update(){
     _KeyDowns.fill(false);
     _KeyUps.fill(false);

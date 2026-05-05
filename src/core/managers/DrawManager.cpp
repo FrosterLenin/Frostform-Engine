@@ -1,6 +1,9 @@
 #include "core/managers/DrawManager.hpp"
 
-DrawManager::DrawManager() {}
+DrawManager::DrawManager() {
+    // Initialize the draw layers
+    Init();
+}
 DrawManager::~DrawManager() {}
 
 void DrawManager::BeginDraw() const{

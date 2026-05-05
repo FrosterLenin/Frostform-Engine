@@ -14,6 +14,14 @@ void CollisionManager::UnregisterCollider(std::shared_ptr<GameObject> gameOject)
         }
     }
 }
+
+// Clear all colliders and collision state
+void CollisionManager::Init(){
+    _GameObjects.clear();
+    _CurrentCollisions.clear();
+    _PreviousCollisions.clear();
+}
+
 void CollisionManager::Update(){
     _PreviousCollisions = _CurrentCollisions;
     _CurrentCollisions.clear();
@@ -56,7 +64,7 @@ void CollisionManager::Update(){
         }
     }
 
-    for(const auto& collisionPair : _PreviousCollisions){
+    for(const FCollisionPair& collisionPair : _PreviousCollisions){
         std::shared_ptr<GameObject> gameObjectA = collisionPair.A.lock();
         std::shared_ptr<GameObject> gameObjectB = collisionPair.B.lock();
         if(!gameObjectA || !gameObjectB) continue;

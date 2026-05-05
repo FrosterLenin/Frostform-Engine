@@ -14,6 +14,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Contributions or suggestions to help identify and fix these issues are welcome.
 - Space Invaders: The enemy formation gradually shifts, causing inconsistent spacing between invaders over time after the enemy manager update.
 
+## [0.10.0] - 2026-05-05
+
+### Added
+- **Scene-based game architecture**
+  - `Scene` base class for managing game states and object lifecycles
+  - `SceneManager` for orchestrating scene transitions and lifecycle
+  - `SceneResult` enum for scene state communication (CONTINUE, EXIT, RESTART, SCENE_COMPLETE)
+  - `SceneState` enum for tracking scene loading/active/unloading states
+  - Scene template methods `SpawnGameObject<T>()` and `SetNextScene<T>()` for flexible scene setup
+  - Scene-specific game object management separate from Game's global object list
+- **PongGame implementation** using scene architecture
+  - `PongGameScene` for active gameplay with paddles and ball
+  - `PongGameOverScene` for game completion screen
+- **SpaceInvaders implementation** using scene architecture
+  - `SpaceInvadersGameScene` for active gameplay with enemies and player ship
+- `AddPlayer()` method to ScoreUI for explicit player registration from game scenes
+
+### Changed
+- `SetGameScene()` moved from inline header to cpp implementations for PongGame and SpaceInvaders
+- All game object spawning now handled through Scene::SpawnGameObject() for scene-local object management
+- Collision detection integrated into scene updates via CollisionManager
+- Input management now scene-based via InputManager bound during scene initialization
+- Making UIObject set correct DrawLayer (UI) in constructor
+- Activating ScoreUI in Start() method so DrawManager renders it
+- Initializing DrawManager layer vector immediately in constructor
+- Preventing ScoreUI from clearing players in UpdateControlled()
+- Having game scenes explicitly register players via AddPlayer()
+- DrawManager layer availability by initializing in constructor instead of deferred initialization
+
 ## [0.6.0] - 2026-05-01
 
 ### Added

@@ -12,6 +12,7 @@ private:
 public:
     void RegisterCollider(std::shared_ptr<GameObject> gameObject);
     void UnregisterCollider(std::shared_ptr<GameObject> gameObject);
+    void Init();  // Clear all colliders and collision state
     void Update();
 
 private:

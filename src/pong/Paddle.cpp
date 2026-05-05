@@ -39,30 +39,24 @@ void Paddle::Update(float deltaTime){
     else{
         // Needed to check before clamping into bounding borders fo screen
         FVector2 nextPosition = GetCenter() + _Velocity.Normalized() * _AccelerationIndex * deltaTime;
-        if(nextPosition.y - GetHalfHeight() < 0 || nextPosition.y + GetHalfHeight() > GetScreenHeight()){
+        if(nextPosition.y - GetHalfHeight() < 0 || nextPosition.y + GetHalfHeight() > GetScreenHeight())
             _Velocity.y *= -1;
-        }
-        if(nextPosition.x - GetHalfWidth() < 0 || nextPosition.x + GetHalfWidth() > GetScreenWidth()){
+        if(nextPosition.x - GetHalfWidth() < 0 || nextPosition.x + GetHalfWidth() > GetScreenWidth())
             _Velocity.x *= -1;
-        }
     }
     SetPosition(_Position + _Velocity.Normalized() * _AccelerationIndex * deltaTime);
 }
 void Paddle::UpdateWithInput(float deltaTime){
     const InputManager* inputManager = dynamic_cast<PongGame*>(_Game)->GetInputManager();
     _Velocity = {0,0}; // Button released so it stops
-    if(inputManager->GetActionState(_UP)){
+    if(inputManager->GetActionState(_UP))
         _Velocity.y = -1;
-    }
-    else if(inputManager->GetActionState(_DOWN)){
+    else if(inputManager->GetActionState(_DOWN))
         _Velocity.y = 1;
-    }
-    if(inputManager->GetActionState(_RIGHT)){
+    if(inputManager->GetActionState(_RIGHT))
         _Velocity.x = 1;
-    }
-    else if(inputManager->GetActionState(_LEFT)){
+    else if(inputManager->GetActionState(_LEFT))
         _Velocity.x = -1;
-    }
 }
 void Paddle::SetRandomIndexVelocityX(const int value){
     _RandomIndexVelocityX = value;

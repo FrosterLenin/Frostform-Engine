@@ -26,6 +26,7 @@ public:
         : GameObject(game, position, size, color)
         , UpdateEvent(nullptr)
     {
+        _DrawLayer = DrawLayer::UI;
     }
 
     virtual ~UIObject() = default;

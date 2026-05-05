@@ -19,8 +19,10 @@ private:
 public:
     InputManager();
 
+    void Init();  // Clear all bindings and state
     void BindKey(InputAction action, const int key);
     void UnbindKey(InputAction action);
+    void ClearAllBindings();  // Clear all key bindings
     void Update();
 
     bool GetActionDown(InputAction action) const;

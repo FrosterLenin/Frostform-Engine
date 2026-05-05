@@ -10,7 +10,10 @@
 #include "core/managers/EnemyManager.hpp"
 #include "core/managers/CollisionManager.hpp"
 #include "core/managers/UIManager.hpp"
+#include "core/managers/SceneManager.hpp"
+
 class Player; // Forward declaration
+class SceneManager; // Forward declaration
 
 class Game
 {
@@ -25,6 +28,7 @@ protected:
     std::unique_ptr<DrawManager> _DrawManager;
     std::unique_ptr<EnemyManager> _EnemyManager;
     std::unique_ptr<UIManager> _UIManager;
+    std::unique_ptr<SceneManager> _SceneManager;
 public:
     const bool DEBUGMODE = true;
     Game(FVector2 screenSize, const std::string& title);
@@ -37,9 +41,15 @@ public:
     void Quit();
 
     const FVector2 GetScreenSize() const;
-    const InputManager* GetInputManager() const;
-    const EnemyManager* GetEnemyManager() const;
-    const UIManager* GetUIManager() const;
+    InputManager* GetInputManager() const;
+    EnemyManager* GetEnemyManager() const;
+    UIManager* GetUIManager() const;
+    CollisionManager* GetCollisionManager() const;
+    DrawManager* GetDrawManager() const;
+    Color GetClearColor() const;
+    
+    // Clear all managers (called when loading new scene)
+    void ClearManagers();
     const std::vector<Player*> GetPlayers() const;
     void SetShouldClose(const bool shouldClose);
     void SetClearColor(const Color other);

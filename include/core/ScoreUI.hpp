@@ -23,6 +23,7 @@ public:
     virtual void Draw() override;
     virtual void Start() override;
 
+    void AddPlayer(Player* player);
     void UpdateScore(const int playerIndex, const int points);
     int GetPlayerScore(const int playerIndex) const;
     int GetNumberOfPlayers() const;

@@ -62,13 +62,12 @@ void ScoreUI::Draw(){
 }
 
 void ScoreUI::Start(){
-    // Get all players from the game (up to _MaxPlayers)
-    std::vector<Player*> allPlayers = _Game->GetPlayers();
-    _Players.clear();
+    // Activate this UI object so it can be drawn
+    SetActive(true);
     
-    // Store pointers to players up to the max limit
-    for(int i = 0; i < std::min(static_cast<int>(allPlayers.size()), _MaxPlayers); ++i)
-        _Players.push_back(allPlayers[i]);
+    // Initialize empty player list
+    // Players will be manually added via AddPlayer() after spawning
+    _Players.clear();
 }
 
 
@@ -87,17 +86,15 @@ int ScoreUI::GetPlayerScore(const int playerIndex) const {
     return 0;
 }
 
+void ScoreUI::AddPlayer(Player* player) {
+    if(player && static_cast<int>(_Players.size()) < _MaxPlayers)
+        _Players.push_back(player);
+}
+
 void ScoreUI::UpdateControlled(float deltaTime){
     GameObject::UpdateControlled(deltaTime);
-    // Update player references in case they changed (though they shouldn't)
-    if(_Game) {
-        std::vector<Player*> allPlayers = _Game->GetPlayers();
-        if(allPlayers.size() != _Players.size()) {
-            _Players.clear();
-            for(int i = 0; i < std::min(static_cast<int>(allPlayers.size()), _MaxPlayers); ++i)
-                _Players.push_back(allPlayers[i]);
-        }
-    }
+    // Don't refresh players from Game - they're managed manually via AddPlayer()
+    // Attempting to fetch from Game will fail since Scene objects aren't in Game's list
 }
 int ScoreUI::GetNumberOfPlayers() const {
     return static_cast<int>(_Players.size());
