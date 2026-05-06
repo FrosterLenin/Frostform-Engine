@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Space Invaders: The enemy formation gradually shifts, causing inconsistent spacing between invaders over time after the enemy manager update.
 
 ### Added
+#### 2026-05-06
 - **Software rasterizer module** under `core/rasterizer/`
   - `Rasterizer` class unifying line and triangle rasterization with both explicit methods (`DrawLine`, `DrawTriangle`) and a `Draw(RasterMode, ...)` mode-driven dispatcher
   - `RasterMode` enum (DDA_LINE, BBOX_TRIANGLE, SCANLINE_TRIANGLE) in `core/enums/`
@@ -32,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `FMaths` namespace with `Min3`, `Max3`, `Det` (edge function), and `PI2`
 
 ### Changed
+#### 2026-05-06
 - `CMakeLists.txt` now globs `src/core/rasterizer/*.cpp` into the build
 - Renamed FVector.cpp to FVector2.cpp
 
