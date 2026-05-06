@@ -14,6 +14,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Contributions or suggestions to help identify and fix these issues are welcome.
 - Space Invaders: The enemy formation gradually shifts, causing inconsistent spacing between invaders over time after the enemy manager update.
 
+### Added
+- **Software rasterizer module** under `core/rasterizer/`
+  - `Rasterizer` class unifying line and triangle rasterization with both explicit methods (`DrawLine`, `DrawTriangle`) and a `Draw(RasterMode, ...)` mode-driven dispatcher
+  - `RasterMode` enum (DDA_LINE, BBOX_TRIANGLE, SCANLINE_TRIANGLE) in `core/enums/`
+  - `GpuDrawMode` enum (NONE, COLOR, TEXTURE) in `core/enums/`
+  - `Gpu` and `GpuVertex` structs for the scanline path with Phong lighting (ambient + Lambert diffuse + specular)
+  - `Screen` class providing a software framebuffer with color buffer, depth buffer, and raylib `Texture2D` blit
+  - `TextureCpu` class for CPU-side RGBA texture loading via raylib `LoadImage`
+- **Rasterizer demo** (`RasterizerDemo`)
+  - Standalone runner with rotating triangle rendered in three switchable modes (`1` wireframe, `2` filled bbox, `3` scanline + Phong)
+  - `[R] Rasterizer Demo` entry added to the main launcher menu
+- **Math utility types** under `utility/`
+  - `IVector2` integer 2D vector for screen-space coordinates
+  - `FVector3` 3D float vector with `RotateY`, `Normalize`, `Magnitude`, `Dot`, `Reflect`, `Cross`, and arithmetic operators
+  - `FXColor` RGBA color with saturating scalar multiply / add operators for lighting math
+  - `FMaths` namespace with `Min3`, `Max3`, `Det` (edge function), and `PI2`
+
+### Changed
+- `CMakeLists.txt` now globs `src/core/rasterizer/*.cpp` into the build
+- Renamed FVector.cpp to FVector2.cpp
+
 ## [0.10.0] - 2026-05-05
 
 ### Added
