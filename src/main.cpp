@@ -52,7 +52,7 @@ int main(){
         DrawText("Try demo games [PRESS KEY]:", paddingLeft, 150, 20, WHITE);
         DrawText("[P] Pong", paddingLeft, 190, 20, WHITE);
         DrawText("[S] Space Invaders", paddingLeft, 230, 20, WHITE);
-        DrawText("[R] Rasterizer Demo", paddingLeft, 270, 20, WHITE);
+        DrawText("[R] Rasterizer Demo (Triangles)", paddingLeft, 270, 20, WHITE);
 
         EndDrawing();
 

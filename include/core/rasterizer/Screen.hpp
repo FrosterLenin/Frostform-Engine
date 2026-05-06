@@ -6,6 +6,12 @@
 // Software framebuffer with a color buffer and depth buffer.
 // The color buffer is uploaded to a raylib Texture2D each frame via Blit().
 class Screen {
+private:
+    int _Width;
+    int _Height;
+    std::vector<Color> _ColorBuffer;
+    std::vector<float> _DepthBuffer;
+    Texture2D _Texture;
 public:
     Screen(int width, int height);
     ~Screen();
@@ -23,10 +29,5 @@ public:
     int GetWidth() const { return _Width; }
     int GetHeight() const { return _Height; }
 
-private:
-    int _Width;
-    int _Height;
-    std::vector<Color> _ColorBuffer;
-    std::vector<float> _DepthBuffer;
-    Texture2D _Texture;
+
 };

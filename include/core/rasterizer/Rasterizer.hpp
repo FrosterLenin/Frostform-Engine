@@ -14,8 +14,8 @@
 struct Gpu {
     TextureCpu* Texture = nullptr;
     GpuDrawMode Mode = GpuDrawMode::COLOR;
-    FVector3 pointLightPosition{0.f, 0.f, 0.f};
-    FVector3 cameraPosition{0.f, 0.f, 0.f};
+    FVector3 pointLightPosition {0.f, 0.f, 0.f};
+    FVector3 cameraPosition {0.f, 0.f, 0.f};
 };
 
 // Per-vertex inputs for the scanline triangle path.
@@ -28,26 +28,35 @@ struct GpuVertex {
     FVector3 worldNormal;
 };
 
-// Unified software rasterizer. Provides:
-//   * explicit named methods (DrawLine / DrawTriangle) for direct calls
-//   * a Draw(RasterMode, ...) overload set for mode-driven dispatch
-class Rasterizer {
-public:
-    // Direct API 
 
-    // DDA line, depth = 0.
+class Rasterizer {
+private:
+    // higher values result in a smaller and sharper highlight
+    static constexpr float SHININESS_FACTOR = 50.f; // Arbitrary shininess factor for specular highlights.
+private:
+    static bool IsPointInTriangleBBox(IVector2 p, IVector2 a, IVector2 b, IVector2 c);
+    static void RasterizeRow(const Gpu& gpu, int y,
+                             const GpuVertex& leftV1, const GpuVertex& leftV2,
+                             const GpuVertex& rightV1, const GpuVertex& rightV2,
+                             Screen* screen);
+public:
+
+
+    // DDA (Digital Differential Analyzer algorithm) line rasterization with depth = 0
     static void DrawLine(int x1, int y1, int x2, int y2, Color color, Screen* screen);
     static void DrawLine(IVector2 pointA, IVector2 pointB, Color color, Screen* screen);
 
     // Bounding-box flat-color triangle, depth = 0.
+    // In a Box we iterate over each pixel and check if it's in the triangle via edge functions.
     static void DrawTriangle(IVector2 pointA, IVector2 pointB, IVector2 pointC, Color color, Screen* screen);
 
     // Scanline triangle with per-vertex attribute interpolation + Phong lighting.
+    // We iterate over each horizontal row of the triangle 
+    // and interpolate the left and right edges to find the start and end x coordinate for that row.
     static void DrawTriangle(const Gpu& gpu, const GpuVertex& v1, const GpuVertex& v2, const GpuVertex& v3, Screen* screen);
 
     // Mode-driven dispatch
     // Each overload asserts that `mode` matches its argument shape.
-
     static void Draw(RasterMode mode, IVector2 pointA, IVector2 pointB, Color color, Screen* screen);
     static void Draw(RasterMode mode, IVector2 pointA, IVector2 pointB, IVector2 pointC, Color color, Screen* screen);
     static void Draw(RasterMode mode, const Gpu& gpu, const GpuVertex& v1, const GpuVertex& v2, const GpuVertex& v3, Screen* screen);
