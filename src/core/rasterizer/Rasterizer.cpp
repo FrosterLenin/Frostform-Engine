@@ -1,6 +1,6 @@
 #include "core/rasterizer/Rasterizer.hpp"
 
-#include "utility/FMaths.hpp"
+#include "utility/MathsUtils.hpp"
 #include "utility/FXColor.hpp"
 #include "utility/Interpolator.hpp"
 
@@ -13,9 +13,9 @@
 
 bool Rasterizer::IsPointInTriangleBBox(IVector2 p, IVector2 a, IVector2 b, IVector2 c) {
     // Calculate the area of the triangle formed by the three vertices (a, b, c) and the point (p)
-    bool b1 = FMaths::Det(p, a, b) < 0;
-    bool b2 = FMaths::Det(p, b, c) < 0;
-    bool b3 = FMaths::Det(p, c, a) < 0;
+    bool b1 = MathsUtils::Det(p, a, b) < 0;
+    bool b2 = MathsUtils::Det(p, b, c) < 0;
+    bool b3 = MathsUtils::Det(p, c, a) < 0;
     // if the point is on the same side of all three edges of the triangle, then it is inside the triangle
     // if b1, b2, and b3 are all true or all false, then the point is inside the triangle
     return (b1 == b2) && (b2 == b3);
@@ -198,13 +198,13 @@ void Rasterizer::DrawLine(IVector2 a, IVector2 b, Color color, Screen* screen) {
 
 void Rasterizer::DrawTriangle(IVector2 p1, IVector2 p2, IVector2 p3, Color color, Screen* screen) {
     // find the minimum x coordinate among the three vertices of the triangle
-    int xMin = FMaths::Min3(p1.x, p2.x, p3.x); 
+    int xMin = MathsUtils::Min3(p1.x, p2.x, p3.x); 
     // find the minimum y coordinate among the three vertices of the triangle
-    int yMin = FMaths::Min3(p1.y, p2.y, p3.y);
+    int yMin = MathsUtils::Min3(p1.y, p2.y, p3.y);
     // find the maximum x coordinate among the three vertices of the triangle
-    int xMax = FMaths::Max3(p1.x, p2.x, p3.x);
+    int xMax = MathsUtils::Max3(p1.x, p2.x, p3.x);
     // find the maximum y coordinate among the three vertices of the triangle
-    int yMax = FMaths::Max3(p1.y, p2.y, p3.y);
+    int yMax = MathsUtils::Max3(p1.y, p2.y, p3.y);
 
     // iterate through each pixel in the bounding box defined by the minimum and maximum x and y coordinates
     for (int x = xMin; x <= xMax; ++x) {

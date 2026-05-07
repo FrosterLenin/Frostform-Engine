@@ -10,8 +10,7 @@ RasterizerDemo::RasterizerDemo(FVector2 screenSize)
 
 void RasterizerDemo::InitGame(const Color clearColor)
 {
-    _DrawManager->Init();
-    SetClearColor(clearColor);
+    Game::InitGame(clearColor);
 
     _SceneManager->LoadScene<RasterizerDemoScene>();
     _GameScene = dynamic_cast<RasterizerDemoScene*>(_SceneManager->GetCurrentScene());

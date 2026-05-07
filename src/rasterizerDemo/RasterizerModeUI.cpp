@@ -12,12 +12,10 @@ void RasterizerModeUI::Start()
 
 void RasterizerModeUI::Update(float deltaTime)
 {
-    GameObject::Update(deltaTime);
 }
 
 void RasterizerModeUI::Draw()
 {
-    GameObject::Draw();
 
     DrawText("Rasterizer Demo", static_cast<int>(_Position.x), static_cast<int>(_Position.y), static_cast<int>(_Size.x), WHITE);
     DrawText("[1] Wireframe (DDA)", static_cast<int>(_Position.x), static_cast<int>(_Position.y) + 30, 18, LIGHTGRAY);

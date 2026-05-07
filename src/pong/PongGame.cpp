@@ -9,8 +9,7 @@ PongGame::PongGame(FVector2 screenSize)
 }
 
 void PongGame::InitGame(const Color clearColor){
-    _DrawManager->Init();
-    SetClearColor(clearColor);
+    Game::InitGame(clearColor);
     
     // Load the game scene using SceneManager
     _SceneManager->LoadScene<PongGameScene>();

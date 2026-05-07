@@ -25,7 +25,6 @@ StatBar::~StatBar() {}
 void StatBar::Start() {}
 
 void StatBar::Update(float deltaTime) {
-    GameObject::Update(deltaTime);
 }
 
 void StatBar::UpdateControlled(float deltaTime) {

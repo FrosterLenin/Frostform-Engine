@@ -2,7 +2,7 @@
 
 #include "utility/IVector2.hpp"
 
-namespace FMaths {
+namespace MathsUtils {
 
     constexpr float PI2 = 3.1415926f;
 

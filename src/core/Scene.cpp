@@ -17,7 +17,6 @@ std::shared_ptr<GameObject> Scene::SpawnGameObject(std::shared_ptr<GameObject> g
 std::shared_ptr<GameObject> Scene::RegisterGameObject(std::shared_ptr<GameObject> gameObject)
 {
     gameObject->Start();
-    // gameObject->SetActive(true);
     _GameObjects.push_back(gameObject);
     
     if (_Game) {

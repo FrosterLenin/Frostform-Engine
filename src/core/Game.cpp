@@ -107,14 +107,6 @@ void Game::Quit(){
 void Game::InitGame(const Color clearColor){
     _DrawManager.get()->Init();
     SetClearColor(clearColor);
-    const size_t initialGameObjectCount = _GameObjects.size();
-    for(size_t i = 0; i < initialGameObjectCount; ++i){
-        std::shared_ptr<GameObject> gameObject = _GameObjects.at(i);
-        if(!gameObject->IsActive()) continue;
-        gameObject->Start();
-        _CollisionManager.get()->RegisterCollider(gameObject);
-        _DrawManager.get()->BindObject(gameObject);
-    }
 }
 
 std::shared_ptr<GameObject> Game::SpawnGameObject(std::shared_ptr<GameObject> gameObject) {

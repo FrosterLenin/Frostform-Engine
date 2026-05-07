@@ -12,11 +12,9 @@ ScoreUI::ScoreUI(Game* game, int maxPlayers, FVector2 position, FVector2 size, C
 ScoreUI::~ScoreUI() {}
 
 void ScoreUI::Update(float deltaTime){
-    GameObject::Update(deltaTime);
 }
 
 void ScoreUI::Draw(){
-    GameObject::Draw();
     
     float screenWidth = _Game->GetScreenSize().x;
     float screenHeight = _Game->GetScreenSize().y;

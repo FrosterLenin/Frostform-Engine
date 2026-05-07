@@ -9,7 +9,6 @@ SpaceShip::SpaceShip(Game* game, FVector2 position, FVector2 size, Color color, 
 }
     
 void SpaceShip::Draw(){
-    GameObject::Draw();
     DrawRectangle(_Position.x, _Position.y, _Size.x, _Size.y, _Color);
 }
 

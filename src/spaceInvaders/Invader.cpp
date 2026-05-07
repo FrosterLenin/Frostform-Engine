@@ -12,8 +12,8 @@ Invader::Invader(Game* game, FVector2 position, FVector2 size, Color color, floa
     _Collider = std::make_shared<RectangleCollider>(position, size, CollisionLayer::ENEMY, CollisionLayer::PLAYER | CollisionLayer::PROJECTILE); 
 }
 Invader::~Invader(){}
+
 void Invader::Draw(){
-    GameObject::Draw();
     DrawRectangle(_Position.x, _Position.y, _Size.x, _Size.y, _Color);
 }
 void Invader::Start(){

@@ -1,8 +1,8 @@
-#include "utility/FMaths.hpp"
+#include "utility/MathsUtils.hpp"
 
 #include <algorithm>
 
-namespace FMaths {
+namespace MathsUtils {
 
     int Min3(int a, int b, int c) {
         return std::min(std::min(a, b), c);

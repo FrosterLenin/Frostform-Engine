@@ -18,7 +18,6 @@ void Circle::Update(float deltaTime){
     if(!_Game) return;
 }
 void Circle::Draw(){
-    GameObject::Draw();
     DrawCircle(GetCenter().x, GetCenter().y, _Radius, _Color);
 }
 

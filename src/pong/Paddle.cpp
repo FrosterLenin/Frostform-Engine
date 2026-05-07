@@ -11,7 +11,6 @@ Paddle::Paddle(Game* game, FVector2 position, FVector2 size, Color color, bool i
 }
     
 void Paddle::Draw(){
-    GameObject::Draw();
     DrawRectangle(_Position.x, _Position.y, _Size.x, _Size.y, _Color);
 }
 

@@ -8,8 +8,7 @@ SpaceInvaders::SpaceInvaders() : Game({800, 600}, "Space Invaders"), _GameScene(
 }
 
 void SpaceInvaders::InitGame(const Color clearColor){
-    _DrawManager->Init();
-    SetClearColor(clearColor);
+    Game::InitGame(clearColor);
     
     // Load the game scene using SceneManager
     _SceneManager->LoadScene<SpaceInvadersGameScene>();

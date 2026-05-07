@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `InitGame(clearColor)` override initializes scene manager with `RasterizerDemoScene`
   - Rendering and input handling delegated to scene and spawned game objects
   - Removed direct window ownership and manual loop; inherits `Game::Run()` behavior
+  - Consolidate math utils, clean up GameObject base methods, unify game initialization
 
 #### 2026-05-06
 - **Software rasterizer module** under `core/rasterizer/`

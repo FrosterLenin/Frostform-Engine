@@ -99,16 +99,10 @@ void GameObject::DrawCenter() const{
     FVector2 center = GetCenter();
     DrawCircle((int)center.x, (int)center.y, 1.f, GREEN);
 }
-void GameObject::Draw() {
-
-}
 void GameObject::UpdateWithInput(float deltaTime){
 }
 void GameObject::UpdateControlled(float deltaTime){
 }
-void GameObject::Update(float deltaTime){
-}
-
 bool GameObject::CheckCollision(const GameObject& other) const{
     return false;
 }
