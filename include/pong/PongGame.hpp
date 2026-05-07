@@ -6,7 +6,7 @@ class PongGameOverScene;
 
 class PongGame : public Game{
 public:
-    PongGame(FVector2 screenSize);
+    PongGame(FVector2 screenSize = FVector2{800, 450});
 
     virtual void InitGame(const Color clearColor = BLACK) override;
     

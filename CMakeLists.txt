@@ -28,6 +28,7 @@ file(GLOB SRC_FILES_CORE_ENUMS "src/core/enums/*.cpp")
 file(GLOB SRC_FILES_PONG "src/pong/*.cpp")
 file(GLOB SRC_FILES_SPACE_INVADERS "src/spaceInvaders/*.cpp")
 file(GLOB SRC_FILES_CORE_RASTERIZER "src/core/rasterizer/*.cpp")
+file(GLOB SRC_FILES_RASTERIZER_DEMO "src/rasterizerDemo/*.cpp")
 
 add_executable(${PROJECT_NAME} src/main.cpp 
     ${SRC_FILES_UTILITY} 
@@ -36,7 +37,9 @@ add_executable(${PROJECT_NAME} src/main.cpp
     ${SRC_FILES_CORE_ENUMS} 
     ${SRC_FILES_PONG} 
     ${SRC_FILES_SPACE_INVADERS}
-    ${SRC_FILES_CORE_RASTERIZER})
+    ${SRC_FILES_CORE_RASTERIZER}
+    ${SRC_FILES_RASTERIZER_DEMO}
+)
 
 # link libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)

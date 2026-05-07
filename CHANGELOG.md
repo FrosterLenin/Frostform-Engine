@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### TODO
+- Game implementations should not have explicit scene data members
+- Cleanup Background gameObject, implement 2 modes, color (for clear color), or picture
+- Implement Camera logic with Orthographic and Perspective projections
+
 ### Future Plans
 - OpenGL, DirectX, and Vulkan backends
 - 3D rendering capabilities
@@ -15,6 +20,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Space Invaders: The enemy formation gradually shifts, causing inconsistent spacing between invaders over time after the enemy manager update.
 
 ### Added
+#### 2026-05-07
+- **Rasterizer demo refactor** to unified Game/Scene architecture
+  - `RasterizerDemo` now inherits from `Game` (matching Pong/SpaceInvaders pattern)
+  - `RasterizerDemoScene` manages scene lifecycle with manager-driven updates
+  - `RasterizerTriangleObject` GameObject handles triangle rotation and rasterization rendering
+  - `RasterizerModeUI` UIObject handles HUD text and mode display
+  - Input actions `RASTER_MODE_1`, `RASTER_MODE_2`, `RASTER_MODE_3` added to `InputActions` enum
+  - Scene-driven rendering through `DrawManager` and UI updates through `UIManager` event binding
+  - All rasterizer initialization and update logic now flows through core Game managers
+
+### Changed
+#### 2026-05-07
+- **RasterizerDemo** refactored from standalone loop to Game subclass
+  - Constructor now takes `FVector2 screenSize` parameter (default `{800, 450}`)
+  - `InitGame(clearColor)` override initializes scene manager with `RasterizerDemoScene`
+  - Rendering and input handling delegated to scene and spawned game objects
+  - Removed direct window ownership and manual loop; inherits `Game::Run()` behavior
+
 #### 2026-05-06
 - **Software rasterizer module** under `core/rasterizer/`
   - `Rasterizer` class unifying line and triangle rasterization with both explicit methods (`DrawLine`, `DrawTriangle`) and a `Draw(RasterMode, ...)` mode-driven dispatcher

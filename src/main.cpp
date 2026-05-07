@@ -1,12 +1,12 @@
 #include "raylib.h"
 #include "core/Game.hpp"
 #include "pong/PongGame.hpp"
-#include "SpaceInvaders/SpaceInvaders.hpp"
-#include "core/rasterizer/RasterizerDemo.hpp"
+#include "spaceInvaders/SpaceInvaders.hpp"
+#include "rasterizerDemo/RasterizerDemo.hpp"
 
 void PlayPong(){
-    PongGame pongGame(FVector2{800,450});
-    pongGame.InitGame(BLACK);
+    PongGame pongGame;
+    pongGame.InitGame();
     pongGame.Run();
 }
 void PlaySpaceInvaders(){
@@ -15,9 +15,9 @@ void PlaySpaceInvaders(){
     spaceInvaders.Run();
 }
 void PlayRasterizerDemo(){
-    RasterizerDemo demo;
-    demo.InitGame();
-    demo.Run();
+    RasterizerDemo rasterizerDemo;
+    rasterizerDemo.InitGame();
+    rasterizerDemo.Run();
 }
 
 int main(){

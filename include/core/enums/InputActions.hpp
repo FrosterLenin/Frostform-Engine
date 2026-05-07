@@ -12,5 +12,9 @@ enum class InputAction{
     , MOVE_RIGHT_2
     
     , SHOOT
+    
+    , RASTER_MODE_1
+    , RASTER_MODE_2
+    , RASTER_MODE_3
     , LAST
 };

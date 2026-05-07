@@ -3,7 +3,8 @@
 #include "pong/PongGameOverScene.hpp"
 #include "core/managers/SceneManager.hpp"
 
-PongGame::PongGame(FVector2 screenSize) : Game(screenSize, "Pong"), _GameScene(nullptr), _GameOverScene(nullptr)
+PongGame::PongGame(FVector2 screenSize) 
+: Game(screenSize, "Pong"), _GameScene(nullptr), _GameOverScene(nullptr)
 {
 }
 
