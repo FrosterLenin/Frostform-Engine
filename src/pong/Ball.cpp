@@ -25,7 +25,7 @@ void Ball::Start(){
         do { ry = (float)GetRandomValue(-_RandomIndexVelocityY, _RandomIndexVelocityY); } while (ry == 0);
         _Velocity = (FVector2{rx, ry}).Normalized();
     }
-    _AccelerationIndex = 100.0f;
+    _AccelerationIndex = PongGame::BASE_ACCELERATION;
 }
 Ball::~Ball(){}
 
@@ -53,7 +53,7 @@ void Ball::Update(float deltaTime){
             // Ball detected a score, call PongGame to trigger the ScoreUI event
             _Game->GetUIManager()->TriggerObjectEvent<ScoreUI>(playerIndex, 1);
             SetPosition(_Game->GetScreenSize() * .5f);
-            _AccelerationIndex = 100.0f;
+            _AccelerationIndex = PongGame::BASE_ACCELERATION; // Reset speed on score
         }
             
     }

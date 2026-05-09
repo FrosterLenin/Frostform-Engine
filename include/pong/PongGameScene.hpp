@@ -6,7 +6,7 @@
 class Paddle;
 class Ball;
 
-/// @brief The active gameplay scene for Pong. Manages paddles, ball, and score tracking.
+// The active gameplay scene for Pong. Manages paddles, ball, and score tracking.
 class PongGameScene : public Scene
 {
 public:
@@ -20,8 +20,6 @@ public:
 
     int GetPlayerScore(const int playerIndex) const;
     void ScorePoint(const int playerIndex, const int score);
-
-    static constexpr int WINNING_SCORE = 10;
 
 private:
     Paddle* _Player1;

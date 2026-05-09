@@ -24,8 +24,8 @@ void SpaceInvadersGameScene::Init()
     FVector2 centerScreen = _Game->GetScreenSize() * 0.5f;
     FVector2 spaceShipSpawnPoint = {centerScreen.x, centerScreen.y + 200.0f};
     
-    // Spawn background
-    SpawnGameObject<Background>(_Game, FVector2{0.0f, 0.0f}, BLACK);
+    // Spawn background in picture mode (clear color remains a fallback)
+    SpawnGameObject<Background>(_Game, FVector2{0.0f, 0.0f}, "src/spaceInvaders/resources/space.jpg", BLACK);
     
     // Spawn player spaceship
     std::weak_ptr<SpaceShip> playerShip = SpawnGameObject<SpaceShip>(_Game, spaceShipSpawnPoint, 

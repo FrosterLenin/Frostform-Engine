@@ -2,13 +2,11 @@
 
 #include "core/Scene.hpp"
 
-class PongGameScene;
-
-/// @brief The game over scene for Pong. Displays final score and winner.
+// The game over scene for Pong. Displays final score and winner.
 class PongGameOverScene : public Scene
 {
 public:
-    PongGameOverScene(Game* game, PongGameScene* gameScene);
+    PongGameOverScene(Game* game, int player1Score, int player2Score);
     virtual ~PongGameOverScene() = default;
 
     virtual void Init() override;
@@ -17,7 +15,8 @@ public:
     virtual void Destroy() override;
 
 private:
-    PongGameScene* _GameScene;
+    int _Player1Score;
+    int _Player2Score;
     float _DisplayTime;
     static constexpr float DISPLAY_DURATION = 5.0f;
 };

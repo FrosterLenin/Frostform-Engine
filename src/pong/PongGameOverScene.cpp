@@ -1,9 +1,8 @@
 #include "pong/PongGameOverScene.hpp"
-#include "pong/PongGameScene.hpp"
 #include "core/Game.hpp"
 
-PongGameOverScene::PongGameOverScene(Game* game, PongGameScene* gameScene)
-    : Scene(game), _GameScene(gameScene), _DisplayTime(0.0f)
+PongGameOverScene::PongGameOverScene(Game* game, int player1Score, int player2Score)
+    : Scene(game), _Player1Score(player1Score), _Player2Score(player2Score), _DisplayTime(0.0f)
 {
 }
 
@@ -27,12 +26,9 @@ void PongGameOverScene::Draw()
     ClearBackground(_Game->GetClearColor());
     
     const char* gameOverText = "Game Over";
-    
-    int p1Score = _GameScene ? _GameScene->GetPlayerScore(0) : 0;
-    int p2Score = _GameScene ? _GameScene->GetPlayerScore(1) : 0;
-    
-    const char* winnerText = p1Score >= p2Score ? "Player 1 Wins!" : "Player 2 Wins!";
-    std::string scoreTextString = std::to_string(p1Score) + " - " + std::to_string(p2Score);
+
+    const char* winnerText = _Player1Score >= _Player2Score ? "Player 1 Wins!" : "Player 2 Wins!";
+    std::string scoreTextString = std::to_string(_Player1Score) + " - " + std::to_string(_Player2Score);
     const char* scoreText = scoreTextString.c_str();
     
     Font font = GetFontDefault();    

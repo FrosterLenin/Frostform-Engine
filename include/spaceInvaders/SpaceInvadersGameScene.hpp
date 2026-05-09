@@ -6,7 +6,7 @@
 class SpaceShip;
 class Bullet;
 
-/// @brief The gameplay scene for Space Invaders. Manages ship, enemies, and bullet spawning.
+// gameplay scene for Space Invaders. Manages ship, enemies, and bullet spawning.
 class SpaceInvadersGameScene : public Scene
 {
 public:

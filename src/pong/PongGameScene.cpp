@@ -2,6 +2,8 @@
 #include "pong/PongGame.hpp"
 #include "pong/Ball.hpp"
 #include "pong/Paddle.hpp"
+#include "pong/PongGameOverScene.hpp"
+#include "core/Background.hpp"
 #include "core/Game.hpp"
 
 PongGameScene::PongGameScene(Game* game) 
@@ -19,6 +21,9 @@ void PongGameScene::Init()
         pongGame->SetGameScene(this);
     
     FVector2 centerScreen = _Game->GetScreenSize() * 0.5f;
+
+    // Spawn background in picture mode (clear color remains a fallback)
+    SpawnGameObject<Background>(_Game, FVector2{0.0f, 0.0f}, BLACK);
     
     // Spawn ball
     std::weak_ptr<Ball> ball = SpawnGameObject<Ball>(_Game, centerScreen, 5.0f, RAYWHITE, true);
@@ -72,8 +77,10 @@ SceneResult PongGameScene::Update(float deltaTime)
     int p1Score = _Player1 ? _Player1->GetScore() : 0;
     int p2Score = _Player2 ? _Player2->GetScore() : 0;
     
-    if (p1Score >= WINNING_SCORE || p2Score >= WINNING_SCORE)
+    if (p1Score >= PongGame::WINNING_SCORE || p2Score >= PongGame::WINNING_SCORE) {
+        SetNextScene<PongGameOverScene>(p1Score, p2Score);
         return SceneResult::SCENE_COMPLETE;
+    }
     
     return SceneResult::CONTINUE;
 }

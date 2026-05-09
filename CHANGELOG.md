@@ -8,7 +8,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### TODO
 - Game implementations should not have explicit scene data members
-- Cleanup Background gameObject, implement 2 modes, color (for clear color), or picture
 - Implement Camera logic with Orthographic and Perspective projections
 
 ### Future Plans
@@ -20,6 +19,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Space Invaders: The enemy formation gradually shifts, causing inconsistent spacing between invaders over time after the enemy manager update.
 
 ### Added
+#### 2026-05-09
+- **Background gameObject cleanup and dual-mode implementation**
+  - `BackgroundMode` enum (COLOR, PICTURE) moved to `core/enums/BackgroundMode.hpp`
+  - `Background` COLOR mode: drives `Game::SetClearColor()` during updates so background controls clear color
+  - `Background` PICTURE mode: loads image via `LoadImage()` + `LoadTextureFromImage()`, renders fullscreen with `DrawTexturePro()`
+  - Picture-mode image loading with robust relative path resolution (parent directory walk from current working directory)
+  - Proper texture lifecycle: loaded in `Start()`, unloaded on mode switch or destruction
+  - Scene-level API: `SetColorMode(Color)` and `SetPictureMode(std::string path, Color clearColor)`
+  - Applied picture-mode background spawning to `SpaceInvadersGameScene`, `PongGameScene`, and `RasterizerDemoScene`
+  - Picture assets loaded from `src/spaceInvaders/resources/space.jpg` fallback to black clear color on load failure
+
+### Fixed
+#### 2026-05-09
+- **Pong scene transition crash fix**
+  - `PongGameOverScene` now receives final scores by value instead of storing dangling scene pointer
+  - Scene transition set at game-end time in `PongGameScene::Update()` to avoid use-after-free
+  - Removed outdated pre-computed next-scene setup from `PongGame::InitGame()`
+
+### Changed
 #### 2026-05-07
 - **Rasterizer demo refactor** to unified Game/Scene architecture
   - `RasterizerDemo` now inherits from `Game` (matching Pong/SpaceInvaders pattern)
@@ -30,8 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Scene-driven rendering through `DrawManager` and UI updates through `UIManager` event binding
   - All rasterizer initialization and update logic now flows through core Game managers
 
-### Changed
-#### 2026-05-07
+#### 2026-05-07 (RasterizerDemo refactor changes)
 - **RasterizerDemo** refactored from standalone loop to Game subclass
   - Constructor now takes `FVector2 screenSize` parameter (default `{800, 450}`)
   - `InitGame(clearColor)` override initializes scene manager with `RasterizerDemoScene`
@@ -55,8 +72,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `FVector3` 3D float vector with `RotateY`, `Normalize`, `Magnitude`, `Dot`, `Reflect`, `Cross`, and arithmetic operators
   - `FXColor` RGBA color with saturating scalar multiply / add operators for lighting math
   - `FMaths` namespace with `Min3`, `Max3`, `Det` (edge function), and `PI2`
-
-### Changed
+  
 #### 2026-05-06
 - `CMakeLists.txt` now globs `src/core/rasterizer/*.cpp` into the build
 - Renamed FVector.cpp to FVector2.cpp
