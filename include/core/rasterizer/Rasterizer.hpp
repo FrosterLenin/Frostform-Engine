@@ -33,14 +33,20 @@ class Rasterizer {
 private:
     // higher values result in a smaller and sharper highlight
     static constexpr float SHININESS_FACTOR = 50.f; // Arbitrary shininess factor for specular highlights.
+    static bool s_EnableFaceCulling;  // Toggle backface culling on/off
+    static bool s_TwoSidedRenderingEnabled;  // Render both front and back faces
 private:
     static bool IsPointInTriangleBBox(IVector2 p, IVector2 a, IVector2 b, IVector2 c);
+    static bool IsFrontFacing(const Gpu& gpu, const GpuVertex& v1, const GpuVertex& v2, const GpuVertex& v3);
     static void RasterizeRow(const Gpu& gpu, int y,
                              const GpuVertex& leftV1, const GpuVertex& leftV2,
                              const GpuVertex& rightV1, const GpuVertex& rightV2,
                              Screen* screen);
 public:
-
+    static void SetFaceCullingEnabled(bool enabled);
+    static bool IsFaceCullingEnabled();
+    static void SetTwoSidedRenderingEnabled(bool enabled);
+    static bool IsTwoSidedRenderingEnabled();
 
     // DDA (Digital Differential Analyzer algorithm) line rasterization with depth = 0
     static void DrawLine(int x1, int y1, int x2, int y2, Color color, Screen* screen);

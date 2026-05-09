@@ -34,7 +34,7 @@ private:
     // for mode 3, we will use the vertex colors for a simple Gouraud shading effect
     std::array<Color, 3> _BaseColors;
     // the mode in which the triangle will be drawn, it will be set by the input manager in the update function
-    int _Mode; // 1 = wireframe, 2 = filled, 3 = filled with vertex colors
+    int _Mode; // 1 = wireframe, 2 = filled, 3 = scanline+phong, 4 = scanline+phong (two-sided)
     // the angle of rotation for the triangle, it will be updated in the update function and used in the draw function to rotate the triangle
     float _Angle; 
 };

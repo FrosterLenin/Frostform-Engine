@@ -21,7 +21,8 @@ void RasterizerModeUI::Draw()
     DrawText("[1] Wireframe (DDA)", static_cast<int>(_Position.x), static_cast<int>(_Position.y) + 30, 18, LIGHTGRAY);
     DrawText("[2] Filled (BBox)", static_cast<int>(_Position.x), static_cast<int>(_Position.y) + 52, 18, LIGHTGRAY);
     DrawText("[3] Scanline + Phong", static_cast<int>(_Position.x), static_cast<int>(_Position.y) + 74, 18, LIGHTGRAY);
-    DrawText(TextFormat("Mode: %d", _Mode), static_cast<int>(_Position.x), static_cast<int>(_Position.y) + 100, 18, YELLOW);
+    DrawText("[4] Scanline + Phong (2-Sided, normal flip)", static_cast<int>(_Position.x), static_cast<int>(_Position.y) + 96, 18, LIGHTGRAY);
+    DrawText(TextFormat("Mode: %d", _Mode), static_cast<int>(_Position.x), static_cast<int>(_Position.y) + 122, 18, YELLOW);
 }
 
 void RasterizerModeUI::SetMode(int mode)

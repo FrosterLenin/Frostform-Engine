@@ -10,6 +10,38 @@
 #include <cstdint>
 #include <functional>
 
+bool Rasterizer::s_EnableFaceCulling = true;  // Face culling enabled by default
+bool Rasterizer::s_TwoSidedRenderingEnabled = false;  // Two-sided rendering disabled by default
+
+void Rasterizer::SetFaceCullingEnabled(bool enabled) {
+    s_EnableFaceCulling = enabled;
+}
+
+bool Rasterizer::IsFaceCullingEnabled() {
+    return s_EnableFaceCulling;
+}
+
+void Rasterizer::SetTwoSidedRenderingEnabled(bool enabled) {
+    s_TwoSidedRenderingEnabled = enabled;
+}
+
+bool Rasterizer::IsTwoSidedRenderingEnabled() {
+    return s_TwoSidedRenderingEnabled;
+}
+
+bool Rasterizer::IsFrontFacing(const Gpu& gpu, const GpuVertex& v1, const GpuVertex& v2, const GpuVertex& v3) {
+    // Compute face normal from edge cross product
+    FVector3 edge1 = v2.worldPosition - v1.worldPosition;
+    FVector3 edge2 = v3.worldPosition - v1.worldPosition;
+    FVector3 faceNormal = edge1.Cross(edge2);
+    
+    // Direction from triangle to camera
+    FVector3 directionToCamera = gpu.cameraPosition - v1.worldPosition;
+    
+    // If normal and direction to camera have positive dot product, triangle faces camera
+    return faceNormal.Dot(directionToCamera) >= 0.f;
+}
+
 
 bool Rasterizer::IsPointInTriangleBBox(IVector2 p, IVector2 a, IVector2 b, IVector2 c) {
     // Calculate the area of the triangle formed by the three vertices (a, b, c) and the point (p)
@@ -216,6 +248,10 @@ void Rasterizer::DrawTriangle(IVector2 p1, IVector2 p2, IVector2 p3, Color color
     }
 }
 void Rasterizer::DrawTriangle(const Gpu& gpu, const GpuVertex& v1, const GpuVertex& v2, const GpuVertex& v3, Screen* screen) {
+    // Backface culling: skip triangle if it faces away from camera (unless two-sided rendering is enabled)
+    if (!s_TwoSidedRenderingEnabled && s_EnableFaceCulling && !IsFrontFacing(gpu, v1, v2, v3))
+        return;
+
     // reference_wrapper allows us to create an array of references to the vertices
     // which we can then sort based on their screen y coordinate
     std::array<std::reference_wrapper<const GpuVertex>, 3> points = { std::cref(v1), std::cref(v2), std::cref(v3) };

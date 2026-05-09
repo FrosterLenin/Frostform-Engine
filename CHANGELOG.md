@@ -29,6 +29,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Scene-level API: `SetColorMode(Color)` and `SetPictureMode(std::string path, Color clearColor)`
   - Applied picture-mode background spawning to `SpaceInvadersGameScene`, `PongGameScene`, and `RasterizerDemoScene`
   - Picture assets loaded from `src/spaceInvaders/resources/space.jpg` fallback to black clear color on load failure
+- **Rasterizer backface culling and two-sided rendering**
+  - `Rasterizer::SetFaceCullingEnabled(bool)` and `IsFaceCullingEnabled()` to control backface culling
+  - `Rasterizer::SetTwoSidedRenderingEnabled(bool)` and `IsTwoSidedRenderingEnabled()` for two-sided rendering mode
+  - Private helper `Rasterizer::IsFrontFacing()` uses cross product to determine triangle facing direction
+  - Mode 4 added to rasterizer demo: **Scanline + Phong (2-Sided)** - renders triangle with both faces colored and lit
+  - Input action `RASTER_MODE_4` bound to `KEY_FOUR` in rasterizer demo scenes
+  - Back face lighting fixed by flipping normals when rendering backfacing triangles
 
 ### Fixed
 #### 2026-05-09
@@ -36,6 +43,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `PongGameOverScene` now receives final scores by value instead of storing dangling scene pointer
   - Scene transition set at game-end time in `PongGameScene::Update()` to avoid use-after-free
   - Removed outdated pre-computed next-scene setup from `PongGame::InitGame()`
+- **Rasterizer mode 3 (Phong) backface rendering**
+  - Added backface culling to prevent rendering of triangles facing away from camera (improves performance)
+  - Mode 3: Backface culling enabled (default behavior)
 
 ### Changed
 #### 2026-05-07
@@ -72,7 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `FVector3` 3D float vector with `RotateY`, `Normalize`, `Magnitude`, `Dot`, `Reflect`, `Cross`, and arithmetic operators
   - `FXColor` RGBA color with saturating scalar multiply / add operators for lighting math
   - `FMaths` namespace with `Min3`, `Max3`, `Det` (edge function), and `PI2`
-  
+
 #### 2026-05-06
 - `CMakeLists.txt` now globs `src/core/rasterizer/*.cpp` into the build
 - Renamed FVector.cpp to FVector2.cpp

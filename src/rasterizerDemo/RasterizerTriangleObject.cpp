@@ -28,6 +28,7 @@ void RasterizerTriangleObject::Update(float deltaTime)
     if (inputManager->GetActionDown(InputAction::RASTER_MODE_1)) _Mode = 1;
     if (inputManager->GetActionDown(InputAction::RASTER_MODE_2)) _Mode = 2;
     if (inputManager->GetActionDown(InputAction::RASTER_MODE_3)) _Mode = 3;
+    if (inputManager->GetActionDown(InputAction::RASTER_MODE_4)) _Mode = 4;
 
     _Angle += 30.0f * deltaTime;
 }
@@ -55,11 +56,11 @@ void RasterizerTriangleObject::Draw()
 
     _Screen->Clear(BLACK);
 
-    if (_Mode == 1) {
+    if (_Mode == 1)
         Rasterizer::Draw(RasterMode::DDA_LINE, screenPosition[0], screenPosition[1], screenPosition[2], WHITE, _Screen.get());
-    } else if (_Mode == 2) {
+    else if (_Mode == 2)
         Rasterizer::Draw(RasterMode::BBOX_TRIANGLE, screenPosition[0], screenPosition[1], screenPosition[2], SKYBLUE, _Screen.get());
-    } else {
+    else if (_Mode == 3) {
         Gpu gpu;
         gpu.Mode = GpuDrawMode::COLOR;
         gpu.pointLightPosition = {0.0f, 0.0f, -2.0f};
@@ -75,6 +76,34 @@ void RasterizerTriangleObject::Draw()
             verts[i].worldNormal = normal;
         }
 
+        Rasterizer::SetFaceCullingEnabled(true);
+        Rasterizer::SetTwoSidedRenderingEnabled(false);
+        Rasterizer::Draw(RasterMode::SCANLINE_TRIANGLE, gpu, verts[0], verts[1], verts[2], _Screen.get());
+    } 
+    else if (_Mode == 4) {
+        Gpu gpu;
+        gpu.Mode = GpuDrawMode::COLOR;
+        gpu.pointLightPosition = {0.0f, 0.0f, -2.0f};
+        gpu.cameraPosition = {0.0f, 0.0f, -4.0f};
+
+        // Check if triangle is backfacing; if so, flip normal for proper lighting
+        FVector3 directionToCamera = gpu.cameraPosition - world[0];
+        FVector3 normalForRender = normal;
+        if (normal.Dot(directionToCamera) < 0.f) 
+            normalForRender = normal * -1.0f;
+
+        std::array<GpuVertex, 3> verts;
+        for (int i = 0; i < 3; ++i) {
+            verts[i].screenPosition = screenPosition[i];
+            verts[i].color = _BaseColors[i];
+            verts[i].zPosition = zPosition[i];
+            verts[i].uv = {0.0f, 0.0f};
+            verts[i].worldPosition = world[i];
+            verts[i].worldNormal = normalForRender;
+        }
+
+        Rasterizer::SetFaceCullingEnabled(false);
+        Rasterizer::SetTwoSidedRenderingEnabled(true);
         Rasterizer::Draw(RasterMode::SCANLINE_TRIANGLE, gpu, verts[0], verts[1], verts[2], _Screen.get());
     }
 

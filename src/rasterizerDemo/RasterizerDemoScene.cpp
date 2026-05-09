@@ -23,6 +23,7 @@ void RasterizerDemoScene::Init()
     _Game->GetInputManager()->BindKey(InputAction::RASTER_MODE_1, KEY_ONE);
     _Game->GetInputManager()->BindKey(InputAction::RASTER_MODE_2, KEY_TWO);
     _Game->GetInputManager()->BindKey(InputAction::RASTER_MODE_3, KEY_THREE);
+    _Game->GetInputManager()->BindKey(InputAction::RASTER_MODE_4, KEY_FOUR);
 
     std::weak_ptr<Background> background = SpawnGameObject<Background>(_Game, FVector2{0.0f, 0.0f}, BLACK);
     _Background = background.lock().get();

@@ -16,5 +16,6 @@ enum class InputAction{
     , RASTER_MODE_1
     , RASTER_MODE_2
     , RASTER_MODE_3
+    , RASTER_MODE_4
     , LAST
 };
