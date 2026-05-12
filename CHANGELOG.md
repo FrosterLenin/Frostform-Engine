@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Future Plans
 - OpenGL, DirectX, and Vulkan backends
-- 3D rendering capabilities
+- 3D rendering capabilities: Raytracing
 
 ### Known Issues 
 #### Contributions or suggestions to help identify and fix these issues are welcome.

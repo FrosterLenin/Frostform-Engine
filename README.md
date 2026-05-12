@@ -1,23 +1,74 @@
 # Frostform Engine
 
-A simple 2D game engine built with C++ and Raylib, featuring sample games including Pong and Space Invaders.
+Frostform Engine is a C++ game engine built with Raylib, focused on learning engine architecture through playable demos and a custom software rasterizer path.
+
+## Future Plans
+
+- Camera logic with orthographic and perspective projection support.
+- Additional rendering backends (OpenGL, DirectX, Vulkan).
+- Expanded 3D rendering capabilities.
 
 ## Features
 
 - **Core Engine Components**:
-  - GameObject base class for game entities
-  - Collider system for collision detection
-  - Background rendering
-  - Circle shape utilities
-  - Vector2 math utilities
+  - Core gameplay framework with Game, Scene, GameObject, and manager systems
+  - Collision handling with colliders and collision layers/masks
+  - Background support for color mode and picture mode
+  - Utility math types and interpolation helper
+  - Vectors math utilities
+  - Custom software rasterizer module with color buffer + depth buffer
+
+### Demos Included
 
 - **Sample Games**:
   - **Pong**: Classic paddle ball game with scoring
   - **Space Invaders**: Retro space shooter with invaders and bullets
+  - **Rasterizer Demo** : triangle rendering modes, culling, two-sided mode
 
-## Future Plans
+## Engine Logic: Scene, Screen, Camera, Rasterizer
 
-In the future, I plan to integrate pure OpenGL, DirectX, and Vulkan rendering backends for enhanced graphics capabilities, cross-platform support, and add 3D rendering features.
+This engine uses these concepts with different responsibilities:
+
+- Scene:
+  - High-level gameplay state container.
+  - Owns scene-specific objects and rules (Init, Update, Draw, Destroy).
+  - Examples: Pong match scene, game over scene, space invaders gameplay scene.
+
+- Screen:
+  - Low-level software framebuffer (color + depth buffers).
+  - Receives pixels from the rasterizer and blits to a texture for display.
+  - Used by rasterizer flow, not by every game flow.
+
+- Camera:
+  - Defines where you look from and how geometry is projected.
+  - Produces view/projection behavior that affects how world-space objects are seen.
+  - Camera integration is planned/ongoing for the rasterizer pipeline.
+
+- Rasterizer:
+  - Converts projected primitives into pixels/fragments.
+  - Runs depth testing and shading logic, then writes into Screen.
+
+Conceptual pipeline:
+
+1. Scene updates game objects.
+2. Camera defines view/projection for visible geometry.
+3. Rasterizer converts geometry into fragments.
+4. Screen stores color/depth results.
+5. Final image is presented in the window.
+
+Planned render-backend selection:
+
+- The engine will expose a render strategy/backend selection layer to decide which rendering path is used at runtime or startup.
+- Initial targets are:
+  - Software rasterizer path (custom `Screen` + `Rasterizer`).
+  - Raylib immediate-mode drawing path.
+  - Future backends such as OpenGL, DirectX, and Vulkan.
+- Goal: keep gameplay and scene logic backend-agnostic while swapping only the rendering implementation.
+
+## Why Only RasterizerDemo Uses Screen
+
+Pong and Space Invaders currently render with direct Raylib draw calls (rectangles, circles, textures), so they do not need the software framebuffer. 
+RasterizerDemo uses the custom rasterizer, so it needs Screen as its render target.
 
 ## Prerequisites
 
@@ -83,7 +134,13 @@ In the future, I plan to integrate pure OpenGL, DirectX, and Vulkan rendering ba
 
 ## Running
 
-After building, the executable will be located in `build/bin/Release/`. Run the game engine to start with the default game, or modify the code to select different games.
+After building, the executable will be located in `build/bin/Release/`. Run the game engine to start with the default game samples, or modify the code to select different games.
+
+Launcher controls:
+
+- Press P for Pong.
+- Press S for Space Invaders.
+- Press R for Rasterizer Demo.
 
 ## Project Structure
 
@@ -114,6 +171,7 @@ I would like to express my sincere gratitude to the following:
 
 - **AIV (Accademia Italiana Videogiochi)** – and its teachers for their guidance, support, and for helping me build the knowledge and foundation to implement this code.
   - Website: https://www.aiv01.it/
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
