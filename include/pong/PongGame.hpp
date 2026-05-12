@@ -11,14 +11,7 @@ public:
     PongGame(FVector2 screenSize = FVector2{800, 450});
 
     virtual void InitGame(const Color clearColor = BLACK) override;
-    
+
     // Access to game scene for passing data between scenes
     PongGameScene* GetGameScene() const;
-    
-    // Set game scene (called by scene during Init)
-    void SetGameScene(PongGameScene* scene);
-
-private:
-    PongGameScene* _GameScene;
-    PongGameOverScene* _GameOverScene;
 };

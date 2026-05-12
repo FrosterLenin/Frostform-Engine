@@ -16,11 +16,6 @@ void SpaceInvadersGameScene::Init()
 {
     _State = SceneState::ACTIVE;
     
-    // Set this scene on the SpaceInvaders game instance immediately so bullets can be spawned
-    SpaceInvaders* spaceInvadersGame = dynamic_cast<SpaceInvaders*>(_Game);
-    if (spaceInvadersGame)
-        spaceInvadersGame->SetGameScene(this);
-    
     FVector2 centerScreen = _Game->GetScreenSize() * 0.5f;
     FVector2 spaceShipSpawnPoint = {centerScreen.x, centerScreen.y + 200.0f};
     

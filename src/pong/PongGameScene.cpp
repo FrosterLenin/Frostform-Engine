@@ -15,11 +15,6 @@ void PongGameScene::Init()
 {
     _State = SceneState::ACTIVE;
     
-    // Set this scene on the PongGame instance immediately
-    PongGame* pongGame = dynamic_cast<PongGame*>(_Game);
-    if (pongGame)
-        pongGame->SetGameScene(this);
-    
     FVector2 centerScreen = _Game->GetScreenSize() * 0.5f;
 
     // Spawn background in picture mode (clear color remains a fallback)

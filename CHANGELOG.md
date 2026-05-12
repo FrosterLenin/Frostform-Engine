@@ -7,7 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### TODO
-- Game implementations should not have explicit scene data members
 - Implement Camera logic with Orthographic and Perspective projections
 
 ### Future Plans
@@ -48,6 +47,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Mode 3: Backface culling enabled (default behavior)
 
 ### Changed
+#### 2026-05-12
+- **Refactored scene management:** Removed all explicit scene data members (e.g., _GameScene, _GameOverScene) from game implementations (`PongGame`, `SpaceInvaders`, `RasterizerDemo`). Scene access and management are now handled exclusively via `SceneManager`. All direct assignments like `SetGameScene(this)` in scene classes have been eliminated. This enforces a single source of truth for the current scene and improves maintainability.
+
 #### 2026-05-07
 - **Rasterizer demo refactor** to unified Game/Scene architecture
   - `RasterizerDemo` now inherits from `Game` (matching Pong/SpaceInvaders pattern)

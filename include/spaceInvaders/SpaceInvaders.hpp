@@ -11,15 +11,8 @@ public:
 
     virtual void InitGame(const Color clearColor = BLACK) override;
 
-    // Access to game scene
+    // Access to game scene for passing data between scenes
     SpaceInvadersGameScene* GetGameScene() const;
-    
-    // Set game scene (called by scene during Init)
-    void SetGameScene(SpaceInvadersGameScene* scene);
-    
     // Spawn bullet - delegates to game scene
     std::shared_ptr<Bullet> SpawnBullet(GameObject* owner, FVector2 position, float radius, Color color, float accelerationIndex, bool isPlayer = true);
-
-private:
-    SpaceInvadersGameScene* _GameScene;
 };

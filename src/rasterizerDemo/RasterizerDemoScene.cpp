@@ -16,10 +16,6 @@ void RasterizerDemoScene::Init()
 {
     _State = SceneState::ACTIVE;
 
-    RasterizerDemo* demoGame = dynamic_cast<RasterizerDemo*>(_Game);
-    if (demoGame)
-        demoGame->SetGameScene(this);
-
     _Game->GetInputManager()->BindKey(InputAction::RASTER_MODE_1, KEY_ONE);
     _Game->GetInputManager()->BindKey(InputAction::RASTER_MODE_2, KEY_TWO);
     _Game->GetInputManager()->BindKey(InputAction::RASTER_MODE_3, KEY_THREE);

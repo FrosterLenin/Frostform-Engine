@@ -11,9 +11,6 @@ public:
 
     virtual void InitGame(const Color clearColor = BLACK) override;
 
+    // Access to game scene for passing data between scenes
     RasterizerDemoScene* GetGameScene() const;
-    void SetGameScene(RasterizerDemoScene* scene);
-
-private:
-    RasterizerDemoScene* _GameScene;
 };
