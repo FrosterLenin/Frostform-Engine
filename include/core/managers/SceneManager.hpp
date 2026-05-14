@@ -29,10 +29,10 @@ public:
             _CurrentScene.reset();
         }
 
-        // Create and load new scene
+        // Create new scene and set it as current BEFORE calling Init
         std::unique_ptr<Scene> newScene = std::make_unique<T>(_Game, std::forward<Args>(args)...);
-        newScene->Init();
         _CurrentScene = std::move(newScene);
+        _CurrentScene->Init();
     }
 
     SceneResult Update(float deltaTime);

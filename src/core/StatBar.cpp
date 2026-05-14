@@ -78,14 +78,6 @@ void StatBar::SetCurrent(int value) {
     if (_CurrentPoints == previous) return;
 }
 
-void StatBar::SetMax(int value, bool refill) {
-    _MaxPoints = std::max(1, value);
-    if (refill)
-        _CurrentPoints = _MaxPoints;
-    else
-        _CurrentPoints = std::clamp(_CurrentPoints, 0, _MaxPoints);
-}
-
 void StatBar::Refill() {
     SetCurrent(_MaxPoints);
 }

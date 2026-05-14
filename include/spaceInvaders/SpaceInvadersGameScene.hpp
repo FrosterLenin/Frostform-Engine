@@ -2,6 +2,7 @@
 
 #include "core/Scene.hpp"
 #include "core/ScoreUI.hpp"
+#include "core/StatBar.hpp"
 
 class SpaceShip;
 class Bullet;
@@ -24,6 +25,7 @@ public:
 private:
     SpaceShip* _Player;
     ScoreUI* _ScoreUI;
+    StatBar* _LifeBarUI;
     
     void InitEnemies(int row, int column, float spacing);
     void InitUI();

@@ -2,17 +2,19 @@
 #include "core/UIObject.hpp"
 #include <functional>
 
-// Event signature for stat changes: (currentValue, maxValue)
-using StatBarEventCallback = std::function<void(int, int)>;
+// Event signature for stat changes: (valueToSET, e.g. current life or score)
+using StatBarEventCallback = std::function<void(int)>;
 
 // A generic UI bar that visualizes a stat with a maximum (e.g. life points, mana points).
 // The filled portion scales relative to the current/max ratio.
 // Use AddPoints / RemovePoints / SetCurrent to mutate; UpdateEvent fires whenever the
 // value changes, OnDepleted fires when current reaches 0, OnFilled when current reaches max.
 class StatBar : public UIObject<StatBarEventCallback> {
-private:
+protected:
     int _MaxPoints;
     int _CurrentPoints;
+    
+private:
     Color _BackgroundColor;
     Color _BorderColor;
     int _BorderThickness;
@@ -38,7 +40,6 @@ public:
     void AddPoints(int amount);
     void RemovePoints(int amount);
     void SetCurrent(int value);
-    void SetMax(int value, bool refill = false);
     void Refill();
 
     // Display options.

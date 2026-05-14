@@ -1,5 +1,6 @@
 #include "core/managers/UIManager.hpp"
 #include "core/ScoreUI.hpp"
+#include "core/StatBar.hpp"
 
 UIManager::UIManager() {}
 UIManager::~UIManager() {}
@@ -80,3 +81,7 @@ template void UIManager::TriggerAllEvents<>();
 // This is needed to avoid linker errors for the ScoreUI type, which is used in our games
 template ScoreUI* UIManager::GetManagedObject<ScoreUI>() const;
 template void UIManager::TriggerObjectEvent<ScoreUI>(int, int) const;
+
+// This is needed to avoid linker errors for the StatBar type, which is used in Space Invaders
+template StatBar* UIManager::GetManagedObject<StatBar>() const;
+template void UIManager::TriggerObjectEvent<StatBar>(int) const;

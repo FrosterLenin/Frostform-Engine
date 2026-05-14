@@ -1,6 +1,7 @@
 #include "spaceInvaders/SpaceShip.hpp"
 #include "spaceInvaders/SpaceInvaders.hpp"
 #include "spaceInvaders/Invader.hpp"
+#include "core/StatBar.hpp"
 
 SpaceShip::SpaceShip(Game* game, FVector2 position, FVector2 size, Color color, float accelerationIndex) : 
     Player(game, position, size, color, accelerationIndex) {
@@ -95,8 +96,6 @@ void SpaceShip::OnCollisionEnter(FCollisionInfo& collisionInfo){
 
     if(_Life <= 0){
         SetActive(false);
-        // _Game->GetUIManager()->TriggerObjectEvent<GameOverUI>(0); // Trigger Game Over UI
-        // _Game->GetEnemyManager()->Clear(); // Clear enemies from the screen
         _Game->SetShouldClose(true); // End the game loop, this will close the game after the current frame
     }
         
@@ -105,6 +104,9 @@ int SpaceShip::GetLife() const {
     return _Life;
 }
 
-void SpaceShip::TakeDamage(int amount){
+void SpaceShip::TakeDamage(const int amount){
     _Life -= amount;
+    
+    // Trigger life bar update event through UIManager
+    _Game->GetUIManager()->TriggerObjectEvent<StatBar>(_Life);
 }

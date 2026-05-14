@@ -8,7 +8,7 @@
 #include <memory>
 
 SpaceInvadersGameScene::SpaceInvadersGameScene(Game* game)
-    : Scene(game), _Player(nullptr), _ScoreUI(nullptr)
+    : Scene(game), _Player(nullptr), _ScoreUI(nullptr), _LifeBarUI(nullptr)
 {
 }
 
@@ -116,6 +116,7 @@ void SpaceInvadersGameScene::InitEnemies(int row, int column, float spacing)
 
 void SpaceInvadersGameScene::InitUI()
 {
+    // Initialize Score UI
     std::weak_ptr<ScoreUI> scoreUI = SpawnGameObject<ScoreUI>(_Game, 1, FVector2{10.0f, 10.0f}, 
                                             FVector2{20.0f, 20.0f}, WHITE);
     _ScoreUI = scoreUI.lock().get();
@@ -129,6 +130,24 @@ void SpaceInvadersGameScene::InitUI()
         _Game->GetUIManager()->BindEvent(_ScoreUI, _ScoreUI->UpdateEvent = 
             [this](int playerIndex, int points) {
                 ScorePoint(playerIndex, points);
+            });
+    }
+    
+    // Initialize Life Bar UI
+    FVector2 screenSize = _Game->GetScreenSize();
+    FVector2 lifeBarPosition = {10.0f, screenSize.y - 30.0f}; // Bottom left corner
+    FVector2 lifeBarSize = {200.0f, 20.0f};
+    
+    std::weak_ptr<StatBar> lifeBarUI = SpawnGameObject<StatBar>(_Game, 100, 100, lifeBarPosition, 
+                                                lifeBarSize, GREEN, DARKGRAY, BLACK);
+    _LifeBarUI = lifeBarUI.lock().get();
+    
+    if (_LifeBarUI) {
+        _Game->GetUIManager()->Bind(lifeBarUI.lock());
+        _Game->GetUIManager()->BindEvent(_LifeBarUI, _LifeBarUI->UpdateEvent = 
+            [this](int currentLife) {
+                if (_LifeBarUI)
+                    _LifeBarUI->SetCurrent(currentLife);
             });
     }
 }

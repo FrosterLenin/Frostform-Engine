@@ -47,6 +47,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Mode 3: Backface culling enabled (default behavior)
 
 ### Changed
+#### 2026-05-14
+- **StatBar refactoring and Space Invaders life UI**
+  - Added life bar UI to Space Invaders using `StatBar` directly
+  - Made `_MaxPoints` and `_CurrentPoints` protected for potential subclass access
+  - Simplified `StatBarEventCallback` to single-parameter signature: `std::function<void(int)>` (current value only)
+  - Life bar displayed at bottom-left corner (10px, screen height - 30px) with green fill, updates on damage
+  - `UIManager` template instantiations updated for `StatBar` with single-parameter events
+
+### Fixed
+#### 2026-05-14
+- **SceneManager initialization order bug**
+  - Fixed `SceneManager::LoadScene()` to set `_CurrentScene` before calling `Init()`
+
 #### 2026-05-12
 - **Refactored scene management:** Removed all explicit scene data members (e.g., _GameScene, _GameOverScene) from game implementations (`PongGame`, `SpaceInvaders`, `RasterizerDemo`). Scene access and management are now handled exclusively via `SceneManager`. All direct assignments like `SetGameScene(this)` in scene classes have been eliminated. This enforces a single source of truth for the current scene and improves maintainability.
 
