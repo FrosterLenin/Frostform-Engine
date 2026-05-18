@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Contributions or suggestions to help identify and fix these issues are welcome.
 - Space Invaders: The enemy formation gradually shifts, causing inconsistent spacing between invaders over time after the enemy manager update.
 
+## [0.15.0] - 2026-05-18
 ### Added
 #### 2026-05-09
 - **Background gameObject cleanup and dual-mode implementation**
