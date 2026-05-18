@@ -37,16 +37,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Input action `RASTER_MODE_4` bound to `KEY_FOUR` in rasterizer demo scenes
   - Back face lighting fixed by flipping normals when rendering backfacing triangles
 
-### Fixed
-#### 2026-05-09
-- **Pong scene transition crash fix**
-  - `PongGameOverScene` now receives final scores by value instead of storing dangling scene pointer
-  - Scene transition set at game-end time in `PongGameScene::Update()` to avoid use-after-free
-  - Removed outdated pre-computed next-scene setup from `PongGame::InitGame()`
-- **Rasterizer mode 3 (Phong) backface rendering**
-  - Added backface culling to prevent rendering of triangles facing away from camera (improves performance)
-  - Mode 3: Backface culling enabled (default behavior)
-
 ### Changed
 #### 2026-05-14
 - **StatBar refactoring and Space Invaders life UI**
@@ -63,6 +53,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### 2026-05-12
 - **Refactored scene management:** Removed all explicit scene data members (e.g., _GameScene, _GameOverScene) from game implementations (`PongGame`, `SpaceInvaders`, `RasterizerDemo`). Scene access and management are now handled exclusively via `SceneManager`. All direct assignments like `SetGameScene(this)` in scene classes have been eliminated. This enforces a single source of truth for the current scene and improves maintainability.
+
+#### 2026-05-09
+- **Pong scene transition crash fix**
+  - `PongGameOverScene` now receives final scores by value instead of storing dangling scene pointer
+  - Scene transition set at game-end time in `PongGameScene::Update()` to avoid use-after-free
+  - Removed outdated pre-computed next-scene setup from `PongGame::InitGame()`
+- **Rasterizer mode 3 (Phong) backface rendering**
+  - Added backface culling to prevent rendering of triangles facing away from camera (improves performance)
+  - Mode 3: Backface culling enabled (default behavior)
 
 #### 2026-05-07
 - **Rasterizer demo refactor** to unified Game/Scene architecture
