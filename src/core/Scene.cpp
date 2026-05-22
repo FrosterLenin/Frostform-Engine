@@ -42,6 +42,11 @@ Game* Scene::GetGame() const
     return _Game;
 }
 
+ACamera* Scene::GetCamera() const
+{
+    return _Camera.get();
+}
+
 bool Scene::HasNextScene() const
 {
     return _NextSceneCreator != nullptr;

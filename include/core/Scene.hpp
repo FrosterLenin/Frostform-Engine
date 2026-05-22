@@ -8,17 +8,19 @@
 #include "core/GameObject.hpp"
 #include "core/enums/SceneResult.hpp"
 #include "core/enums/SceneState.hpp"
+#include "core/rasterizer/ACamera.hpp"
 
 class Game;
 
-// Base class for all scenes. Scenes manage GameObjects and the logic for a specific game state.
-// Examples: PongGameScene, PongGameOverScene, SpaceInvadersGameScene, etc.
+// Base class for all scenes. Scenes manage GameObjects and the logic for a specific game state
+// Examples: PongGameScene, PongGameOverScene, SpaceInvadersGameScene, etc...
 class Scene
 {
 protected:
     Game* _Game;
     SceneState _State;
     std::vector<std::shared_ptr<GameObject>> _GameObjects;
+    std::unique_ptr<ACamera> _Camera;
 public:
     Scene(Game* game);
     virtual ~Scene();
@@ -34,6 +36,7 @@ public:
     const std::vector<std::shared_ptr<GameObject>>& GetGameObjects() const;
     SceneState GetState() const;
     Game* GetGame() const;
+    ACamera* GetCamera() const;
 
     template<typename T, typename... Args>
     std::weak_ptr<T> SpawnGameObject(Args&&... args) {

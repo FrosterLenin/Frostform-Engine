@@ -8,6 +8,7 @@
 RasterizerTriangleObject::RasterizerTriangleObject(Game* game)
     : GameObject(game, FVector2{0.0f, 0.0f}, FVector2{1.0f, 1.0f}, WHITE),
       _Screen(nullptr),
+      _Camera(nullptr),
       _BaseVerts({{{0.0f, 0.9f, 0.0f}, {-0.9f, -0.7f, 0.0f}, {0.9f, -0.7f, 0.0f}}}),
       _BaseColors({{RED, GREEN, BLUE}}),
       _Mode(3),
@@ -35,7 +36,7 @@ void RasterizerTriangleObject::Update(float deltaTime)
 
 void RasterizerTriangleObject::Draw()
 {
-    if (!_Screen)
+    if (!_Screen || !_Camera)
         return;
 
     std::array<FVector3, 3> world;
@@ -50,8 +51,8 @@ void RasterizerTriangleObject::Draw()
     std::array<IVector2, 3> screenPosition;
     std::array<float, 3> zPosition;
     for (int i = 0; i < 3; ++i) {
-        screenPosition[i] = Project(world[i]);
-        zPosition[i] = -world[i].z;
+        screenPosition[i] = _Camera->Project(world[i]);
+        zPosition[i] = -_Camera->WorldToCameraSpace(world[i]).z;
     }
 
     _Screen->Clear(BLACK);
@@ -64,7 +65,7 @@ void RasterizerTriangleObject::Draw()
         Gpu gpu;
         gpu.Mode = GpuDrawMode::COLOR;
         gpu.pointLightPosition = {0.0f, 0.0f, -2.0f};
-        gpu.cameraPosition = {0.0f, 0.0f, -4.0f};
+        gpu.cameraPosition = _Camera->GetPosition();
 
         std::array<GpuVertex, 3> verts;
         for (int i = 0; i < 3; ++i) {
@@ -84,7 +85,7 @@ void RasterizerTriangleObject::Draw()
         Gpu gpu;
         gpu.Mode = GpuDrawMode::COLOR;
         gpu.pointLightPosition = {0.0f, 0.0f, -2.0f};
-        gpu.cameraPosition = {0.0f, 0.0f, -4.0f};
+        gpu.cameraPosition = _Camera->GetPosition();
 
         // Check if triangle is backfacing; if so, flip normal for proper lighting
         FVector3 directionToCamera = gpu.cameraPosition - world[0];
@@ -115,20 +116,7 @@ int RasterizerTriangleObject::GetMode() const
     return _Mode;
 }
 
-IVector2 RasterizerTriangleObject::Project(const FVector3& point) const
+void RasterizerTriangleObject::SetCamera(ACamera* camera)
 {
-    const float fov = 1.5f;
-    const float cameraOffset = 4.0f;
-
-    float zPositionOfCam = point.z + cameraOffset;
-    if (zPositionOfCam < 0.1f) zPositionOfCam = 0.1f;
-
-    const FVector2 screenSize = _Game->GetScreenSize();
-    const float halfW = screenSize.x * 0.5f;
-    const float halfH = screenSize.y * 0.5f;
-
-    int sx = static_cast<int>(halfW + (point.x * fov / zPositionOfCam) * halfW);
-    int sy = static_cast<int>(halfH - (point.y * fov / zPositionOfCam) * halfH);
-
-    return {sx, sy};
+    _Camera = camera;
 }

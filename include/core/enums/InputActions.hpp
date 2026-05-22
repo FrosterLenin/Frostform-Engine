@@ -17,5 +17,15 @@ enum class InputAction{
     , RASTER_MODE_2
     , RASTER_MODE_3
     , RASTER_MODE_4
+
+    , CAM_UP
+    , CAM_DOWN
+    , CAM_LEFT
+    , CAM_RIGHT
+    , CAM_FORWARD
+    , CAM_BACK
+    , CAM_FOV_UP
+    , CAM_FOV_DOWN
+
     , LAST
 };

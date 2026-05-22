@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### TODO
-- Implement Camera logic with Orthographic and Perspective projections
+- ~~Implement Camera logic with Orthographic and Perspective projections~~ ✓ Done
 
 ### Future Plans
 - OpenGL, DirectX, and Vulkan backends
@@ -16,6 +16,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Known Issues 
 #### Contributions or suggestions to help identify and fix these issues are welcome.
 - Space Invaders: The enemy formation gradually shifts, causing inconsistent spacing between invaders over time after the enemy manager update.
+
+### Added
+#### 2026-05-22
+- **Camera system for the software rasterizer pipeline**
+  - `ACamera` abstract base class (`include/core/rasterizer/ACamera.hpp`) with `Project()`, `WorldToCameraSpace()`, `GetPosition()`, `SetPosition()`, `IsFaceCulled()`
+  - `PerspectiveCamera` implementation with configurable FOV and position (`PerspectiveCamera.hpp/.cpp`)
+  - `OrthographicCamera` implementation with configurable orthoSize and aspect ratio (`OrthographicCamera.hpp/.cpp`)
+  - Camera integrated into `Scene` base class as optional `std::unique_ptr<ACamera> _Camera` with `GetCamera()` accessor
+  - Real-time camera movement via keyboard: W/S (Y), A/D (X), Q/E (Z), Numpad +/- (FOV)
+  - Camera info HUD in top-right corner showing position (X, Y, Z) and current FOV
+  - New `InputAction` enum values: `CAM_UP`, `CAM_DOWN`, `CAM_LEFT`, `CAM_RIGHT`, `CAM_FORWARD`, `CAM_BACK`, `CAM_FOV_UP`, `CAM_FOV_DOWN`
+
+### Changed
+#### 2026-05-22
+- `RasterizerDemoScene` creates a `PerspectiveCamera` (fov=1.5, pos={0,0,-4}) matching previous hardcoded projection — no visual change
+- `RasterizerTriangleObject` now uses camera's `Project()` instead of its own local projection method
+- Removed `RasterizerTriangleObject::Project()` private method (projection delegated to camera)
 
 ## [0.15.0] - 2026-05-18
 ### Added

@@ -2,6 +2,7 @@
 
 #include "core/GameObject.hpp"
 #include "core/rasterizer/Screen.hpp"
+#include "core/rasterizer/ACamera.hpp"
 #include "utility/FVector3.hpp"
 #include "utility/IVector2.hpp"
 
@@ -21,13 +22,11 @@ public:
     virtual void Draw() override;
 
     int GetMode() const;
-
-private:
-// Projects a 3D point in world space to 2D screen space using a simple perspective projection
-    IVector2 Project(const FVector3& point) const;
+    void SetCamera(ACamera* camera);
 
 private:
     std::unique_ptr<Screen> _Screen;
+    ACamera* _Camera;
     // these are the vertices of the triangle in world space
     // they will be transformed and projected to screen space in the draw function
     std::array<FVector3, 3> _BaseVerts;

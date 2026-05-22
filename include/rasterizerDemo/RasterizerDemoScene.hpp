@@ -21,6 +21,8 @@ public:
     virtual void Destroy() override;
 
 private:
+    void DrawCameraInfo();
+
     Background* _Background;
     RasterizerTriangleObject* _Triangle;
     RasterizerModeUI* _ModeUI;
