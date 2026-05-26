@@ -11,6 +11,8 @@
 #include "core/managers/CollisionManager.hpp"
 #include "core/managers/UIManager.hpp"
 #include "core/managers/SceneManager.hpp"
+#include "core/rasterizer/Screen.hpp"
+#include "core/enums/RasterMode.hpp"
 
 class Player; // Forward declaration
 class SceneManager; // Forward declaration
@@ -29,6 +31,8 @@ protected:
     std::unique_ptr<EnemyManager> _EnemyManager;
     std::unique_ptr<UIManager> _UIManager;
     std::unique_ptr<SceneManager> _SceneManager;
+    std::unique_ptr<Screen> _Screen;
+    RasterMode _RasterMode;
 public:
     const bool DEBUGMODE = true;
     Game(FVector2 screenSize, const std::string& title);
@@ -46,13 +50,16 @@ public:
     UIManager* GetUIManager() const;
     CollisionManager* GetCollisionManager() const;
     DrawManager* GetDrawManager() const;
+    Screen* GetScreen() const;
     Color GetClearColor() const;
+    RasterMode GetRasterMode() const;
     
     // Clear all managers (called when loading new scene)
     void ClearManagers();
     const std::vector<Player*> GetPlayers() const;
     void SetShouldClose(const bool shouldClose);
     void SetClearColor(const Color other);
+    void SetRasterMode(const RasterMode mode);
     virtual void InitGame(const Color clearColor = BLACK);
     
     // TRY DONT USE THIS

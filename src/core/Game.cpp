@@ -6,7 +6,9 @@ Game::Game(FVector2 screenSize, const std::string& title) :
     _ScreenSize(screenSize)
     , _Title(title)
     , _ShouldClose(false)
-    , _ClearColor(RAYWHITE){
+    , _ClearColor(RAYWHITE)
+    , _Screen(nullptr)
+    , _RasterMode(RasterMode::NONE){
     InitWindow(_ScreenSize.x, _ScreenSize.y, _Title.c_str());
     SetTargetFPS(60);
     _InputManager = std::make_unique<InputManager>();
@@ -37,8 +39,14 @@ CollisionManager* Game::GetCollisionManager() const{
 DrawManager* Game::GetDrawManager() const{
     return _DrawManager.get();
 }
+Screen* Game::GetScreen() const{
+    return _Screen.get();
+}
 Color Game::GetClearColor() const{
     return _ClearColor;
+}
+RasterMode Game::GetRasterMode() const{
+    return _RasterMode;
 }
 const std::vector<Player*> Game::GetPlayers() const{
     std::vector<Player*> players;
@@ -55,6 +63,22 @@ void Game::SetShouldClose(const bool shouldClose){
 }
 void Game::SetClearColor(const Color other){
     _ClearColor = other;
+}
+
+void Game::SetRasterMode(const RasterMode mode)
+{
+    _RasterMode = mode;
+    if (_RasterMode == RasterMode::NONE) {
+        _Screen.reset(); // Destroys the current screen if it exists, since we won't be using software rasterization
+        return;
+    }
+
+    if (_Screen == nullptr) {
+        _Screen = std::make_unique<Screen>(
+            static_cast<int>(_ScreenSize.x),
+            static_cast<int>(_ScreenSize.y)
+        );
+    }
 }
 
 void Game::ClearManagers()

@@ -56,6 +56,9 @@ public:
     // In a Box we iterate over each pixel and check if it's in the triangle via edge functions.
     static void DrawTriangle(IVector2 pointA, IVector2 pointB, IVector2 pointC, Color color, Screen* screen);
 
+    // Bounding-box circle fill, depth = 0.
+    static void DrawCircle(IVector2 center, int radius, Color color, Screen* screen);
+
     // Scanline triangle with per-vertex attribute interpolation + Phong lighting.
     // We iterate over each horizontal row of the triangle 
     // and interpolate the left and right edges to find the start and end x coordinate for that row.

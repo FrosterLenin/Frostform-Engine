@@ -247,6 +247,26 @@ void Rasterizer::DrawTriangle(IVector2 p1, IVector2 p2, IVector2 p3, Color color
         }
     }
 }
+
+void Rasterizer::DrawCircle(IVector2 center, int radius, Color color, Screen* screen)
+{
+    const int radiusSquared = radius * radius;
+    const int xMin = center.x - radius;
+    const int xMax = center.x + radius;
+    const int yMin = center.y - radius;
+    const int yMax = center.y + radius;
+
+    for (int x = xMin; x <= xMax; ++x) {
+        for (int y = yMin; y <= yMax; ++y) {
+            const int dx = x - center.x;
+            const int dy = y - center.y;
+            // TODO: Implement a function IsPointInCircle to avoid the square root calculation for better performance
+            if ((dx * dx + dy * dy) <= radiusSquared)
+                screen->PutPixel(x, y, 0.f, color);
+        }
+    }
+}
+
 void Rasterizer::DrawTriangle(const Gpu& gpu, const GpuVertex& v1, const GpuVertex& v2, const GpuVertex& v3, Screen* screen) {
     // Backface culling: skip triangle if it faces away from camera (unless two-sided rendering is enabled)
     if (!s_TwoSidedRenderingEnabled && s_EnableFaceCulling && !IsFrontFacing(gpu, v1, v2, v3))

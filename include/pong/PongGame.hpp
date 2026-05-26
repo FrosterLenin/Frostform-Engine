@@ -8,10 +8,12 @@ class PongGame : public Game{
 public:
     static constexpr float BASE_ACCELERATION = 150.0f;
     static constexpr int WINNING_SCORE = 5; // Score needed to win the game
-    PongGame(FVector2 screenSize = FVector2{800, 450});
+    PongGame(FVector2 screenSize = FVector2{800, 450}, RasterMode rasterMode = RasterMode::NONE);
 
     virtual void InitGame(const Color clearColor = BLACK) override;
 
     // Access to game scene for passing data between scenes
     PongGameScene* GetGameScene() const;
+private:
+    RasterMode _PongRasterMode;
 };

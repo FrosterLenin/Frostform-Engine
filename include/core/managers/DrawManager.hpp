@@ -17,6 +17,9 @@ public:
     void Init();
 
     void BeginDraw() const;
+    // Draws all drawables in the specified layers, inclusive
+    // If endLayer is less than startLayer, they will be swapped
+    void DrawLayers(DrawLayer startLayer, DrawLayer endLayer) const;
     void EndDraw() const;
 
     void BindObject(std::shared_ptr<GameObject> gameObject);

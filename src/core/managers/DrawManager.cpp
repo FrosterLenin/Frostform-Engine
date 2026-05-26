@@ -14,6 +14,25 @@ void DrawManager::BeginDraw() const{
         }
     }
 }
+
+void DrawManager::DrawLayers(DrawLayer startLayer, DrawLayer endLayer) const
+{
+    size_t startIndex = ToIndex(startLayer);
+    size_t endIndex = ToIndex(endLayer);
+    if (_Layer.empty()) return;
+    if (startIndex >= _Layer.size()) return;
+    if (endIndex >= _Layer.size()) endIndex = _Layer.size() - 1;
+    // Ensure startIndex is less than or equal to endIndex
+    if (startIndex > endIndex) std::swap(startIndex, endIndex);
+
+    for (size_t i = startIndex; i <= endIndex; ++i) {
+        for (const auto& drawable : _Layer[i].Drawables) {
+            if (drawable->IsActive())
+                drawable->Draw();
+        }
+    }
+}
+
 void DrawManager::EndDraw() const {
 }
 

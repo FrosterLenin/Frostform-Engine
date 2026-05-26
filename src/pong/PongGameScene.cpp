@@ -84,7 +84,17 @@ void PongGameScene::Draw()
 {
     BeginDrawing();
     ClearBackground(_Game->GetClearColor());
-    _Game->GetDrawManager()->BeginDraw();
+
+    if (_Game->GetScreen() != nullptr) {
+        _Game->GetScreen()->Clear(_Game->GetClearColor());
+        _Game->GetDrawManager()->DrawLayers(DrawLayer::BACKGROUND, DrawLayer::GAME_FIELD);
+        _Game->GetScreen()->Blit();
+        // Draw UI on top of software rasterized game field
+        _Game->GetDrawManager()->DrawLayers(DrawLayer::UI, DrawLayer::UI);
+    } 
+    else
+        _Game->GetDrawManager()->BeginDraw();
+
     EndDrawing();
 }
 

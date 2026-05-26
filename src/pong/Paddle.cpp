@@ -1,5 +1,7 @@
 #include "pong/Paddle.hpp"
 #include "pong/PongGame.hpp"
+#include "core/enums/RasterMode.hpp"
+#include "core/rasterizer/Rasterizer.hpp"
 #include "raylib.h"
 
 Paddle::Paddle(Game* game, FVector2 position, FVector2 size, Color color, bool isAutomatic, int index) : 
@@ -11,7 +13,24 @@ Paddle::Paddle(Game* game, FVector2 position, FVector2 size, Color color, bool i
 }
     
 void Paddle::Draw(){
-    DrawRectangle(_Position.x, _Position.y, _Size.x, _Size.y, _Color);
+    if (_Game == nullptr)
+        return;
+
+    const RasterMode rasterMode = _Game->GetRasterMode();
+    // TODO: Move this logic into raster a logic to draw a square as two triangles
+    // so we can use the triangle rasterization for the paddles and have a more retro look
+    if (rasterMode == RasterMode::BBOX_TRIANGLE && _Game->GetScreen() != nullptr) {
+        const IVector2 topLeft{static_cast<int>(_Position.x), static_cast<int>(_Position.y)};
+        const IVector2 topRight{static_cast<int>(_Position.x + _Size.x), static_cast<int>(_Position.y)};
+        const IVector2 bottomLeft{static_cast<int>(_Position.x), static_cast<int>(_Position.y + _Size.y)};
+        const IVector2 bottomRight{static_cast<int>(_Position.x + _Size.x), static_cast<int>(_Position.y + _Size.y)};
+
+        Rasterizer::DrawTriangle(topLeft, topRight, bottomLeft, _Color, _Game->GetScreen());
+        Rasterizer::DrawTriangle(topRight, bottomRight, bottomLeft, _Color, _Game->GetScreen());
+        return;
+    }
+
+    DrawRectangle(static_cast<int>(_Position.x), static_cast<int>(_Position.y), static_cast<int>(_Size.x), static_cast<int>(_Size.y), _Color);
 }
 
 void Paddle::Start(){

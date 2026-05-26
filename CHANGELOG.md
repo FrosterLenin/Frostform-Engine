@@ -18,6 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Space Invaders: The enemy formation gradually shifts, causing inconsistent spacing between invaders over time after the enemy manager update.
 
 ### Added
+#### 2026-05-26
+- **Pong software-raster mode integration (NONE/BBOX)**
+  - Added `RasterMode::NONE` to preserve default raylib rendering when software rasterization is disabled
+  - Added raster-mode state and shared software `Screen` management to `Game` (`SetRasterMode`, `GetRasterMode`, `GetScreen`)
+  - Added `Rasterizer::DrawCircle(IVector2 center, int radius, Color color, Screen* screen)` using bounding-box fill + radius test
+  - Added pong-level raster-mode configuration through `PongGame(FVector2, RasterMode)` with default `RasterMode::NONE`
+  - Added `DrawManager::DrawLayers(startLayer, endLayer)` to support precise per-layer ordering when mixing software raster + raylib UI
+
 #### 2026-05-22
 - **Camera system for the software rasterizer pipeline**
   - `ACamera` abstract base class (`include/core/rasterizer/ACamera.hpp`) with `Project()`, `WorldToCameraSpace()`, `GetPosition()`, `SetPosition()`, `IsFaceCulled()`
@@ -29,6 +37,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - New `InputAction` enum values: `CAM_UP`, `CAM_DOWN`, `CAM_LEFT`, `CAM_RIGHT`, `CAM_FORWARD`, `CAM_BACK`, `CAM_FOV_UP`, `CAM_FOV_DOWN`
 
 ### Changed
+#### 2026-05-26
+- `Paddle::Draw()` now supports BBOX raster rendering by decomposing the paddle rectangle into two triangles
+- `Circle::Draw()` now branches by raster mode: raylib path for `NONE`, software raster circle path for `BBOX_TRIANGLE`
+- `PongGameScene::Draw()` now integrates software-screen clear/blit flow for rasterized gameplay objects
+- `main.cpp` Pong launcher now uses a configurable raster mode constant for quick mode testing
+- **Pong UI draw-order regression in raster mode**
+  - `ScoreUI` visibility restored by ensuring UI is rendered after software framebuffer blit
+  
 #### 2026-05-22
 - `RasterizerDemoScene` creates a `PerspectiveCamera` (fov=1.5, pos={0,0,-4}) matching previous hardcoded projection — no visual change
 - `RasterizerTriangleObject` now uses camera's `Project()` instead of its own local projection method
