@@ -5,6 +5,7 @@
 #include "spaceInvaders/SpaceInvaders.hpp"
 #include "core/Background.hpp"
 #include "core/Game.hpp"
+#include "core/rasterizer/OrthographicCamera.hpp"
 #include <memory>
 
 SpaceInvadersGameScene::SpaceInvadersGameScene(Game* game)
@@ -15,6 +16,14 @@ SpaceInvadersGameScene::SpaceInvadersGameScene(Game* game)
 void SpaceInvadersGameScene::Init()
 {
     _State = SceneState::ACTIVE;
+
+    const FVector2 screenSize = _Game->GetScreenSize();
+    _Camera = std::make_unique<OrthographicCamera>(
+        static_cast<int>(screenSize.x),
+        static_cast<int>(screenSize.y),
+        screenSize.y * 0.5f
+    );
+    _Camera->SetPosition({0.0f, 0.0f, 0.0f});
     
     FVector2 centerScreen = _Game->GetScreenSize() * 0.5f;
     FVector2 spaceShipSpawnPoint = {centerScreen.x, centerScreen.y + 200.0f};

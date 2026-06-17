@@ -1,6 +1,7 @@
 #include "spaceInvaders/Invader.hpp"
 #include "spaceInvaders/SpaceInvaders.hpp"
 #include "core/Game.hpp"
+#include "core/rasterizer/ACamera.hpp"
 #include "core/ScoreUI.hpp"
 #include <memory>
 
@@ -14,7 +15,25 @@ Invader::Invader(Game* game, FVector2 position, FVector2 size, Color color, floa
 Invader::~Invader(){}
 
 void Invader::Draw(){
-    DrawRectangle(_Position.x, _Position.y, _Size.x, _Size.y, _Color);
+    if (ACamera* camera = GetCamera()) {
+        Rectangle projectedRectangle = camera->ProjectRectangleTopLeft(_Position, _Size);
+        DrawRectangle(
+            static_cast<int>(projectedRectangle.x),
+            static_cast<int>(projectedRectangle.y),
+            static_cast<int>(projectedRectangle.width),
+            static_cast<int>(projectedRectangle.height),
+            _Color
+        );
+        return;
+    }
+
+    DrawRectangle(
+        static_cast<int>(_Position.x),
+        static_cast<int>(_Position.y),
+        static_cast<int>(_Size.x),
+        static_cast<int>(_Size.y),
+        _Color
+    );
 }
 void Invader::Start(){
     _Velocity = {1.f, .0}; // Move only in X axis

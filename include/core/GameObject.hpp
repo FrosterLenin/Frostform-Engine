@@ -3,6 +3,8 @@
 #include <memory>
 #include "core/Collider.hpp"
 #include "core/enums/DrawLayers.hpp"
+
+class ACamera;
 class Game;
 
 class GameObject{
@@ -15,6 +17,8 @@ protected:
     Color _Color;
     //std::weak_ptr<Game> Game; // GameObjects does not posses it and need to avoid memory leak
     std::shared_ptr<Collider> _Collider;
+    // Optional camera override for this object. If null, scene camera is used.
+    ACamera* _Camera;
     Game* _Game;
     DrawLayer _DrawLayer;
     // Optional owner/parent - the GameObject that "owns" this one (e.g. a ship that fired a bullet).
@@ -49,6 +53,10 @@ public:
     // Specific Manager will call this for the game objects it manages
     // like the enemy manager will call this for the enemies, the projectile manager will call this for the projectiles, etc.
     virtual void UpdateControlled(float deltaTime); 
+
+public:
+    void SetCamera(ACamera* camera);
+    ACamera* GetCamera() const;
 
     void SetPosition(const FVector2& other);
     void SetVelocity(const FVector2& other);

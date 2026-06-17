@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### TODO
 - ~~Implement Camera logic with Orthographic and Perspective projections~~ ✓ Done
+- ~~Integrate camera world-to-screen projection into Pong and Space Invaders~~ ✓ Done
 
 ### Future Plans
 - OpenGL, DirectX, and Vulkan backends
@@ -18,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Space Invaders: The enemy formation gradually shifts, causing inconsistent spacing between invaders over time after the enemy manager update.
 
 ### Added
+#### 2026-06-17
+- **Camera system integration for Pong and Space Invaders**
+  - Scene camera setup: `PongGameScene` and `SpaceInvadersGameScene` now create `OrthographicCamera` instances in `Init()`
+  - World-to-screen projection helpers in camera classes: `ProjectTopLeft2D()`, `GetProjectedDepth()`, `ProjectRectangleTopLeft()` on `ACamera` with implementations in `PerspectiveCamera` and `OrthographicCamera`
+  - GameObject camera ownership: added public `SetCamera()` / `GetCamera()` to GameObject base class with automatic scene camera fallback
+  - Renderable objects in Pong/Space Invaders now use projected coordinates: `Paddle`, `Circle` (Ball/Bullet), `Invader`, `SpaceShip` all apply camera projection in `Draw()`
+  - Scene manager exposure: added `Game::GetSceneManager()` for cross-subsystem access to active scene
+
 #### 2026-05-26
 - **Pong software-raster mode integration (NONE/BBOX)**
   - Added `RasterMode::NONE` to preserve default raylib rendering when software rasterization is disabled
@@ -37,6 +46,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - New `InputAction` enum values: `CAM_UP`, `CAM_DOWN`, `CAM_LEFT`, `CAM_RIGHT`, `CAM_FORWARD`, `CAM_BACK`, `CAM_FOV_UP`, `CAM_FOV_DOWN`
 
 ### Changed
+#### 2026-06-17
+- **Projection logic moved to camera classes** — Camera classes now own all projection math including 2D-to-centered-world conversion and depth calculation; `GameObject` helpers delegate to camera methods rather than duplicating logic
+- `Invader::Draw()` and `SpaceShip::Draw()` now apply projected rectangle when scene camera is present, falling back to screen-space drawing
+- `Circle::Draw()` now applies projected center coordinates when scene camera is present
+- `Paddle::Draw()` now applies projected rectangle in both raylib and software raster paths
+- Removed `GetSceneCamera()` from GameObject in favor of single unified `GetCamera()` that resolves object override first, then scene camera as fallback
+
 #### 2026-05-26
 - `Paddle::Draw()` now supports BBOX raster rendering by decomposing the paddle rectangle into two triangles
 - `Circle::Draw()` now branches by raster mode: raylib path for `NONE`, software raster circle path for `BBOX_TRIANGLE`

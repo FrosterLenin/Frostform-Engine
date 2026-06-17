@@ -45,8 +45,6 @@ void RasterizerDemoScene::Init()
 
     std::weak_ptr<RasterizerTriangleObject> triangle = SpawnGameObject<RasterizerTriangleObject>(_Game);
     _Triangle = triangle.lock().get();
-    if (_Triangle)
-        _Triangle->SetCamera(_Camera.get());
 
     std::weak_ptr<RasterizerModeUI> modeUI = SpawnGameObject<RasterizerModeUI>(_Game, FVector2{10.0f, 10.0f}, FVector2{20.0f, 20.0f}, WHITE);
     _ModeUI = modeUI.lock().get();
@@ -72,20 +70,28 @@ SceneResult RasterizerDemoScene::Update(float deltaTime)
         FVector3 pos = _Camera->GetPosition();
         InputManager* input = _Game->GetInputManager();
 
-        if (input->GetActionState(InputAction::CAM_UP))    pos.y += cameraSpeed * deltaTime;
-        if (input->GetActionState(InputAction::CAM_DOWN))  pos.y -= cameraSpeed * deltaTime;
-        if (input->GetActionState(InputAction::CAM_LEFT))  pos.x -= cameraSpeed * deltaTime;
-        if (input->GetActionState(InputAction::CAM_RIGHT)) pos.x += cameraSpeed * deltaTime;
-        if (input->GetActionState(InputAction::CAM_FORWARD)) pos.z += cameraSpeed * deltaTime;
-        if (input->GetActionState(InputAction::CAM_BACK))    pos.z -= cameraSpeed * deltaTime;
+        if (input->GetActionState(InputAction::CAM_UP))    
+            pos.y += cameraSpeed * deltaTime;
+        if (input->GetActionState(InputAction::CAM_DOWN))  
+            pos.y -= cameraSpeed * deltaTime;
+        if (input->GetActionState(InputAction::CAM_LEFT))  
+            pos.x -= cameraSpeed * deltaTime;
+        if (input->GetActionState(InputAction::CAM_RIGHT)) 
+            pos.x += cameraSpeed * deltaTime;
+        if (input->GetActionState(InputAction::CAM_FORWARD)) 
+            pos.z += cameraSpeed * deltaTime;
+        if (input->GetActionState(InputAction::CAM_BACK))    
+            pos.z -= cameraSpeed * deltaTime;
         _Camera->SetPosition(pos);
 
         // FOV adjustment (perspective only)
         PerspectiveCamera* perspective = dynamic_cast<PerspectiveCamera*>(_Camera.get());
         if (perspective) {
             float fov = perspective->GetFov();
-            if (input->GetActionState(InputAction::CAM_FOV_UP))   fov += fovChangeSpeed * deltaTime;
-            if (input->GetActionState(InputAction::CAM_FOV_DOWN)) fov -= fovChangeSpeed * deltaTime;
+            if (input->GetActionState(InputAction::CAM_FOV_UP))   
+                fov += fovChangeSpeed * deltaTime;
+            if (input->GetActionState(InputAction::CAM_FOV_DOWN)) 
+                fov -= fovChangeSpeed * deltaTime;
             if (fov < 0.1f) fov = 0.1f;
             perspective->SetFov(fov);
         }

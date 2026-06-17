@@ -5,6 +5,8 @@
 #include "pong/PongGameOverScene.hpp"
 #include "core/Background.hpp"
 #include "core/Game.hpp"
+#include "core/enums/RasterMode.hpp"
+#include "core/rasterizer/OrthographicCamera.hpp"
 
 PongGameScene::PongGameScene(Game* game) 
     : Scene(game), _Player1(nullptr), _Player2(nullptr), _Ball(nullptr), _ScoreUI(nullptr)
@@ -14,6 +16,14 @@ PongGameScene::PongGameScene(Game* game)
 void PongGameScene::Init()
 {
     _State = SceneState::ACTIVE;
+
+    const FVector2 screenSize = _Game->GetScreenSize();
+    _Camera = std::make_unique<OrthographicCamera>(
+        static_cast<int>(screenSize.x),
+        static_cast<int>(screenSize.y),
+        screenSize.y * 0.5f
+    );
+    _Camera->SetPosition({0.0f, 0.0f, 0.0f});
     
     FVector2 centerScreen = _Game->GetScreenSize() * 0.5f;
 
@@ -85,7 +95,7 @@ void PongGameScene::Draw()
     BeginDrawing();
     ClearBackground(_Game->GetClearColor());
 
-    if (_Game->GetScreen() != nullptr) {
+    if (_Game->GetRasterMode() != RasterMode::NONE && _Game->GetScreen() != nullptr) {
         _Game->GetScreen()->Clear(_Game->GetClearColor());
         _Game->GetDrawManager()->DrawLayers(DrawLayer::BACKGROUND, DrawLayer::GAME_FIELD);
         _Game->GetScreen()->Blit();

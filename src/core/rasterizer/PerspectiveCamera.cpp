@@ -21,6 +21,35 @@ IVector2 PerspectiveCamera::Project(FVector3 worldPoint) {
     return {sx, sy};
 }
 
+IVector2 PerspectiveCamera::ProjectTopLeft2D(FVector2 worldPoint, float z) {
+    const float halfWidth = _ScreenWidth * 0.5f;
+    const float halfHeight = _ScreenHeight * 0.5f;
+
+    const FVector3 centeredWorldPoint{
+        worldPoint.x - halfWidth,
+        halfHeight - worldPoint.y,
+        z
+    };
+
+    return Project(centeredWorldPoint);
+}
+
+float PerspectiveCamera::GetProjectedDepth(FVector3 worldPoint) {
+    return -WorldToCameraSpace(worldPoint).z;
+}
+
+Rectangle PerspectiveCamera::ProjectRectangleTopLeft(FVector2 position, FVector2 size, float z) {
+    const IVector2 topLeft = ProjectTopLeft2D(position, z);
+    const IVector2 bottomRight = ProjectTopLeft2D(position + size, z);
+
+    Rectangle rectangle{};
+    rectangle.x = static_cast<float>(topLeft.x);
+    rectangle.y = static_cast<float>(topLeft.y);
+    rectangle.width = static_cast<float>(bottomRight.x - topLeft.x);
+    rectangle.height = static_cast<float>(bottomRight.y - topLeft.y);
+    return rectangle;
+}
+
 FVector3 PerspectiveCamera::WorldToCameraSpace(FVector3 worldPoint) {
     return worldPoint - _Position;
 }

@@ -1,5 +1,9 @@
 #include "core/GameObject.hpp"
 #include "core/Game.hpp"
+#include "core/Scene.hpp"
+#include "core/managers/SceneManager.hpp"
+#include "core/rasterizer/ACamera.hpp"
+#include "utility/FVector3.hpp"
 #include "raylib.h"
 #include <algorithm>
 
@@ -10,6 +14,7 @@ GameObject::GameObject(Game* game, const FVector2 position, const FVector2 size)
     , _AccelerationIndex(.0f)
     , _Size(size)
     , _Active(true)
+    , _Camera(nullptr)
     , _Owner(nullptr)
     , _DrawLayer(DrawLayer::GAME_FIELD){
 }
@@ -105,4 +110,28 @@ void GameObject::UpdateControlled(float deltaTime){
 }
 bool GameObject::CheckCollision(const GameObject& other) const{
     return false;
+}
+
+void GameObject::SetCamera(ACamera* camera)
+{
+    _Camera = camera;
+}
+
+ACamera* GameObject::GetCamera() const
+{
+    if (_Camera)
+        return _Camera;
+
+    if (!_Game)
+        return nullptr;
+
+    SceneManager* sceneManager = _Game->GetSceneManager();
+    if (!sceneManager)
+        return nullptr;
+
+    Scene* currentScene = sceneManager->GetCurrentScene();
+    if (!currentScene)
+        return nullptr;
+
+    return currentScene->GetCamera();
 }

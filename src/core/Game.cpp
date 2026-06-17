@@ -39,6 +39,9 @@ CollisionManager* Game::GetCollisionManager() const{
 DrawManager* Game::GetDrawManager() const{
     return _DrawManager.get();
 }
+SceneManager* Game::GetSceneManager() const{
+    return _SceneManager.get();
+}
 Screen* Game::GetScreen() const{
     return _Screen.get();
 }

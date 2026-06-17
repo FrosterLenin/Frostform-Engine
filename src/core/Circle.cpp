@@ -1,6 +1,7 @@
 #include "core/Circle.hpp"
 #include "core/Game.hpp"
 #include "core/enums/RasterMode.hpp"
+#include "core/rasterizer/ACamera.hpp"
 #include "core/rasterizer/Rasterizer.hpp"
 
 Circle::Circle(Game* game, FVector2 position, float radius, Color color) : 
@@ -24,11 +25,15 @@ void Circle::Draw(){
     if (_Game == nullptr)
         return;
 
+    const FVector2 center = GetCenter();
+    IVector2 projectedCenter{static_cast<int>(center.x), static_cast<int>(center.y)};
+    if (ACamera* camera = GetCamera())
+        projectedCenter = camera->ProjectTopLeft2D(center);
+
     const RasterMode rasterMode = _Game->GetRasterMode();
     if (rasterMode == RasterMode::BBOX_TRIANGLE && _Game->GetScreen() != nullptr) {
-        const FVector2 center = GetCenter();
         Rasterizer::DrawCircle(
-            IVector2{static_cast<int>(center.x), static_cast<int>(center.y)}
+            projectedCenter
             , static_cast<int>(_Radius)
             , _Color
             , _Game->GetScreen()
@@ -36,7 +41,7 @@ void Circle::Draw(){
         return;
     }
 
-    DrawCircle(static_cast<int>(GetCenter().x), static_cast<int>(GetCenter().y), _Radius, _Color);
+    DrawCircle(projectedCenter.x, projectedCenter.y, _Radius, _Color);
 }
 
 

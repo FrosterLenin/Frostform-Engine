@@ -50,6 +50,7 @@ public:
     UIManager* GetUIManager() const;
     CollisionManager* GetCollisionManager() const;
     DrawManager* GetDrawManager() const;
+    SceneManager* GetSceneManager() const;
     Screen* GetScreen() const;
     Color GetClearColor() const;
     RasterMode GetRasterMode() const;

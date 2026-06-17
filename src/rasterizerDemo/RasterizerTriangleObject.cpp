@@ -7,8 +7,7 @@
 
 RasterizerTriangleObject::RasterizerTriangleObject(Game* game)
     : GameObject(game, FVector2{0.0f, 0.0f}, FVector2{1.0f, 1.0f}, WHITE),
-      _Screen(nullptr),
-      _Camera(nullptr),
+    _Screen(nullptr),
       _BaseVerts({{{0.0f, 0.9f, 0.0f}, {-0.9f, -0.7f, 0.0f}, {0.9f, -0.7f, 0.0f}}}),
       _BaseColors({{RED, GREEN, BLUE}}),
       _Mode(3),
@@ -36,7 +35,8 @@ void RasterizerTriangleObject::Update(float deltaTime)
 
 void RasterizerTriangleObject::Draw()
 {
-    if (!_Screen || !_Camera)
+    ACamera* camera = GetCamera();
+    if (!_Screen || !camera)
         return;
 
     std::array<FVector3, 3> world;
@@ -51,8 +51,8 @@ void RasterizerTriangleObject::Draw()
     std::array<IVector2, 3> screenPosition;
     std::array<float, 3> zPosition;
     for (int i = 0; i < 3; ++i) {
-        screenPosition[i] = _Camera->Project(world[i]);
-        zPosition[i] = -_Camera->WorldToCameraSpace(world[i]).z;
+        screenPosition[i] = camera->Project(world[i]);
+        zPosition[i] = camera->GetProjectedDepth(world[i]);
     }
 
     _Screen->Clear(BLACK);
@@ -65,7 +65,7 @@ void RasterizerTriangleObject::Draw()
         Gpu gpu;
         gpu.Mode = GpuDrawMode::COLOR;
         gpu.pointLightPosition = {0.0f, 0.0f, -2.0f};
-        gpu.cameraPosition = _Camera->GetPosition();
+        gpu.cameraPosition = camera->GetPosition();
 
         std::array<GpuVertex, 3> verts;
         for (int i = 0; i < 3; ++i) {
@@ -85,7 +85,7 @@ void RasterizerTriangleObject::Draw()
         Gpu gpu;
         gpu.Mode = GpuDrawMode::COLOR;
         gpu.pointLightPosition = {0.0f, 0.0f, -2.0f};
-        gpu.cameraPosition = _Camera->GetPosition();
+        gpu.cameraPosition = camera->GetPosition();
 
         // Check if triangle is backfacing; if so, flip normal for proper lighting
         FVector3 directionToCamera = gpu.cameraPosition - world[0];
@@ -114,9 +114,4 @@ void RasterizerTriangleObject::Draw()
 int RasterizerTriangleObject::GetMode() const
 {
     return _Mode;
-}
-
-void RasterizerTriangleObject::SetCamera(ACamera* camera)
-{
-    _Camera = camera;
 }
