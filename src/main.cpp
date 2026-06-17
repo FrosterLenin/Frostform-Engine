@@ -5,7 +5,7 @@
 #include "rasterizerDemo/RasterizerDemo.hpp"
 
 void PlayPong(){
-    const RasterMode pongRasterMode = RasterMode::BBOX_TRIANGLE;
+    const RasterMode pongRasterMode = RasterMode::NONE;
     PongGame pongGame(FVector2{800, 450}, pongRasterMode);
     pongGame.InitGame();
     pongGame.Run();

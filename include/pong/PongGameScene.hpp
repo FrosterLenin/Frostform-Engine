@@ -5,6 +5,7 @@
 
 class Paddle;
 class Ball;
+class Timer;
 
 // The active gameplay scene for Pong. Manages paddles, ball, and score tracking.
 class PongGameScene : public Scene
@@ -26,6 +27,7 @@ private:
     Paddle* _Player2;
     Ball* _Ball;
     ScoreUI* _ScoreUI;
+    Timer* _TimerUI;
     
     void InitUI();
 };

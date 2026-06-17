@@ -5,11 +5,12 @@
 #include "pong/PongGameOverScene.hpp"
 #include "core/Background.hpp"
 #include "core/Game.hpp"
+#include "core/Timer.hpp"
 #include "core/enums/RasterMode.hpp"
 #include "core/rasterizer/OrthographicCamera.hpp"
 
 PongGameScene::PongGameScene(Game* game) 
-    : Scene(game), _Player1(nullptr), _Player2(nullptr), _Ball(nullptr), _ScoreUI(nullptr)
+    : Scene(game), _Player1(nullptr), _Player2(nullptr), _Ball(nullptr), _ScoreUI(nullptr), _TimerUI(nullptr)
 {
 }
 
@@ -131,10 +132,10 @@ void PongGameScene::ScorePoint(const int playerIndex, const int score)
 
 void PongGameScene::InitUI()
 {
-    std::weak_ptr<ScoreUI> scoreUI = SpawnGameObject<ScoreUI>(_Game, 2, FVector2{10.0f, 10.0f}, 
-                                            FVector2{10.0f, 10.0f}, WHITE);
+    std::weak_ptr<Timer> timerUI = SpawnGameObject<Timer>(_Game, FVector2{0.0f, 10.0f}, FVector2{20.0f, 20.0f}, WHITE);
+    _TimerUI = timerUI.lock().get();
+    std::weak_ptr<ScoreUI> scoreUI = SpawnGameObject<ScoreUI>(_Game, 2, FVector2{10.0f, _TimerUI->GetPosition().y + 10.0f}, FVector2{10.0f, 10.0f}, WHITE);
     _ScoreUI = scoreUI.lock().get();
-    
     if (_ScoreUI) {
         // Register players with ScoreUI
         if (_Player1)
@@ -148,4 +149,7 @@ void PongGameScene::InitUI()
                 ScorePoint(playerIndex, points);
             });
     }
+
+    if (_TimerUI)
+        _Game->GetUIManager()->Bind(timerUI.lock());
 }

@@ -12,6 +12,7 @@ ScoreUI::ScoreUI(Game* game, int maxPlayers, FVector2 position, FVector2 size, C
 ScoreUI::~ScoreUI() {}
 
 void ScoreUI::Update(float deltaTime){
+    
 }
 
 void ScoreUI::Draw(){
@@ -23,7 +24,7 @@ void ScoreUI::Draw(){
     
     // Calculate x positions based on number of players
     std::vector<float> xPositions(numberOfPlayers);
-    
+    float offset = _Position.x; // Base offset from the left edge
     switch(numberOfPlayers) {
         case 1:
             // Single player: top left
@@ -32,20 +33,20 @@ void ScoreUI::Draw(){
         case 2:
             // Two players: top left and top right
             xPositions[0] = _Position.x;
-            xPositions[1] = screenWidth - _Position.x - 50; // Offset for text width
+            xPositions[1] = screenWidth - _Position.x - offset; // Offset for text width
             break;
         case 3:
             // Three players: top left, top middle, top right
             xPositions[0] = _Position.x;
-            xPositions[1] = screenWidth / 2 - 25; // Center
-            xPositions[2] = screenWidth - _Position.x - 50;
+            xPositions[1] = screenWidth / 2 - offset / 2; // Center
+            xPositions[2] = screenWidth - _Position.x - offset;
             break;
         case 4:
             // Four players: top corners and two in top middle (justified)
             xPositions[0] = _Position.x;
-            xPositions[1] = screenWidth / 3 - 25;
-            xPositions[2] = 2 * screenWidth / 3 - 25;
-            xPositions[3] = screenWidth - _Position.x - 50;
+            xPositions[1] = screenWidth / 3 - offset / 2;
+            xPositions[2] = 2 * screenWidth / 3 - offset / 2;
+            xPositions[3] = screenWidth - _Position.x - offset;
             break;
     }
     

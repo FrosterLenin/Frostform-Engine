@@ -20,6 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 #### 2026-06-17
+- **Pong in-game timer UI component**
+  - Added `Timer` UI integration to `PongGameScene::InitUI()`
+  - Timer is spawned and bound through `UIManager` so it updates every frame
+  - Timer is rendered at the top-center in `MM:SS` format during gameplay
+
 - **Camera system integration for Pong and Space Invaders**
   - Scene camera setup: `PongGameScene` and `SpaceInvadersGameScene` now create `OrthographicCamera` instances in `Init()`
   - World-to-screen projection helpers in camera classes: `ProjectTopLeft2D()`, `GetProjectedDepth()`, `ProjectRectangleTopLeft()` on `ACamera` with implementations in `PerspectiveCamera` and `OrthographicCamera`
@@ -47,6 +52,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 #### 2026-06-17
+- **CMake source glob refresh for core files**
+  - Updated `SRC_FILES_CORE` to `file(GLOB ... CONFIGURE_DEPENDS ...)` so new files like `Timer.cpp` are detected without stale generated project state
+
 - **Projection logic moved to camera classes** — Camera classes now own all projection math including 2D-to-centered-world conversion and depth calculation; `GameObject` helpers delegate to camera methods rather than duplicating logic
 - `Invader::Draw()` and `SpaceShip::Draw()` now apply projected rectangle when scene camera is present, falling back to screen-space drawing
 - `Circle::Draw()` now applies projected center coordinates when scene camera is present
@@ -65,6 +73,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `RasterizerDemoScene` creates a `PerspectiveCamera` (fov=1.5, pos={0,0,-4}) matching previous hardcoded projection — no visual change
 - `RasterizerTriangleObject` now uses camera's `Project()` instead of its own local projection method
 - Removed `RasterizerTriangleObject::Project()` private method (projection delegated to camera)
+
+### Fixed
+#### 2026-06-17
+- **ScoreUI horizontal offset alignment**
+  - Corrected score text horizontal offset handling in `ScoreUI::Draw()` to keep player score placement consistent across layouts
 
 ## [0.15.0] - 2026-05-18
 ### Added
