@@ -2,7 +2,7 @@
 #include "raylib.h"
 #include <iostream>
 
-TextureCpu* TextureCpu::LoadFromFile(const std::string& filePath) {
+std::unique_ptr<TextureCpu> TextureCpu::LoadFromFile(const std::string& filePath) {
     Image image = LoadImage(filePath.c_str());
     if (!IsImageValid(image)) {
         std::cout << "Error loading image: " << filePath << "\n";
@@ -19,7 +19,12 @@ TextureCpu* TextureCpu::LoadFromFile(const std::string& filePath) {
 
     std::vector<uint8_t> pixels(data, data + textureSize);
 
-    TextureCpu* texture = new TextureCpu(image.width, image.height, bytesPerPixel, std::move(pixels));
+    std::unique_ptr<TextureCpu> texture = std::make_unique<TextureCpu>(
+        image.width,
+        image.height,
+        bytesPerPixel,
+        std::move(pixels)
+    );
     UnloadImage(image);
     return texture;
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -8,7 +9,7 @@
 // Pixels are stored as a flat RGBA byte array.
 class TextureCpu {
 public:
-    static TextureCpu* LoadFromFile(const std::string& filePath);
+    static std::unique_ptr<TextureCpu> LoadFromFile(const std::string& filePath);
 
     TextureCpu(int width, int height, int pixelMemorySize, std::vector<uint8_t> pixels);
 

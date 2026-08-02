@@ -12,7 +12,7 @@
 
 // Per-draw rasterizer state for the scanline path (lighting, shading mode, texture).
 struct Gpu {
-    TextureCpu* Texture = nullptr;
+    std::unique_ptr<TextureCpu> Texture = nullptr;
     GpuDrawMode Mode = GpuDrawMode::COLOR;
     FVector3 pointLightPosition {0.f, 0.f, 0.f};
     FVector3 cameraPosition {0.f, 0.f, 0.f};

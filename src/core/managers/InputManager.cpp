@@ -35,7 +35,7 @@ void InputManager::Update(){
     _KeyUps.fill(false);
 
     for(size_t i = 0; i < ACTION_COUNT; ++i){
-        const size_t key = _KeyBindings[i];
+        const int key = _KeyBindings[i];
         if(key == -1) continue;
         bool isKeyDown = IsKeyDown(key);
         _KeyDowns[i] = isKeyDown && !_KeyStates[i];
@@ -43,9 +43,10 @@ void InputManager::Update(){
         _KeyStates[i] = isKeyDown; // IF STILL BEEING PRESSED
     }
     const FVector2 oldMousePosition = _MousePosition;
-    const FVector2 currentMousePosition = GetInputMousePosition();
+    const FVector2 currentMousePosition = {static_cast<float>(GetMouseX()), static_cast<float>(GetMouseY())};
     _MousePosition = {currentMousePosition.x, currentMousePosition.y};
     _MousePositionDelta = _MousePosition - oldMousePosition;
+    _MouseWheel = GetMouseWheelMove();
 
 }
 bool InputManager::GetActionDown(InputAction action) const{

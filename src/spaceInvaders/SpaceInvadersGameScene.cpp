@@ -16,6 +16,8 @@ SpaceInvadersGameScene::SpaceInvadersGameScene(Game* game)
 void SpaceInvadersGameScene::Init()
 {
     _State = SceneState::ACTIVE;
+    // Reset cadence each time this scene starts (header init runs only once per process).
+    Invader::_TimeSinceLastShot = .0f;
 
     const FVector2 screenSize = _Game->GetScreenSize();
     _Camera = std::make_unique<OrthographicCamera>(

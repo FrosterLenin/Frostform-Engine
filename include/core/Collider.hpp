@@ -1,7 +1,7 @@
 #pragma once
 #include "utility/FVector2.hpp"
 #include "core/enums/CollisionLayers.hpp"
-#include <Algorithm>
+#include <algorithm>
 #include <memory>
 
 class GameObject;

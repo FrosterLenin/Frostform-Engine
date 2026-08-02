@@ -129,7 +129,7 @@ void Rasterizer::RasterizeRow(const Gpu& gpu, int y,
             // With Texture mapping, we need to interpolate the UV coordinates across the triangle 
             // to determine which part of the texture to sample for the current pixel
             FVector2 sampleUV = Interpolator::Vector2(leftUV, rightUV, gradientX);
-            const TextureCpu* texture = gpu.Texture;
+            const TextureCpu* texture = gpu.Texture.get();
 
             int textureX = static_cast<int>(static_cast<float>(texture->width  - 1) * sampleUV.x);
             int textureY = static_cast<int>(static_cast<float>(texture->height - 1) * (1.f - sampleUV.y));

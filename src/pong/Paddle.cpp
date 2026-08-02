@@ -99,10 +99,12 @@ bool Paddle::CheckCollision(const GameObject& other) const{
     // Circle x rectangle collision
     // Closest point to the rectangle < circle radius = collision
     // Max(Box.X, Min(CircleCenter.x, Box.x + Widht)) < Circle.Radius = collision
-    bool overlapX = _Position.x < other.GetPosition().x < _Position.x + _Size.x;
-                    // || _Position.x < other.GetPosition().x + other.GetSize().x < _Position.x + _Size.x;
-    bool overlapY = _Position.y < other.GetPosition().y < _Position.y + _Size.y;
-                    // || _Position.y < other.GetPosition().y + other.GetSize().y < _Position.y + _Size.y;
+    const FVector2 otherPosition = other.GetPosition();
+    const FVector2 otherSize = other.GetSize();
+    bool overlapX = _Position.x < (otherPosition.x + otherSize.x)
+        && otherPosition.x < (_Position.x + _Size.x);
+    bool overlapY = _Position.y < (otherPosition.y + otherSize.y)
+        && otherPosition.y < (_Position.y + _Size.y);
     return overlapX && overlapY;
 }
 

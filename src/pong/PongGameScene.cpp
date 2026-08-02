@@ -134,7 +134,9 @@ void PongGameScene::InitUI()
 {
     std::weak_ptr<Timer> timerUI = SpawnGameObject<Timer>(_Game, FVector2{0.0f, 10.0f}, FVector2{20.0f, 20.0f}, WHITE);
     _TimerUI = timerUI.lock().get();
-    std::weak_ptr<ScoreUI> scoreUI = SpawnGameObject<ScoreUI>(_Game, 2, FVector2{10.0f, _TimerUI->GetPosition().y + 10.0f}, FVector2{10.0f, 10.0f}, WHITE);
+    // Fallback keeps score readable even if timer spawn/lock fails
+    const float scoreY = _TimerUI ? (_TimerUI->GetPosition().y + 10.0f) : 20.0f;
+    std::weak_ptr<ScoreUI> scoreUI = SpawnGameObject<ScoreUI>(_Game, 2, FVector2{10.0f, scoreY}, FVector2{10.0f, 10.0f}, WHITE);
     _ScoreUI = scoreUI.lock().get();
     if (_ScoreUI) {
         // Register players with ScoreUI

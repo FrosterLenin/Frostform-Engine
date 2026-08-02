@@ -5,8 +5,6 @@
 #include "core/ScoreUI.hpp"
 #include <memory>
 
-float Invader::_TimeSinceLastShot = 0.0f;
-
 Invader::Invader(Game* game, FVector2 position, FVector2 size, Color color, float accelerationIndex) : 
     GameObject(game, position, size, color, accelerationIndex) {
     // Enemy should collide with players and player projectiles, but not with other enemies or enemy projectiles

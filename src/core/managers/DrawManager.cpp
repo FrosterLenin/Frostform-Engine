@@ -46,7 +46,7 @@ void DrawManager::Init() {
 
 void DrawManager::BindObject(std::shared_ptr<GameObject> gameObject){
     size_t index = ToIndex(gameObject->GetDrawLayer());
-    if(index < 0 || index >= _Layer.size()) return;
+    if(index >= _Layer.size()) return;
     _Layer[index].Drawables.push_back(gameObject);
 }
 

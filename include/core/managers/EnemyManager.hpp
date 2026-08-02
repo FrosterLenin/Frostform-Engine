@@ -8,7 +8,5 @@ class EnemyManager : public BaseManager{
 public:
     EnemyManager();
     ~EnemyManager();
-
-    void SpawnEnemy(const FVector2& position, const FVector2& size, const Color color, float accelerationIndex);
     const std::vector<std::weak_ptr<GameObject>>& GetManagedObjects() const { return _ManagedObjects; }
 };

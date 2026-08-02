@@ -51,6 +51,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - New `InputAction` enum values: `CAM_UP`, `CAM_DOWN`, `CAM_LEFT`, `CAM_RIGHT`, `CAM_FORWARD`, `CAM_BACK`, `CAM_FOV_UP`, `CAM_FOV_DOWN`
 
 ### Changed
+#### 2026-08-02
+- **Input and gameplay consistency pass**
+  - `InputManager` now samples mouse position directly from raylib every frame and updates mouse wheel delta in `Update()`
+  - Restored mouse button semantics to preserve held-button behavior: `GetMouseButtonDown()` maps to `IsMouseButtonDown()`, while `GetMouseState()` maps to one-shot `IsMouseButtonPressed()`
+  - `Bullet::Start()` no longer overrides `_AccelerationIndex`, so constructor-provided bullet speed values are preserved
+  - Invader shot cadence state moved to header-side inline static initialization (`Invader::_TimeSinceLastShot`) and kept explicit scene reset on `SpaceInvadersGameScene::Init()`
+
+- **Rasterizer texture ownership safety**
+  - `TextureCpu::LoadFromFile()` now returns `std::unique_ptr<TextureCpu>`
+  - `Gpu::Texture` now owns texture memory via `std::unique_ptr<TextureCpu>`
+  - Rasterizer texture sampling path updated to use `gpu.Texture.get()` after null checks
+
+- **Maintenance cleanup and defensive guards**
+  - Removed unused `EnemyManager::SpawnEnemy(...)` declaration from the public API
+  - Added `scoreY` fallback handling/comment in `PongGameScene::InitUI()` to keep score text readable if timer spawn/lock is unavailable
+  - Corrected non-portable standard include case in `Collider.hpp` (`<Algorithm>` -> `<algorithm>`)
+  - Removed redundant unsigned bounds check branch in `DrawManager::BindObject()`
+
 #### 2026-06-17
 - **CMake source glob refresh for core files**
   - Updated `SRC_FILES_CORE` to `file(GLOB ... CONFIGURE_DEPENDS ...)` so new files like `Timer.cpp` are detected without stale generated project state
@@ -75,6 +93,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed `RasterizerTriangleObject::Project()` private method (projection delegated to camera)
 
 ### Fixed
+#### 2026-08-02
+- **Legacy and fallback behavior fixes**
+  - Fixed legacy `Paddle::CheckCollision()` chained-comparison logic by replacing invalid chained comparisons with explicit AABB overlap checks
+
 #### 2026-06-17
 - **ScoreUI horizontal offset alignment**
   - Corrected score text horizontal offset handling in `ScoreUI::Draw()` to keep player score placement consistent across layouts

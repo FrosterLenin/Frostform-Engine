@@ -12,7 +12,7 @@ private:
 public:
     static constexpr int COLLISION_DAMAGE = 10;
     static constexpr float SHOOT_INTERVAL = 2.0f; // Time between shots in seconds
-    static float _TimeSinceLastShot; // Timer to track shooting intervals
+    inline static float _TimeSinceLastShot = .0f; // Shared timer for invader firing cadence
     
     Invader(Game* game, FVector2 position = FVector2{0,0}, FVector2 size = FVector2{1,1}
         , Color color = RAYWHITE, float accelerationIndex = 50.0f);
