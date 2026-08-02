@@ -16,6 +16,6 @@ public:
     void Update();
 
 private:
-    bool CheckForCollissionPair(const Collider* A, const Collider* B, FCollisionInfo& collisionInfo);
+    bool CheckForCollisionPair(const Collider* A, const Collider* B, FCollisionInfo& collisionInfo);
     bool HasCollisionPair(const std::vector<FCollisionPair>& pair, const std::shared_ptr<GameObject>& A, const std::shared_ptr<GameObject>& B);
 };

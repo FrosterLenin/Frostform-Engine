@@ -33,7 +33,8 @@ void PongGameScene::Init()
     
     // Spawn ball
     std::weak_ptr<Ball> ball = SpawnGameObject<Ball>(_Game, centerScreen, 5.0f, RAYWHITE, true);
-    _Ball = ball.lock().get();
+    std::shared_ptr<Ball> sharedBall = ball.lock();
+    _Ball = sharedBall ? sharedBall.get() : nullptr;
     if (_Ball) {
         _Ball->SetRandomIndexVelocityX(5);
         _Ball->SetSpeedCap(400);
@@ -42,7 +43,8 @@ void PongGameScene::Init()
     // Spawn player 1 paddle
     std::weak_ptr<Paddle> paddle1 = SpawnGameObject<Paddle>(_Game, FVector2{100.0f, centerScreen.y}, 
                                            FVector2{10.0f, 30.0f}, RAYWHITE, false);
-    _Player1 = paddle1.lock().get();
+    std::shared_ptr<Paddle> sharedPaddle1 = paddle1.lock();
+    _Player1 = sharedPaddle1 ? sharedPaddle1.get() : nullptr;
     if (_Player1)
         _Player1->ResetScore();
     
@@ -50,7 +52,8 @@ void PongGameScene::Init()
     std::weak_ptr<Paddle> paddle2 = SpawnGameObject<Paddle>(_Game, 
                                            FVector2{_Game->GetScreenSize().x - 100.0f, centerScreen.y}, 
                                            FVector2{10.0f, 30.0f}, RED, false, 1);
-    _Player2 = paddle2.lock().get();
+    std::shared_ptr<Paddle> sharedPaddle2 = paddle2.lock();
+    _Player2 = sharedPaddle2 ? sharedPaddle2.get() : nullptr;
     if (_Player2)
         _Player2->ResetScore();
     
@@ -133,11 +136,13 @@ void PongGameScene::ScorePoint(const int playerIndex, const int score)
 void PongGameScene::InitUI()
 {
     std::weak_ptr<Timer> timerUI = SpawnGameObject<Timer>(_Game, FVector2{0.0f, 10.0f}, FVector2{20.0f, 20.0f}, WHITE);
-    _TimerUI = timerUI.lock().get();
+    std::shared_ptr<Timer> sharedTimerUI = timerUI.lock();
+    _TimerUI = sharedTimerUI ? sharedTimerUI.get() : nullptr;
     // Fallback keeps score readable even if timer spawn/lock fails
     const float scoreY = _TimerUI ? (_TimerUI->GetPosition().y + 10.0f) : 20.0f;
     std::weak_ptr<ScoreUI> scoreUI = SpawnGameObject<ScoreUI>(_Game, 2, FVector2{10.0f, scoreY}, FVector2{10.0f, 10.0f}, WHITE);
-    _ScoreUI = scoreUI.lock().get();
+    std::shared_ptr<ScoreUI> sharedScoreUI = scoreUI.lock();
+    _ScoreUI = sharedScoreUI ? sharedScoreUI.get() : nullptr;
     if (_ScoreUI) {
         // Register players with ScoreUI
         if (_Player1)

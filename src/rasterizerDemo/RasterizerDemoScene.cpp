@@ -41,13 +41,16 @@ void RasterizerDemoScene::Init()
     _Game->GetInputManager()->BindKey(InputAction::CAM_FOV_DOWN, KEY_KP_SUBTRACT);
 
     std::weak_ptr<Background> background = SpawnGameObject<Background>(_Game, FVector2{0.0f, 0.0f}, BLACK);
-    _Background = background.lock().get();
+    std::shared_ptr<Background> sharedBackground = background.lock();
+    _Background = sharedBackground ? sharedBackground.get() : nullptr;
 
     std::weak_ptr<RasterizerTriangleObject> triangle = SpawnGameObject<RasterizerTriangleObject>(_Game);
-    _Triangle = triangle.lock().get();
+    std::shared_ptr<RasterizerTriangleObject> sharedTriangle = triangle.lock();
+    _Triangle = sharedTriangle ? sharedTriangle.get() : nullptr;
 
     std::weak_ptr<RasterizerModeUI> modeUI = SpawnGameObject<RasterizerModeUI>(_Game, FVector2{10.0f, 10.0f}, FVector2{20.0f, 20.0f}, WHITE);
-    _ModeUI = modeUI.lock().get();
+    std::shared_ptr<RasterizerModeUI> sharedModeUI = modeUI.lock();
+    _ModeUI = sharedModeUI ? sharedModeUI.get() : nullptr;
 
     if (_ModeUI) {
         _Game->GetUIManager()->Bind(modeUI.lock());

@@ -45,7 +45,7 @@ void CollisionManager::Update(){
             if(!Collider::CanCollide(*colliderA, *colliderB)) continue;
 
             FCollisionInfo collisionInfo;
-            if(CheckForCollissionPair(colliderA, colliderB, collisionInfo)){
+            if(CheckForCollisionPair(colliderA, colliderB, collisionInfo)){
                 FCollisionInfo collisionInfoForA = collisionInfo;
                 FCollisionInfo collisionInfoForB = collisionInfo;
                 collisionInfoForA.OtherObject = gameObjectB.get();
@@ -79,7 +79,7 @@ void CollisionManager::Update(){
         }
     }
 }
-bool CollisionManager::CheckForCollissionPair(const Collider* A, const Collider* B, FCollisionInfo& collisionInfo){
+bool CollisionManager::CheckForCollisionPair(const Collider* A, const Collider* B, FCollisionInfo& collisionInfo){
     const RectangleCollider* rectangleColliderA = dynamic_cast<const RectangleCollider*>(A);
     const RectangleCollider* rectangleColliderB = dynamic_cast<const RectangleCollider*>(B);
     

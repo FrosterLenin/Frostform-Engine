@@ -36,7 +36,8 @@ void SpaceInvadersGameScene::Init()
     // Spawn player spaceship
     std::weak_ptr<SpaceShip> playerShip = SpawnGameObject<SpaceShip>(_Game, spaceShipSpawnPoint, 
                                                   FVector2{40.0f, 40.0f}, WHITE, 100.0f);
-    _Player = playerShip.lock().get();
+    std::shared_ptr<SpaceShip> sharedPlayerShip = playerShip.lock();
+    _Player = sharedPlayerShip ? sharedPlayerShip.get() : nullptr;
     
     // Initialize enemies
     InitEnemies(3, 7, 20.0f);
@@ -120,7 +121,8 @@ void SpaceInvadersGameScene::InitEnemies(int row, int column, float spacing)
         for (int j = 0; j < column; ++j) {
             FVector2 position = startPosition + FVector2{j * (size.x + spacing), i * (size.y + spacing)};
             std::weak_ptr<Invader> invader = SpawnGameObject<Invader>(_Game, position, size, RED, 300.0f);
-            _Game->GetEnemyManager()->Bind(invader.lock());
+            if (std::shared_ptr<Invader> sharedInvader = invader.lock())
+                _Game->GetEnemyManager()->Bind(sharedInvader);
         }
     }
 }
@@ -130,7 +132,8 @@ void SpaceInvadersGameScene::InitUI()
     // Initialize Score UI
     std::weak_ptr<ScoreUI> scoreUI = SpawnGameObject<ScoreUI>(_Game, 1, FVector2{10.0f, 10.0f}, 
                                             FVector2{20.0f, 20.0f}, WHITE);
-    _ScoreUI = scoreUI.lock().get();
+    std::shared_ptr<ScoreUI> sharedScoreUI = scoreUI.lock();
+    _ScoreUI = sharedScoreUI ? sharedScoreUI.get() : nullptr;
     
     if (_ScoreUI) {
         // Register player with ScoreUI
@@ -151,7 +154,8 @@ void SpaceInvadersGameScene::InitUI()
     
     std::weak_ptr<StatBar> lifeBarUI = SpawnGameObject<StatBar>(_Game, 100, 100, lifeBarPosition, 
                                                 lifeBarSize, GREEN, DARKGRAY, BLACK);
-    _LifeBarUI = lifeBarUI.lock().get();
+    std::shared_ptr<StatBar> sharedLifeBarUI = lifeBarUI.lock();
+    _LifeBarUI = sharedLifeBarUI ? sharedLifeBarUI.get() : nullptr;
     
     if (_LifeBarUI) {
         _Game->GetUIManager()->Bind(lifeBarUI.lock());

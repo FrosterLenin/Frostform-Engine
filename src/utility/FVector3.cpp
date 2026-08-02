@@ -16,7 +16,7 @@ FVector3 FVector3::operator*(float scalar) const {
 }
 
 FVector3 FVector3::RotateY(float angleDegrees) const {
-    float radians = angleDegrees * MathsUtils::PI2 / 180.f;
+    float radians = angleDegrees * MathsUtils::fPI / 180.f;
     FVector3 result;
     result.x = std::cos(radians) * x - std::sin(radians) * z;
     result.y = y;

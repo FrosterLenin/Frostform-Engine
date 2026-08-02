@@ -68,6 +68,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added `scoreY` fallback handling/comment in `PongGameScene::InitUI()` to keep score text readable if timer spawn/lock is unavailable
   - Corrected non-portable standard include case in `Collider.hpp` (`<Algorithm>` -> `<algorithm>`)
   - Removed redundant unsigned bounds check branch in `DrawManager::BindObject()`
+  - Replaced multiple `weak_ptr.lock().get()` assignments in scene initialization code with explicit `shared_ptr` lock checks before storing raw pointers
+  - Guarded `EnemyManager::Bind(...)` calls in Space Invaders enemy spawn setup to avoid binding null entries when a lock fails
+  - Renamed collision helper typo `CheckForCollissionPair` -> `CheckForCollisionPair` in `CollisionManager`
+  - Renamed math constant `PI2` to `PiValue` to match its actual value usage in degree-to-radian conversion
 
 #### 2026-06-17
 - **CMake source glob refresh for core files**
@@ -96,6 +100,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### 2026-08-02
 - **Legacy and fallback behavior fixes**
   - Fixed legacy `Paddle::CheckCollision()` chained-comparison logic by replacing invalid chained comparisons with explicit AABB overlap checks
+  - Preserved bullet owner-callback behavior by using callback-first expiration handling with explicit local deactivation fallback when no callback is bound
 
 #### 2026-06-17
 - **ScoreUI horizontal offset alignment**

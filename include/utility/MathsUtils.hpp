@@ -4,7 +4,7 @@
 
 namespace MathsUtils {
 
-    constexpr float PI2 = 3.1415926f;
+    constexpr float fPI = 3.1415926f;
 
     int Min3(int a, int b, int c);
     int Max3(int a, int b, int c);
