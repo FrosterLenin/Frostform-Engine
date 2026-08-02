@@ -24,18 +24,16 @@ FetchContent_MakeAvailable(raylib)
 file(GLOB SRC_FILES_UTILITY "src/utility/*.cpp")
 # CONFIGURE_DEPENDS is used to make sure CMake re-evaluates the glob if files are added or removed
 file(GLOB SRC_FILES_CORE CONFIGURE_DEPENDS "src/core/*.cpp")
-file(GLOB SRC_FILES_CORE_MANAGERS "src/core/managers/*.cpp")
-file(GLOB SRC_FILES_CORE_ENUMS "src/core/enums/*.cpp")
+file(GLOB SRC_FILES_CORE_MANAGERS CONFIGURE_DEPENDS "src/core/managers/*.cpp")
 file(GLOB SRC_FILES_PONG "src/pong/*.cpp")
 file(GLOB SRC_FILES_SPACE_INVADERS "src/spaceInvaders/*.cpp")
-file(GLOB SRC_FILES_CORE_RASTERIZER "src/core/rasterizer/*.cpp")
+file(GLOB SRC_FILES_CORE_RASTERIZER CONFIGURE_DEPENDS "src/core/rasterizer/*.cpp")
 file(GLOB SRC_FILES_RASTERIZER_DEMO "src/rasterizerDemo/*.cpp")
 
 add_executable(${PROJECT_NAME} src/main.cpp 
     ${SRC_FILES_UTILITY} 
     ${SRC_FILES_CORE} 
     ${SRC_FILES_CORE_MANAGERS} 
-    ${SRC_FILES_CORE_ENUMS} 
     ${SRC_FILES_PONG} 
     ${SRC_FILES_SPACE_INVADERS}
     ${SRC_FILES_CORE_RASTERIZER}

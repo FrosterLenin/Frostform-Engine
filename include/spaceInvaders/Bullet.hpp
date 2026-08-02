@@ -18,6 +18,10 @@ public:
     virtual void Draw() override;
 
     virtual void OnCollisionEnter(FCollisionInfo& collisionInfo) override;
+
+private:
+    bool IsOutOfVerticalBounds(const FVector2& nextPosition) const;
+    bool IsOutOfHorizontalBounds(const FVector2& nextPosition) const;
     
     // This function reset bullet and put its position outside the game bounds
     // void ResetBullet(); 

@@ -47,8 +47,8 @@ void Circle::Draw(){
 
 void Circle::SetRadius(const float other){
     _Radius = other;
-    _Size.x = other;
-    _Size.y = other;
+    _Size.x = other * 2;
+    _Size.y = other * 2;
 }
 float Circle::GetRadius() const{
     return _Radius;

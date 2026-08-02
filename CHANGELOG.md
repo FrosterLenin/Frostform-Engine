@@ -72,6 +72,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Guarded `EnemyManager::Bind(...)` calls in Space Invaders enemy spawn setup to avoid binding null entries when a lock fails
   - Renamed collision helper typo `CheckForCollissionPair` -> `CheckForCollisionPair` in `CollisionManager`
   - Renamed math constant `PI2` to `PiValue` to match its actual value usage in degree-to-radian conversion
+  - Updated core CMake globs to use `CONFIGURE_DEPENDS` only for core modules (`src/core`, `src/core/managers`, `src/core/rasterizer`)
+  - Removed unused `src/core/enums/*.cpp` source glob from CMake (enums are header-only)
+  - Made `Ball` speed-cap logic opt-in with explicit `_HasSpeedCap` state to avoid relying on an unset cap
+  - `Circle::SetRadius()` now keeps `_Size` aligned to diameter (`radius * 2`) after runtime radius changes
+  - Enforced horizontal-only player ship movement in Space Invaders by ignoring vertical input in `SpaceShip::UpdateWithInput()`
 
 #### 2026-06-17
 - **CMake source glob refresh for core files**
@@ -101,6 +106,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Legacy and fallback behavior fixes**
   - Fixed legacy `Paddle::CheckCollision()` chained-comparison logic by replacing invalid chained comparisons with explicit AABB overlap checks
   - Preserved bullet owner-callback behavior by using callback-first expiration handling with explicit local deactivation fallback when no callback is bound
+  - Split bullet boundary handling into dedicated vertical and horizontal checks; horizontal expiry is currently disabled by design for vertical-only projectiles
 
 #### 2026-06-17
 - **ScoreUI horizontal offset alignment**

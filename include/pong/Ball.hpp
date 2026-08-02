@@ -10,6 +10,7 @@ class Ball : public Circle{
     int _RandomIndexVelocityY;
     int _Index;
     int _SpeedCap;
+    bool _HasSpeedCap;
     InputAction _UP;
     InputAction _DOWN;
     InputAction _LEFT;

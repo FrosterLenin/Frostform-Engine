@@ -45,7 +45,6 @@ void SpaceShip::Start(){
 
     SpaceInvaders* spaceInvadersGame = dynamic_cast<SpaceInvaders*>(_Game);
     // Initialize bullet pool
-    _Velocity = {1.f, .0}; // Move only in X axis
     for(int i = 0; i < MAX_BULLETS; ++i) {
         std::shared_ptr<Bullet> bullet = spaceInvadersGame->SpawnBullet(this, FVector2{-100.f, -100.f}, 5.f, BLUE, 200.f);
         bullet->OnExpired = [weakThis = weak_from_this()](std::shared_ptr<Bullet> inBullet)
@@ -66,12 +65,14 @@ void SpaceShip::Update(float deltaTime){
 void SpaceShip::UpdateWithInput(float deltaTime){
     const InputManager* inputManager = dynamic_cast<SpaceInvaders*>(_Game)->GetInputManager();
     _Velocity = {0,0}; // Button released so it stops
-    if(inputManager->GetActionState(_UP)){
-        _Velocity.y = -1;
-    }
-    else if(inputManager->GetActionState(_DOWN)){
-        _Velocity.y = 1;
-    }
+    
+    // Horizontal-only movement: vertical inputs are intentionally ignored
+    // if(inputManager->GetActionState(_UP)){
+    //     _Velocity.y = -1;
+    // }
+    // else if(inputManager->GetActionState(_DOWN)){
+    //     _Velocity.y = 1;
+    // }
     if(inputManager->GetActionState(_RIGHT)){
         _Velocity.x = 1;
     }

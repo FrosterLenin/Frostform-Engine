@@ -8,7 +8,9 @@ Ball::Ball(Game* game, FVector2 position, float radius, Color color, bool isAuto
     , _IsAutomatic(isAutomatic)
     , _RandomIndexVelocityX(1)
     , _RandomIndexVelocityY(1)
-    , _Index(index){
+    , _Index(index)
+    , _SpeedCap(0)
+    , _HasSpeedCap(false){
     _Collider = std::make_shared<CircleCollider>(position, radius);
 }
 void Ball::Start(){
@@ -83,6 +85,7 @@ void Ball::SetRandomIndexVelocityY(const int value){
 }
 void Ball::SetSpeedCap(const int value){
     _SpeedCap = value;
+    _HasSpeedCap = true;
 }
 void Ball::OnCollisionEnter(FCollisionInfo& collisionInfo){
     GameObject::OnCollisionEnter(collisionInfo);
@@ -90,7 +93,7 @@ void Ball::OnCollisionEnter(FCollisionInfo& collisionInfo){
         _Velocity.x *= -1;
     else
         _Velocity.y *= -1;
-    if(_AccelerationIndex < _SpeedCap)
+    if(_HasSpeedCap && _AccelerationIndex < _SpeedCap)
         _AccelerationIndex *= 1.1f;
 }
 
