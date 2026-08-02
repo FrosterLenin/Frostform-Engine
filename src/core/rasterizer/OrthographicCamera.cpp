@@ -1,9 +1,14 @@
 #include "core/rasterizer/OrthographicCamera.hpp"
 
+namespace {
+constexpr float kMinOrthoSize = 0.0001f;
+}
+
 OrthographicCamera::OrthographicCamera(int screenWidth, int screenHeight, float orthoSize)
-    : _ScreenWidth(screenWidth), _ScreenHeight(screenHeight), _Position({0, 0, 0}), _OrthoSize(orthoSize)
+    : _ScreenWidth(screenWidth > 0 ? screenWidth : 1), _ScreenHeight(screenHeight > 0 ? screenHeight : 1), _Position({0, 0, 0}), _OrthoSize(orthoSize > kMinOrthoSize ? orthoSize : kMinOrthoSize)
 {
-    _AspectRatio = static_cast<float>(screenWidth) / static_cast<float>(screenHeight);
+    // Clamp constructor inputs so projection math never divides by zero.
+    _AspectRatio = static_cast<float>(_ScreenWidth) / static_cast<float>(_ScreenHeight);
 }
 
 IVector2 OrthographicCamera::Project(FVector3 worldPoint) {
@@ -78,5 +83,6 @@ float OrthographicCamera::GetOrthoSize() const {
 }
 
 void OrthographicCamera::SetOrthoSize(float orthoSize) {
-    _OrthoSize = orthoSize;
+    // Keep ortho size strictly positive to avoid invalid projection scale
+    _OrthoSize = orthoSize > kMinOrthoSize ? orthoSize : kMinOrthoSize;
 }

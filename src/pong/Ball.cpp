@@ -33,7 +33,10 @@ Ball::~Ball(){}
 
 void Ball::Update(float deltaTime){
     if(!_Game) return;
-    const InputManager* inputManager = dynamic_cast<PongGame*>(_Game)->GetInputManager();
+    // [[maybe_unused]] tells the compiler this variable may be intentionally unused
+    // Here we keep inputManager ready for quick debug experiments on ball trajectory/input
+    // without triggering "unused variable" warnings in normal builds
+    [[maybe_unused]] const InputManager* inputManager = dynamic_cast<PongGame*>(_Game)->GetInputManager();
     if(!_IsAutomatic)
         UpdateWithInput(deltaTime);
     else{
@@ -56,6 +59,8 @@ void Ball::Update(float deltaTime){
             _Game->GetUIManager()->TriggerObjectEvent<ScoreUI>(playerIndex, 1);
             SetPosition(_Game->GetScreenSize() * .5f);
             _AccelerationIndex = PongGame::BASE_ACCELERATION; // Reset speed on score
+            // Stop here so the ball does not move again in the same scoring frame.
+            return;
         }
             
     }

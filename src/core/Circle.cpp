@@ -53,7 +53,9 @@ void Circle::SetRadius(const float other){
 float Circle::GetRadius() const{
     return _Radius;
 }
-// NOT USED, MANAGED BY COLLISION MANAGER AND OnCollisionEnter/Exit/Stay METHODS
+// LEGACY PATH: this helper is not used by the active collision pipeline
+// Runtime collisions are handled by CollisionManager + OnCollisionEnter/Exit/Stay
+// Kept only as historical fallback/reference during engine migration
 bool Circle::CheckCollision(const GameObject& other) const{
 
     const Circle* otherCircle = dynamic_cast<const Circle*>(&other);

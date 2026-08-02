@@ -77,6 +77,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Made `Ball` speed-cap logic opt-in with explicit `_HasSpeedCap` state to avoid relying on an unset cap
   - `Circle::SetRadius()` now keeps `_Size` aligned to diameter (`radius * 2`) after runtime radius changes
   - Enforced horizontal-only player ship movement in Space Invaders by ignoring vertical input in `SpaceShip::UpdateWithInput()`
+  - `Ball::Update()` now returns immediately after score reset so the ball does not move twice in the same scoring frame
+  - Added explicit `[[maybe_unused]]` documentation comment in `Ball::Update()` for debug-ready local input access
+  - `UIManager` event bindings now use `std::weak_ptr<GameObject>` keys instead of raw pointers to avoid stale pointer lifetime hazards
+  - Added lazy cleanup of expired `UIManager` event bindings during trigger iteration
+  - Added constructor/setter clamping guards in `OrthographicCamera` to prevent invalid projection parameters (zero/negative size or screen dimensions)
+  - Updated `PerspectiveCamera` projection handling for behind-camera points (discarded outside viewport) and clamped minimum FOV
+  - Added explicit CMake comment documenting that `CONFIGURE_DEPENDS` auto-reload is intentionally enabled only for core engine modules
+  - Expanded legacy documentation comment for `Circle::CheckCollision()` to clarify it is a historical fallback path
 
 #### 2026-06-17
 - **CMake source glob refresh for core files**

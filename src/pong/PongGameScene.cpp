@@ -151,7 +151,7 @@ void PongGameScene::InitUI()
             _ScoreUI->AddPlayer(_Player2);
         
         _Game->GetUIManager()->Bind(scoreUI.lock());
-        _Game->GetUIManager()->BindEvent(_ScoreUI, _ScoreUI->UpdateEvent = 
+        _Game->GetUIManager()->BindEvent(scoreUI, _ScoreUI->UpdateEvent = 
             [this](int playerIndex, int points) {
                 ScorePoint(playerIndex, points);
             });

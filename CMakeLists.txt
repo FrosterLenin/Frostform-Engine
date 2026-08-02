@@ -23,6 +23,8 @@ FetchContent_MakeAvailable(raylib)
 # we use the name giving in project()
 file(GLOB SRC_FILES_UTILITY "src/utility/*.cpp")
 # CONFIGURE_DEPENDS is used to make sure CMake re-evaluates the glob if files are added or removed
+# We intentionally enable auto-reconfigure only for engine core folders.
+# Gameplay/demo modules are examples and are kept explicit to avoid extra CMake churn.
 file(GLOB SRC_FILES_CORE CONFIGURE_DEPENDS "src/core/*.cpp")
 file(GLOB SRC_FILES_CORE_MANAGERS CONFIGURE_DEPENDS "src/core/managers/*.cpp")
 file(GLOB SRC_FILES_PONG "src/pong/*.cpp")

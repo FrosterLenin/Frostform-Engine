@@ -9,7 +9,8 @@
 
 class UIManager : public BaseManager{
 private:
-    std::map<GameObject*, std::any> _Events;
+    // Use weak ownership as event key so stale raw pointers cannot outlive UI objects
+    std::map<std::weak_ptr<GameObject>, std::any, std::owner_less<std::weak_ptr<GameObject>>> _Events;
 
 public:
     UIManager();
@@ -19,7 +20,7 @@ public:
     
     // Bind an event from a UI object to the manager
     template<typename... Args>
-    void BindEvent(GameObject* UIObject, std::function<void(Args...)> event);
+    void BindEvent(const std::weak_ptr<GameObject>& UIObject, std::function<void(Args...)> event);
     
     // Trigger event for a UI object of type T with parameters
     template<typename T, typename... Args>

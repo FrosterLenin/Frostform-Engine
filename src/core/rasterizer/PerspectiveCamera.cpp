@@ -1,5 +1,9 @@
 #include "core/rasterizer/PerspectiveCamera.hpp"
 
+namespace {
+constexpr float kNearPlane = 0.1f;
+}
+
 PerspectiveCamera::PerspectiveCamera(int screenWidth, int screenHeight, float fov)
     : _ScreenWidth(screenWidth), _ScreenHeight(screenHeight), _Position({0, 0, 0}), _Fov(fov)
 {
@@ -10,7 +14,11 @@ IVector2 PerspectiveCamera::Project(FVector3 worldPoint) {
 
     // Perspective divide: x and y scaled by fov, divided by depth (positive Z in camera space)
     float depth = cameraPoint.z;
-    if (depth < 0.1f) depth = 0.1f;
+    if (depth <= 0.0f) {
+        // Behind-camera points are intentionally pushed outside the viewport to avoid mirrored artifacts.
+        return {-_ScreenWidth, -_ScreenHeight};
+    }
+    if (depth < kNearPlane) depth = kNearPlane;
 
     float halfW = _ScreenWidth * 0.5f;
     float halfH = _ScreenHeight * 0.5f;
@@ -77,5 +85,6 @@ float PerspectiveCamera::GetFov() const {
 }
 
 void PerspectiveCamera::SetFov(float fov) {
-    _Fov = fov;
+    // Keep FOV positive to preserve projection orientation and avoid inverted scaling
+    _Fov = fov > 0.1f ? fov : 0.1f;
 }

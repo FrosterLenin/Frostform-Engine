@@ -54,7 +54,7 @@ void RasterizerDemoScene::Init()
 
     if (_ModeUI) {
         _Game->GetUIManager()->Bind(modeUI.lock());
-        _Game->GetUIManager()->BindEvent<int>(_ModeUI, _ModeUI->UpdateEvent =
+        _Game->GetUIManager()->BindEvent<int>(modeUI, _ModeUI->UpdateEvent =
             [this](int mode) {
                 if (_ModeUI)
                     _ModeUI->SetMode(mode);

@@ -12,19 +12,25 @@ void UIManager::Init() {
 
 // Template implementations
 template<typename... Args>
-void UIManager::BindEvent(GameObject* UIObject, std::function<void(Args...)> event) {
+void UIManager::BindEvent(const std::weak_ptr<GameObject>& UIObject, std::function<void(Args...)> event) {
     _Events[UIObject] = event;
 }
 
 template<typename... Args>
 void UIManager::TriggerAllEvents(Args... args) {
-    for (auto& eventPair : _Events) {
+    for (auto it = _Events.begin(); it != _Events.end();) {
+        if (it->first.expired()) {
+            // Remove stale bindings lazily when UI objects are gone
+            it = _Events.erase(it);
+            continue;
+        }
         try {
-            auto function = std::any_cast<std::function<void(Args...)>>(eventPair.second);
+            auto function = std::any_cast<std::function<void(Args...)>>(it->second);
             if (function) function(args...);
         } catch(...) {
             // Event doesn't match this signature, skip silently
         }
+        ++it;
     }
 }
 
@@ -33,8 +39,12 @@ template<typename T, typename... Args>
 void UIManager::TriggerObjectEvent(Args... args) const {
     // Search through _Events for an object of type T and trigger its event
     if(_Events.empty()) return;
-    for (auto& eventPair : _Events) {
-        T* gameObject = dynamic_cast<T*>(eventPair.first);
+    for (const auto& eventPair : _Events) {
+        std::shared_ptr<GameObject> eventObject = eventPair.first.lock();
+        if (!eventObject)
+            continue;
+
+        T* gameObject = dynamic_cast<T*>(eventObject.get());
         if (gameObject) {
             try {
                 auto function = std::any_cast<std::function<void(Args...)>>(eventPair.second);
@@ -70,9 +80,9 @@ T* UIManager::GetManagedObject() const {
 // so we want to avoid the overhead of std::any_cast and std::function for every event trigger
 // and instead only use it for the events we actually use in our games
 // which are mostly void() and void(int) or void(int,int) for score updates and similar events
-template void UIManager::BindEvent<int>(GameObject*, std::function<void(int)>);
-template void UIManager::BindEvent<int, int>(GameObject*, std::function<void(int,int)>);
-template void UIManager::BindEvent<>(GameObject*, std::function<void()>);
+template void UIManager::BindEvent<int>(const std::weak_ptr<GameObject>&, std::function<void(int)>);
+template void UIManager::BindEvent<int, int>(const std::weak_ptr<GameObject>&, std::function<void(int,int)>);
+template void UIManager::BindEvent<>(const std::weak_ptr<GameObject>&, std::function<void()>);
 
 template void UIManager::TriggerAllEvents<int>(int);
 template void UIManager::TriggerAllEvents<>();

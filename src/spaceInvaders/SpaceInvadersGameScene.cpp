@@ -141,7 +141,7 @@ void SpaceInvadersGameScene::InitUI()
             _ScoreUI->AddPlayer(_Player);
         
         _Game->GetUIManager()->Bind(scoreUI.lock());
-        _Game->GetUIManager()->BindEvent(_ScoreUI, _ScoreUI->UpdateEvent = 
+        _Game->GetUIManager()->BindEvent(scoreUI, _ScoreUI->UpdateEvent = 
             [this](int playerIndex, int points) {
                 ScorePoint(playerIndex, points);
             });
@@ -159,7 +159,7 @@ void SpaceInvadersGameScene::InitUI()
     
     if (_LifeBarUI) {
         _Game->GetUIManager()->Bind(lifeBarUI.lock());
-        _Game->GetUIManager()->BindEvent(_LifeBarUI, _LifeBarUI->UpdateEvent = 
+        _Game->GetUIManager()->BindEvent(lifeBarUI, _LifeBarUI->UpdateEvent = 
             [this](int currentLife) {
                 if (_LifeBarUI)
                     _LifeBarUI->SetCurrent(currentLife);
