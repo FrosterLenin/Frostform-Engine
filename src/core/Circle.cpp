@@ -49,6 +49,8 @@ void Circle::SetRadius(const float other){
     _Radius = other;
     _Size.x = other * 2;
     _Size.y = other * 2;
+    if (CircleCollider* circleCollider = dynamic_cast<CircleCollider*>(_Collider.get()))
+        circleCollider->_Radius = other;
 }
 float Circle::GetRadius() const{
     return _Radius;

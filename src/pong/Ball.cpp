@@ -94,11 +94,37 @@ void Ball::SetSpeedCap(const int value){
 }
 void Ball::OnCollisionEnter(FCollisionInfo& collisionInfo){
     GameObject::OnCollisionEnter(collisionInfo);
-    if(collisionInfo.OverlapPoint.x < collisionInfo.OverlapPoint.y)
+    // OverlapPoint may come with signed values depending on collider pair order,
+    // but for axis selection we only care about penetration magnitude per axis
+    float overlapX = collisionInfo.OverlapPoint.x;
+    float overlapY = collisionInfo.OverlapPoint.y;
+    if (overlapX < 0.0f) overlapX = -overlapX;
+    if (overlapY < 0.0f) overlapY = -overlapY;
+
+    // Small tolerance to avoid unstable axis flips when overlaps are almost equal
+    constexpr float tollerance = 0.0001f;
+    if (overlapX + tollerance < overlapY) {
+        // Less penetration on X means we likely touched a vertical face: reflect X
         _Velocity.x *= -1;
-    else
+    } else if (overlapY + tollerance < overlapX) {
+        // Less penetration on Y means we likely touched a horizontal face: reflect Y
         _Velocity.y *= -1;
-    if(_HasSpeedCap && _AccelerationIndex < _SpeedCap)
+    } else {
+        // Corner/near-tie case: choose a deterministic axis from incoming velocity
+        // This prevents random-looking bounces when both overlaps are almost identical
+        float velocityX = _Velocity.x < 0.0f ? -_Velocity.x : _Velocity.x;
+        float velocityY = _Velocity.y < 0.0f ? -_Velocity.y : _Velocity.y;
+        if (velocityX >= velocityY)
+            _Velocity.x *= -1;
+        else
+            _Velocity.y *= -1;
+    }
+
+    if(_HasSpeedCap && _SpeedCap > 0 && _AccelerationIndex < static_cast<float>(_SpeedCap)) {
+        // Keep the existing acceleration feel while enforcing a strict upper limit
         _AccelerationIndex *= 1.1f;
+        if (_AccelerationIndex > static_cast<float>(_SpeedCap))
+            _AccelerationIndex = static_cast<float>(_SpeedCap);
+    }
 }
 

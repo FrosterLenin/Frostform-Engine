@@ -116,6 +116,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added safe default initialization for `GameObject::_Color` in the base constructor to avoid latent undefined state when color-specific constructors are not used
   - Fixed `GameObject::SetPosition()` clamping for oversized objects by guarding max bounds with `std::max(0, ...)`, preventing invalid clamp ranges
   - Made `Game` destructor virtual and updated `Game::~Game()` teardown order to release engine objects and texture-owning resources before `CloseWindow()`
+  - Hardened `Ball::OnCollisionEnter()` bounce-axis resolution for ambiguous corner contacts and added deterministic tie-breaking using incoming velocity
+  - Enforced strict `Ball` speed-cap behavior by clamping post-acceleration value to the configured cap
+  - Synchronized `Circle::SetRadius()` with `CircleCollider` radius to keep runtime visual size and collision radius aligned
 
 #### 2026-08-02
 - **Legacy and fallback behavior fixes**
