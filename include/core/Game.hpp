@@ -36,7 +36,7 @@ protected:
 public:
     const bool DEBUGMODE = true;
     Game(FVector2 screenSize, const std::string& title);
-    ~Game();
+    virtual ~Game();
     // NON COPYABLE CLASS
     Game(const Game& other) = delete;
     Game& operator=(const Game& other) = delete;

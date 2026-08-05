@@ -14,6 +14,7 @@ GameObject::GameObject(Game* game, const FVector2 position, const FVector2 size)
     , _AccelerationIndex(.0f)
     , _Size(size)
     , _Active(true)
+    , _Color(WHITE)
     , _Camera(nullptr)
     , _Owner(nullptr)
     , _DrawLayer(DrawLayer::GAME_FIELD){
@@ -40,10 +41,12 @@ void GameObject::SetPosition(const FVector2& other){
         return;
     }
     FVector2 screenSize = _Game->GetScreenSize();
+    const float maxX = std::max(0.0f, screenSize.x - _Size.x);
+    const float maxY = std::max(0.0f, screenSize.y - _Size.y);
 
     // Clamp in screensize considering object size
-    _Position.x = std::clamp(other.x, .0f, screenSize.x - _Size.x);
-    _Position.y = std::clamp(other.y, .0f, screenSize.y - _Size.y);
+    _Position.x = std::clamp(other.x, .0f, maxX);
+    _Position.y = std::clamp(other.y, .0f, maxY);
 
     if(GetCollider()){
         _Collider.get()->_Position = _Position;

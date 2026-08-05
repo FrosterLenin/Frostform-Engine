@@ -19,7 +19,18 @@ Game::Game(FVector2 screenSize, const std::string& title) :
     _SceneManager = std::make_unique<SceneManager>(this);
 }
 Game::~Game(){
-    CloseWindow();
+    // Release game resources that can call Raylib unload APIs before closing the window/context
+    _SceneManager.reset();
+    _DrawManager.reset();
+    _UIManager.reset();
+    _EnemyManager.reset();
+    _CollisionManager.reset();
+    _InputManager.reset();
+    _GameObjects.clear();
+    _Screen.reset();
+
+    if (IsWindowReady())
+        CloseWindow();
 }
 const FVector2 Game::GetScreenSize() const{
     return _ScreenSize;

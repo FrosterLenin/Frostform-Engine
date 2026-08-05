@@ -25,7 +25,7 @@ protected:
     // Actual lifetime ownership is managed by the Game itself.
     GameObject* _Owner;
 public:
-    GameObject(Game* game, const FVector2 position = (.0f, .0f), const FVector2 size = (1.f, 1.f));
+    GameObject(Game* game, const FVector2 position = {0.f, 0.f}, const FVector2 size = {1.f, 1.f});
     GameObject(Game* game, const FVector2 position, const FVector2 size, const Color color, float accelerationIndex);
     GameObject(Game* game, const FVector2 position, const FVector2 size, const Color color);
     GameObject(Game* game, const FVector2 position, const Color color);
